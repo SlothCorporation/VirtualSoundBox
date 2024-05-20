@@ -1,1 +1,1 @@
-# riot-database
+# vtuber-database
