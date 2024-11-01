@@ -27,11 +27,15 @@ function SideNavContent() {
 
 function Layout({children}: LayoutProps) {
     return (
-        <GlobalNavLayout
-            sideNavContent={<SideNavContent />}
-        >
-            {children}
-        </GlobalNavLayout>
+      <GlobalNavLayout
+        sideNavContent={<SideNavContent/>}
+      >
+          <main className="flex-1 w-full flex justify-center bg-white text-black">
+              <div className="w-full max-w-[1280px] px-4">
+                  {children}
+              </div>
+          </main>
+      </GlobalNavLayout>
     );
 };
 
