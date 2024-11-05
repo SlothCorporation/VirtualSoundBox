@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {MdMenu} from 'react-icons/md';
+import React, { useState } from "react";
+import { MdMenu } from "react-icons/md";
 import Link from "next/link";
 
 interface GlobalNavLayoutProps {
@@ -9,17 +9,17 @@ interface GlobalNavLayoutProps {
 
 export function GlobalNavLayout({
   sideNavContent,
-  children
+  children,
 }: GlobalNavLayoutProps) {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   return (
-    <div className="flex flex-col h-screen">
-      <header className="mb-12 w-full flex justify-center">
-        <nav className="fixed top-0 inset-x-0 h-12 bg-black flex items-center justify-between z-50 w-full px-4">
+    <div className="flex h-screen flex-col">
+      <header className="mb-12 flex w-full justify-center">
+        <nav className="fixed inset-x-0 top-0 z-50 flex h-12 w-full items-center justify-between bg-black px-4">
           <div>
             <div className="flex items-center space-x-4">
               <Link href="/">
-                <div className="flex items-center leading-[0] space-x-4">
+                <div className="flex items-center space-x-4 leading-[0]">
                   VirtualSoundBox
                 </div>
               </Link>
@@ -32,13 +32,13 @@ export function GlobalNavLayout({
                 setIsSideNavOpen(!isSideNavOpen);
                 e.stopPropagation();
               }}
-              className="flex items-center h-12 hover:bg-[#393939]"
+              className="flex h-12 items-center hover:bg-[#393939]"
             >
-              <MdMenu color="white" size={24}/>
+              <MdMenu color="white" size={24} />
             </button>
             <aside
-              className={`bg-white text-black z-50 fixed top-12 right-0 shadow-[0_2px_4px_rgba(0,0,0,0.15)] h-[calc(100vh_-_3rem)] overflow-y-auto transition-all duration-150 ease-in-out flex flex-col
-                            ${isSideNavOpen ? 'w-[320px]' : 'w-0'}`}
+              className={`fixed right-0 top-12 z-50 flex h-[calc(100vh_-_3rem)] flex-col overflow-y-auto bg-white text-black shadow-[0_2px_4px_rgba(0,0,0,0.15)] transition-all duration-150 ease-in-out
+                            ${isSideNavOpen ? "w-[320px]" : "w-0"}`}
             >
               {sideNavContent}
             </aside>
@@ -48,6 +48,6 @@ export function GlobalNavLayout({
       {children}
     </div>
   );
-};
+}
 
 export default GlobalNavLayout;
