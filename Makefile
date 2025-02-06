@@ -12,4 +12,6 @@ initial-setup:
 	rm -f keystore.p12
 	@echo "=====Build docker====="
 	docker compose build
+	docker compose run --rm php composer install
+	docker compose run --rm php php artisan migrate
 	@echo "=====Initial setup is done. Please reboot if you need.====="
