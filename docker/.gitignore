@@ -1,3 +1,2 @@
-mysql/logs/*
-mysql/lib/*
+mysql/*
 nginx/certs/*
