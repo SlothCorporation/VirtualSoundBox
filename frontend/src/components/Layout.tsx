@@ -1,6 +1,6 @@
 import React, { type ReactNode } from "react";
-import GlobalNavLayout from "@/components/layouts/GlobalNavLayout";
-import { SideNavHeading, SideNavLink } from "@/components/sideNav/sideNav";
+import GlobalNavLayout from "@/components/Layouts/GlobalNavLayout";
+import { SideNavHeading, SideNavLink } from "@/components/SideNav/SideNav";
 
 interface LayoutProps {
   children: ReactNode;

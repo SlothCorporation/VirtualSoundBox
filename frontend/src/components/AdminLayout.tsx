@@ -1,6 +1,6 @@
 import React, { type ReactNode } from "react";
-import GlobalNavLayout from "@/components/layouts/GlobalNavLayout";
-import { SideNavHeading, SideNavLink } from "@/components/sideNav/sideNav";
+import GlobalNavLayout from "@/components/Layouts/GlobalNavLayout";
+import { SideNavHeading, SideNavLink } from "@/components/SideNav/SideNav";
 import Sidebar from "@/components/Sidebar/Sidebar";
 
 interface LayoutProps {
@@ -31,7 +31,7 @@ function AdminLayout({ children }: LayoutProps) {
     <GlobalNavLayout sideNavContent={<SideNavContent />}>
       <main className="flex w-full flex-1 justify-center bg-white text-black">
         <Sidebar />
-        <div className="w-full px-4">{children}</div>
+        <div className="ml-72 w-full px-4">{children}</div>
       </main>
     </GlobalNavLayout>
   );
