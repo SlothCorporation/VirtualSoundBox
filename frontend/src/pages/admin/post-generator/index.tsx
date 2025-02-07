@@ -159,27 +159,36 @@ const setListTemplate = `{{liveTitle}}
 {{number}}:{{music}}/{{artist}}
 @{{end}}`;
 
+type TemplateVariables = {
+  [key: string]: string | string[] | { [key: string]: string }[];
+};
+
 function replacePlaceholders(
   template: string,
-  variables: { [key: string]: any },
+  variables: TemplateVariables,
 ): string {
   return template
-    .replace(/@{{(\w+)}}([\s\S]*?)@{{end}}/g, (_, key, content) => {
-      if (Array.isArray(variables[key])) {
-        return variables[key]
-          .map((item: string[], index: number) =>
-            content
-              .replace(
-                /{{(.*?)}}/g,
-                (_: void, varKey: string) => item[varKey.trim()] || "",
-              )
-              .trim(),
-          )
-          .join("\n");
-      }
-      return content.trim();
-    })
-    .replace(/{{(.*?)}}/g, (_, key) => variables[key.trim()] || "");
+    .replace(
+      /@{{(\w+)}}([\s\S]*?)@{{end}}/g,
+      (_, key: string, content: string) => {
+        if (Array.isArray(variables[key])) {
+          return (variables[key] as { [key: string]: string }[])
+            .map((item) =>
+              content
+                .replace(
+                  /{{(.*?)}}/g,
+                  (_, varKey: string) => item[varKey.trim()] || "",
+                )
+                .trim(),
+            )
+            .join("\n");
+        }
+        return content.trim();
+      },
+    )
+    .replace(/{{(.*?)}}/g, (_, key: string) =>
+      String(variables[key.trim()] || ""),
+    );
 }
 
 function PostPreview() {
