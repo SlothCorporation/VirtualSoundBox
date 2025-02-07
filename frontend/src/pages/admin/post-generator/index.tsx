@@ -5,7 +5,7 @@ import {
   liveStreamDataAtom,
 } from "@/atoms/admin/postGenerator/atoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import {
   fetchYoutubeData,
@@ -40,18 +40,18 @@ function PostGenerator() {
     setArtist("");
   };
 
-  const suggestedMusic = async () => {
+  const suggestedMusic = useCallback(async () => {
     if (!music && !artist) {
       setSuggestions([]);
       return;
     }
     const data = await fetchSuggestedMusic(music, artist);
     setSuggestions(data);
-  };
+  }, [music, artist]);
 
   useEffect(() => {
     suggestedMusic();
-  }, [music, artist]);
+  }, [music, artist, suggestedMusic]);
 
   const handleSuggest = async (item: { name: string; artist: string }) => {
     setMusic(item.name);
