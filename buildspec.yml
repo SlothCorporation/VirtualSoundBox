@@ -1,0 +1,40 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      # Composer install
+      - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+      - php composer-setup.php
+      - php -r "unlink('composer-setup.php');"
+      - mv composer.phar /usr/local/bin/composer
+
+      # Install dependencies
+      - composer install
+
+      # .env ファイルがない場合は、.env.example をコピーして作成
+      - if [ ! -f .env ]; then cp .env.example .env; fi
+
+      # Laravel のキーを生成
+      - php artisan key:generate
+
+      # イメージをビルドしてECRにプッシュ
+      - echo "Building the Nginx Docker image..."
+      - docker build --no-cache platform linux/amd64 -t $ECR_NGINX -f ./docker/nginx/Dockerfile
+      - docker tag $ECR_NGINX $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_NGINX
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_NGINX
+
+      - echo "Building the PHP Docker image..."
+      - docker build --no-cache platform linux/amd64 -t $ECR_PHP -f ./docker/php/Dockerfile
+      - docker tag $ECR_PHP $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_PHP
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_PHP
+
+    post_build:
+      commands:
+        # コンテナイメージの情報をimagedefinitions.jsonに書き込む
+        - echo Writing image definitions file...
+        - printf '[{"name":"nginx", "imageUrl":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_NGINX > imagedefinitions.json
+        - printf '[{"name":"php", "imageUrl":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_PHP > imagedefinitions.json
+
+artifacts:
+  files: imagedefinitions.json
