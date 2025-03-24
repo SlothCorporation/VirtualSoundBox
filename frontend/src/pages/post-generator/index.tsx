@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/AdminLayout";
+import Layout from "@/components/Layout";
 import Input from "@/components/Form/Input";
 import {
   setListDataAtom,
@@ -308,11 +308,11 @@ function SetListPreview() {
 
 export default function Home() {
   return (
-    <AdminLayout>
+    <Layout>
       <div className="flex gap-5">
         <PostGenerator />
         <SetListGenerator />
       </div>
-    </AdminLayout>
+    </Layout>
   );
 }
