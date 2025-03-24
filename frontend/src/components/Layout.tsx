@@ -17,7 +17,9 @@ function SideNavContent() {
           </div>
           <div>
             <SideNavHeading title="コンテンツ" />
-            <SideNavLink href="/">ランキング</SideNavLink>
+            <SideNavLink href="/post-generator">
+              ポストジェネレーター
+            </SideNavLink>
           </div>
         </div>
       </nav>
