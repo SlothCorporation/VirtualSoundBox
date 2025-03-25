@@ -13,7 +13,8 @@ class FetchYoutubeDataController extends Controller
     public function __invoke(FetchYoutubeDataRequest $request): JsonResponse
     {
         $url = $request->query('url');
-        $videoId = explode('v=', $url)[1];
+        preg_match('/(?:v=|\/live\/)([^&\/?]+)/', $url, $matches);
+        $videoId = $matches[1] ?? null;
 
         $client = new Google_Client();
         $client->setDeveloperKey(config('env.youtube_api_key'));
