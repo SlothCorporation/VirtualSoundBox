@@ -215,10 +215,9 @@ function PostPreview() {
 
   return (
     <div className="w-full">
-      <textarea
-        className="h-52 w-full rounded border border-gray-400 px-4 py-[0.62rem] text-sm"
-        value={data.length > 0 ? generatedText : ""}
-      />
+      <div className="mb-2 h-52 w-full whitespace-pre rounded border border-gray-400 px-4 py-[0.62rem] text-sm">
+        {data.length > 0 ? generatedText : ""}
+      </div>
       <button
         className="w-full rounded border p-1.5 text-sm font-bold"
         onClick={() => handlePost()}
@@ -287,20 +286,15 @@ function SetListPreview() {
   };
   return (
     <div className="w-full">
-      {data.length > 0 && (
-        <>
-          <textarea
-            className="h-52 w-full rounded border border-gray-400 px-4 py-[0.62rem] text-sm"
-            value={generatedText}
-          />
-          <button
-            className="w-full rounded border p-1.5 text-sm font-bold"
-            onClick={() => handlePost()}
-          >
-            Tweet
-          </button>
-        </>
-      )}
+      <div className="mb-2 h-52 w-full whitespace-pre rounded border border-gray-400 px-4 py-[0.62rem] text-sm">
+        {data.length > 0 ? generatedText : ""}
+      </div>
+      <button
+        className="w-full rounded border p-1.5 text-sm font-bold"
+        onClick={() => handlePost()}
+      >
+        Tweet
+      </button>
     </div>
   );
 }
