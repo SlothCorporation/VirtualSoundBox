@@ -3,7 +3,7 @@ import Input from "@/components/Form/Input";
 import {
   setListDataAtom,
   liveStreamDataAtom,
-} from "@/atoms/admin/postGenerator/atoms";
+} from "@/atoms/postGenerator/atoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
