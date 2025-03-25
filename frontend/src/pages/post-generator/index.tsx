@@ -215,7 +215,7 @@ function PostPreview() {
 
   return (
     <div className="w-full">
-      <div className="mb-2 h-52 w-full whitespace-pre rounded border border-gray-400 px-4 py-[0.62rem] text-sm">
+      <div className="mb-2 h-52 w-full whitespace-pre-wrap rounded border border-gray-400 px-4 py-[0.62rem] text-sm">
         {data.length > 0 ? generatedText : ""}
       </div>
       <button
@@ -286,7 +286,7 @@ function SetListPreview() {
   };
   return (
     <div className="w-full">
-      <div className="mb-2 h-52 w-full whitespace-pre rounded border border-gray-400 px-4 py-[0.62rem] text-sm">
+      <div className="mb-2 h-52 w-full whitespace-pre-wrap rounded border border-gray-400 px-4 py-[0.62rem] text-sm">
         {data.length > 0 ? generatedText : ""}
       </div>
       <button
