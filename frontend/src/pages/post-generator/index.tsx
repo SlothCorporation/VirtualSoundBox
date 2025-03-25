@@ -215,20 +215,16 @@ function PostPreview() {
 
   return (
     <div className="w-full">
-      {data.length > 0 && (
-        <>
-          <textarea
-            className="h-[6.25rem] w-full rounded border border-gray-400 px-4 py-[0.62rem] text-sm"
-            value={generatedText}
-          />
-          <button
-            className="w-full rounded border p-1.5 text-sm font-bold"
-            onClick={() => handlePost()}
-          >
-            Tweet
-          </button>
-        </>
-      )}
+      <textarea
+        className="h-52 w-full rounded border border-gray-400 px-4 py-[0.62rem] text-sm"
+        value={data.length > 0 ? generatedText : ""}
+      />
+      <button
+        className="w-full rounded border p-1.5 text-sm font-bold"
+        onClick={() => handlePost()}
+      >
+        Tweet
+      </button>
     </div>
   );
 }
@@ -245,8 +241,11 @@ function SetListGenerator() {
         <span>セットリスト</span>
         <ul className="h-60 overflow-y-scroll rounded border border-gray-400 p-1.5">
           {listData.map((item, index) => (
-            <li key={index}>
-              <span className="mr-2">{`${index + 1}:${item.music}/${item.artist}`}</span>
+            <li
+              key={index}
+              className="flex items-center justify-between border-b py-1.5"
+            >
+              <span className="mr-2">{`${index + 1} : ${item.music}/${item.artist}`}</span>
               <button
                 className="relative rounded border p-1.5 text-sm font-bold"
                 onClick={() => handleRemove(index)}
@@ -291,7 +290,7 @@ function SetListPreview() {
       {data.length > 0 && (
         <>
           <textarea
-            className="h-[6.25rem] w-full rounded border border-gray-400 px-4 py-[0.62rem] text-sm"
+            className="h-52 w-full rounded border border-gray-400 px-4 py-[0.62rem] text-sm"
             value={generatedText}
           />
           <button
@@ -309,7 +308,7 @@ function SetListPreview() {
 export default function Home() {
   return (
     <Layout>
-      <div className="flex gap-5">
+      <div className="flex flex-col gap-10 md:flex-row md:gap-5">
         <PostGenerator />
         <SetListGenerator />
       </div>
