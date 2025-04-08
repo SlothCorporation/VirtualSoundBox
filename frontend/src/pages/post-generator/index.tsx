@@ -5,16 +5,29 @@ import {
   liveStreamDataAtom,
 } from "@/atoms/postGenerator/atoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import type { DependencyList, EffectCallback } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import {
   fetchYoutubeData,
   fetchSuggestedMusic,
   setMusicData,
-} from "@/hooks/admin/postGenerator/api";
+} from "@/hooks/postGenerator/api";
 
 function zeroPadding(NUM: number, LEN: number) {
   return (Array(LEN).join("0") + NUM).slice(-LEN);
+}
+
+function useDelayedEffect(
+  effect: EffectCallback,
+  deps: DependencyList,
+  timeout: number = 1000,
+) {
+  useEffect(() => {
+    const timeoutId = setTimeout(effect, timeout);
+
+    return () => clearTimeout(timeoutId);
+  }, deps);
 }
 
 function PostGenerator() {
@@ -49,9 +62,13 @@ function PostGenerator() {
     setSuggestions(data);
   }, [music, artist]);
 
-  useEffect(() => {
-    suggestedMusic();
-  }, [music, artist, suggestedMusic]);
+  useDelayedEffect(
+    () => {
+      suggestedMusic();
+    },
+    [music, artist, suggestedMusic],
+    300,
+  );
 
   const handleSuggest = async (item: { name: string; artist: string }) => {
     setMusic(item.name);
@@ -151,6 +168,9 @@ const musicTemplate = `🎤{{number}}:{{music}}/{{artist}}🎶
 {{liveTitle}}
 {{liveUrl}} @YouTubeより`;
 
+const streamTemplate = `{{liveTitle}}
+{{liveUrl}} @YouTubeより`;
+
 const setListTemplate = `{{liveTitle}}
 {{liveUrl}} @YouTubeより
 
@@ -198,7 +218,7 @@ function PostPreview() {
 
   useEffect(() => {
     setGeneratedText(
-      replacePlaceholders(musicTemplate, {
+      replacePlaceholders(data.length > 0 ? musicTemplate : streamTemplate, {
         number: String(data.length),
         music: data.slice(-1)[0]?.music,
         artist: data.slice(-1)[0]?.artist,
@@ -216,7 +236,7 @@ function PostPreview() {
   return (
     <div className="w-full">
       <div className="mb-2 h-52 w-full overflow-y-scroll whitespace-pre-wrap rounded border border-gray-400 px-4 py-[0.62rem] text-sm">
-        {data.length > 0 ? generatedText : ""}
+        {(data.length > 0 || liveStreamData.url) && generatedText}
       </div>
       <button
         className="w-full rounded border p-1.5 text-sm font-bold"
