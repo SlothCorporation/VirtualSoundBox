@@ -168,6 +168,9 @@ const musicTemplate = `🎤{{number}}:{{music}}/{{artist}}🎶
 {{liveTitle}}
 {{liveUrl}} @YouTubeより`;
 
+const streamTemplate = `{{liveTitle}}
+{{liveUrl}} @YouTubeより`;
+
 const setListTemplate = `{{liveTitle}}
 {{liveUrl}} @YouTubeより
 
@@ -215,7 +218,7 @@ function PostPreview() {
 
   useEffect(() => {
     setGeneratedText(
-      replacePlaceholders(musicTemplate, {
+      replacePlaceholders(data.length > 0 ? musicTemplate : streamTemplate, {
         number: String(data.length),
         music: data.slice(-1)[0]?.music,
         artist: data.slice(-1)[0]?.artist,
@@ -233,7 +236,7 @@ function PostPreview() {
   return (
     <div className="w-full">
       <div className="mb-2 h-52 w-full overflow-y-scroll whitespace-pre-wrap rounded border border-gray-400 px-4 py-[0.62rem] text-sm">
-        {data.length > 0 ? generatedText : ""}
+        {(data.length > 0 || liveStreamData.url) && generatedText}
       </div>
       <button
         className="w-full rounded border p-1.5 text-sm font-bold"
