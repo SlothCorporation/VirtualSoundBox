@@ -5,16 +5,29 @@ import {
   liveStreamDataAtom,
 } from "@/atoms/postGenerator/atoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import type { DependencyList, EffectCallback } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import {
   fetchYoutubeData,
   fetchSuggestedMusic,
   setMusicData,
-} from "@/hooks/admin/postGenerator/api";
+} from "@/hooks/postGenerator/api";
 
 function zeroPadding(NUM: number, LEN: number) {
   return (Array(LEN).join("0") + NUM).slice(-LEN);
+}
+
+function useDelayedEffect(
+  effect: EffectCallback,
+  deps: DependencyList,
+  timeout: number = 1000,
+) {
+  useEffect(() => {
+    const timeoutId = setTimeout(effect, timeout);
+
+    return () => clearTimeout(timeoutId);
+  }, deps);
 }
 
 function PostGenerator() {
@@ -49,9 +62,13 @@ function PostGenerator() {
     setSuggestions(data);
   }, [music, artist]);
 
-  useEffect(() => {
-    suggestedMusic();
-  }, [music, artist, suggestedMusic]);
+  useDelayedEffect(
+    () => {
+      suggestedMusic();
+    },
+    [music, artist, suggestedMusic],
+    300,
+  );
 
   const handleSuggest = async (item: { name: string; artist: string }) => {
     setMusic(item.name);
