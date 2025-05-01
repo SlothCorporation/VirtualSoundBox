@@ -1,5 +1,10 @@
+import { NEXT_PUBLIC_BACKEND_URL } from "@/config/env-client";
+
+const youtubeUrl = `${NEXT_PUBLIC_BACKEND_URL}/api/youtube`;
+const musicUrl = `${NEXT_PUBLIC_BACKEND_URL}/api/music`;
+
 export const fetchYoutubeData = async (url: string) => {
-  const response = await fetch(`/api/youtube?url=${url}`);
+  const response = await fetch(`${youtubeUrl}?url=${url}`);
   const data = await response.json();
   return data;
 };
@@ -8,7 +13,7 @@ export const fetchSuggestedMusic = async (
   music: string | null,
   artist: string | null,
 ) => {
-  const response = await fetch(`/api/music?music=${music}&artist=${artist}`);
+  const response = await fetch(`${musicUrl}=${music}&artist=${artist}`);
   const data = await response.json();
   return data.length ? data : [];
 };
@@ -19,7 +24,7 @@ export const setMusicData = async (
     artist: string;
   }[],
 ) => {
-  const response = await fetch("/api/music", {
+  const response = await fetch(musicUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
