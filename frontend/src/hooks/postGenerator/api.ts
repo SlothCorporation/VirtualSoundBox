@@ -13,7 +13,7 @@ export const fetchSuggestedMusic = async (
   music: string | null,
   artist: string | null,
 ) => {
-  const response = await fetch(`${musicUrl}=${music}&artist=${artist}`);
+  const response = await fetch(`${musicUrl}?music=${music}&artist=${artist}`);
   const data = await response.json();
   return data.length ? data : [];
 };
