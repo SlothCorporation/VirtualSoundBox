@@ -1,4 +1,5 @@
 import { NEXT_PUBLIC_BACKEND_URL } from "@/config/env-client";
+import { apiFetch } from "@/lib/api";
 
 const youtubeUrl = `${NEXT_PUBLIC_BACKEND_URL}/api/youtube`;
 const musicUrl = `${NEXT_PUBLIC_BACKEND_URL}/api/music`;
@@ -24,11 +25,8 @@ export const setMusicData = async (
     artist: string;
   }[],
 ) => {
-  const response = await fetch(musicUrl, {
+  const response = await apiFetch("/api/music", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ data }),
   });
   const result = await response.json();
