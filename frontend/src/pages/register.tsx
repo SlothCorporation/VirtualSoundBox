@@ -11,7 +11,6 @@ import { useSetAtom } from "jotai";
 import { userAtom } from "@/atoms/userAtom";
 
 function RegisterForm() {
-  const setUser = useSetAtom(userAtom);
   const router = useRouter();
   const [error, setError] = useState("");
   const {
@@ -20,7 +19,7 @@ function RegisterForm() {
     formState: { errors },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
-    mode: "onChange",
+    mode: "onSubmit",
   });
 
   const onSubmit = async (data: RegisterSchema) => {
@@ -36,9 +35,7 @@ function RegisterForm() {
         setError(body.message || "登録に失敗しました");
         return;
       }
-      const user = await res.json();
-      setUser(user);
-      router.push("/mypage");
+      await router.push("/email/verify/sent");
     } catch (err) {
       setError("登録に失敗しました");
     }
