@@ -5,6 +5,8 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
+    'backend_url' => env('APP_URL', 'http://localhost:8000'),
     /*
     |--------------------------------------------------------------------------
     | Application Name

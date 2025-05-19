@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Accounts;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Accounts\RegisterRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class RegisterController extends Controller
 {
@@ -16,15 +16,10 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-
-        Auth::login($user);
+        $user->sendEmailVerificationNotification();
 
         return response()->json([
-            'uuid' => $user->uuid,
-            'name' => $user->name,
-            'email' => $user->email,
-            'plan' => $user->plan,
-            'admin_flg' => $user->admin_flg,
+           'message' => 'ユーザー登録が完了しました。確認メールをご確認ください。'
         ]);
     }
 }
