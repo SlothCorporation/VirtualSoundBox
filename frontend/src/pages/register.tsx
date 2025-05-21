@@ -7,8 +7,6 @@ import Input from "@/components/Form/Input";
 import { useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { useRouter } from "next/router";
-import { useSetAtom } from "jotai";
-import { userAtom } from "@/atoms/userAtom";
 
 function RegisterForm() {
   const router = useRouter();
@@ -35,7 +33,7 @@ function RegisterForm() {
         setError(body.message || "登録に失敗しました");
         return;
       }
-      await router.push("/email/verify/sent");
+      router.push("/email/verify/sent");
     } catch (err) {
       setError("登録に失敗しました");
     }

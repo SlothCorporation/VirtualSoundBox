@@ -5,7 +5,7 @@ type User = {
   name: string;
   email: string;
   plan: string;
-  admin_flag: number;
+  admin_flg: number;
 };
 
 export const userAtom = atom<User | null | undefined>(undefined);

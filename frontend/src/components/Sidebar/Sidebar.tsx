@@ -3,8 +3,8 @@ import SidebarItem from "@/components/Sidebar/SidebarItem";
 
 const menu = [
   {
-    route: "/admin/post-generator",
-    label: "ポストジェネレター",
+    route: "/admin/users",
+    label: "ユーザー管理",
   },
 ];
 
