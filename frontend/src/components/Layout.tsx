@@ -44,7 +44,7 @@ function Layout({ auth = false, children }: LayoutProps) {
     if (auth && user === null) {
       router.push("/login");
     }
-  }, [auth, user]);
+  }, [auth, user, router]);
 
   if (auth && user === undefined) {
     // ローディングスピナー表示
