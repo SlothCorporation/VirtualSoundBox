@@ -8,6 +8,9 @@ use App\Http\Controllers\Api\Accounts\RegisterController;
 use App\Http\Controllers\Api\Accounts\LoginController;
 use App\Http\Controllers\Api\Accounts\LogoutController;
 use App\Http\Controllers\Api\Accounts\FetchUserProfileController;
+use App\Http\Controllers\Api\Accounts\FetchUserController;
+use App\Http\Controllers\Api\Accounts\FetchUsersController;
+use App\Http\Controllers\Api\Accounts\UpdateUserController;
 
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;
@@ -66,4 +69,13 @@ Route::middleware('api')->group(function () {
 
     });
 
+
+    // =============================
+    // 🔹 管理者APIルート
+    // =============================
+    Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+        Route::get('/admin/users', FetchUsersController::class);
+        Route::get('/admin/users/{id}', FetchUserController::class);
+        Route::put('/admin/users/{id}', UpdateUserController::class);
+    });
 });
