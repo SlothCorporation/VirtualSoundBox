@@ -39,7 +39,7 @@ function AdminLayout({ children }: LayoutProps) {
     if (user?.admin_flg === 0) {
       router.push("/");
     }
-  }, [user]);
+  }, [user, router]);
 
   return (
     <GlobalNavLayout sideNavContent={<SideNavContent />}>

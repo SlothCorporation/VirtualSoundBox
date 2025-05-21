@@ -18,9 +18,10 @@ export const useInitAuth = () => {
         }
       } catch (e) {
         setUser(null);
+        console.error(e);
       }
     };
 
     checkAuth();
-  }, []);
+  }, [setUser]);
 };

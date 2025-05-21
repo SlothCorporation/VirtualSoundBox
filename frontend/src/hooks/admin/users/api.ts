@@ -28,7 +28,7 @@ export const updateUser = async (userUuid: string, data: UserData) => {
     method: "POST",
     body: JSON.stringify(data),
   });
-  console.log(response);
+
   if (!response.ok) {
     throw new Error("Failed to update user");
   }

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 
-class FetchUserProfileController
+class FetchUserProfileController extends Controller
 {
     public function __invoke(): JsonResponse
     {

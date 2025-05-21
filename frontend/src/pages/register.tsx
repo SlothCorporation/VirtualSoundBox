@@ -36,6 +36,7 @@ function RegisterForm() {
       router.push("/email/verify/sent");
     } catch (err) {
       setError("登録に失敗しました");
+      console.error("Registration failed", err);
     }
   };
 

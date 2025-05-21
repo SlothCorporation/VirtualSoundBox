@@ -3,8 +3,18 @@ import { fetchUsers } from "@/hooks/admin/users/api";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+type User = {
+  id: number;
+  uuid: string;
+  name: string;
+  email: string;
+  plan: string;
+  admin_flg: boolean;
+  created_at: string;
+};
+
 function Page() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { editUserSchema } from "@/schema/admin/users/edit";
 import type { EditUserSchema } from "@/schema/admin/users/edit";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { fetchUser, updateUser } from "@/hooks/admin/users/api";
+import { fetchUser } from "@/hooks/admin/users/api";
 import { useRouter } from "next/navigation";
 import Input from "@/components/Form/Input";
 import Dropdown from "@/components/Form/Select";
@@ -16,12 +16,7 @@ export default function EditUserPage() {
   const userUuid = params?.userUuid;
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<EditUserSchema>({
+  const { register, handleSubmit, reset } = useForm<EditUserSchema>({
     resolver: zodResolver(editUserSchema),
     defaultValues: {
       name: "",
@@ -62,9 +57,6 @@ export default function EditUserPage() {
     } catch (err) {
       console.error("ユーザーの更新に失敗しました", err);
     }
-
-    // await updateUser(userUuid as string, formData);
-    // router.push("/admin/users");
   };
 
   return (
