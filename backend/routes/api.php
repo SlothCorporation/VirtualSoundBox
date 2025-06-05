@@ -67,6 +67,10 @@ Route::middleware('api')->group(function () {
             Route::get('/me', FetchUserProfileController::class);
         });
 
+        Route::get('/post-template', \App\Http\Controllers\Api\PostTemplates\FetchController::class);
+        Route::get('/post-template/{id}', \App\Http\Controllers\Api\PostTemplates\FindController::class);
+        Route::post('/post-template/create', \App\Http\Controllers\Api\PostTemplates\CreateController::class);
+        Route::post('/post-template/save', \App\Http\Controllers\Api\PostTemplates\SaveController::class);
     });
 
 
