@@ -32,4 +32,42 @@ export const setMusicData = async (
   const result = await response.json();
   return result;
 };
+
+export const fetchTemplates = async () => {
+  const response = await apiFetch("/api/post-template");
+  const templates = await response.json();
+  return templates;
+};
+
+export const findTemplate = async (templateId: string) => {
+  const response = await apiFetch(`/api/post-template/${templateId}`);
+  if (!response.ok) {
+    throw new Error("テンプレートが見つかりません");
+  }
+  const template = await response.json();
+
+  return template;
+};
+
+export const updateTemplate = async (data: {
+  uuid: string;
+  type: "music" | "list";
+  name: string;
+  content: string;
+}) => {
+  const response = await apiFetch("/api/post-template/save", {
+    method: "POST",
+    body: JSON.stringify({ data }),
+  });
+  const result = await response.json();
+  return result;
+};
+
+export const createTemplate = async () => {
+  const response = await apiFetch("/api/post-template/create", {
+    method: "POST",
+  });
+  const result = await response.json();
+  return result;
+};
 // https://www.googleapis.com/youtube/v3/videos?part=snippet&id=1UbYw6yN7RE&key=AIzaSyAjB-JSwA5_89AKgbzjGebfe0eJbJOw-M8
