@@ -11,8 +11,8 @@ import type { PostGeneratorEditSchema } from "@/schema/post-generator/edit";
 import Input from "@/components/Form/Input";
 import { useEffect, useState } from "react";
 import { replacePlaceholders } from "@/lib/post-generator";
-import { useParams } from "next/navigation";
 import { findTemplate, updateTemplate } from "@/hooks/postGenerator/api";
+import { useRouter } from "next/router";
 import Link from "next/link";
 
 const dummyData = {
@@ -152,9 +152,9 @@ function Preview({ watch }: PreviewProps) {
 }
 
 function EditForm() {
-  const params = useParams();
-  const templateUuid = params?.templateUuid;
-  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { templateUuid } = router.query;
+  const uuid = Array.isArray(templateUuid) ? templateUuid[0] : templateUuid;
 
   const {
     register,
@@ -173,21 +173,21 @@ function EditForm() {
   });
 
   const loadTemplateById = async () => {
-    if (!templateUuid) return;
-    setLoading(true);
-    try {
-      const data = await findTemplate(templateUuid);
-      setValue("type", data.type);
-      setValue("name", data.name);
-      setValue("content", data.content);
-    } finally {
-      setLoading(false);
-    }
+    if (!uuid) return;
+
+    const data = await findTemplate(uuid);
+    setValue("type", data.type);
+    setValue("name", data.name);
+    setValue("content", data.content);
   };
 
   const onSubmit = async (data: PostGeneratorEditSchema) => {
+    if (!uuid) {
+      console.log("テンプレートのUUIDが指定されていません");
+      return;
+    }
     try {
-      await updateTemplate({ uuid: templateUuid, ...data });
+      await updateTemplate({ uuid, ...data });
     } catch (err) {
       console.log("テンプレートの更新に失敗しました");
     }

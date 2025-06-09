@@ -386,8 +386,12 @@ function Page() {
 
   const loadTemplates = async () => {
     const data = await fetchTemplates();
-    setMusicTemplates(data.filter((template) => template.type === "music"));
-    setSetListTemplates(data.filter((template) => template.type === "list"));
+    setMusicTemplates(
+      data.filter((template: Template) => template.type === "music"),
+    );
+    setSetListTemplates(
+      data.filter((template: Template) => template.type === "list"),
+    );
   };
 
   useEffect(() => {
