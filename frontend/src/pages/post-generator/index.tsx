@@ -300,7 +300,7 @@ function SetListGenerator({ setListTemplates = [] }: setListGeneratorProps) {
       <div>
         <span>セットリスト</span>
         {setListTemplates.length > 0 && (
-          <div>
+          <div className="mb-2">
             <select
               className="w-full rounded border p-1.5 text-sm"
               onChange={handleSelectChange}
@@ -357,7 +357,7 @@ function SetListPreview({ template }: SetListPreviewProps) {
         })),
       }),
     );
-  }, [liveStreamData, data]);
+  }, [liveStreamData, data, template]);
 
   const handlePost = () => {
     setMusicData(data);
