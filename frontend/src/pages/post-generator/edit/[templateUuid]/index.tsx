@@ -83,7 +83,7 @@ function Index({ register, watch, setValue }: EditProps) {
           <input
             className="mr-2"
             type="radio"
-            value="setList"
+            value="list"
             {...register("type")}
           />
           セトリテンプレート
