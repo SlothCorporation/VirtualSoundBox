@@ -3,8 +3,18 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createTemplate, fetchTemplates } from "@/hooks/postGenerator/api";
 
+type Template = {
+  uuid: string;
+  user_uuid: string;
+  type: "music" | "list";
+  name: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+};
+
 function Page() {
-  const [templates, setTemplates] = useState([]);
+  const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadTemplates = async () => {
