@@ -12,7 +12,27 @@ import {
   fetchYoutubeData,
   fetchSuggestedMusic,
   setMusicData,
+  fetchTemplates,
 } from "@/hooks/postGenerator/api";
+import { replacePlaceholders } from "@/lib/post-generator";
+import { userAtom } from "@/atoms/userAtom";
+import Link from "next/link";
+
+const musicTemplate = `🎤{{number}}:{{music}}/{{artist}}🎶
+
+{{liveTitle}}
+{{liveUrl}} @YouTubeより`;
+
+const streamTemplate = `{{liveTitle}}
+{{liveUrl}} @YouTubeより`;
+
+const setListTemplate = `{{liveTitle}}
+{{liveUrl}} @YouTubeより
+
+本日のセトリ
+@{{setList}}
+{{number}}:{{music}}/{{artist}}
+@{{end}}`;
 
 function zeroPadding(NUM: number, LEN: number) {
   return (Array(LEN).join("0") + NUM).slice(-LEN);
@@ -29,11 +49,25 @@ function useDelayedEffect(
     return () => clearTimeout(timeoutId);
   }, deps);
 }
+type Template = {
+  uuid: string;
+  user_uuid: string;
+  type: "music" | "list";
+  name: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+};
 
-function PostGenerator() {
+type PostGeneratorProps = {
+  musicTemplates: Array<Template>;
+};
+
+function PostGenerator({ musicTemplates = [] }: PostGeneratorProps) {
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [music, setMusic] = useState("");
   const [artist, setArtist] = useState("");
+  const [content, setContent] = useState(musicTemplate);
   const [isFocus, setIsFocus] = useState({ music: false, artist: false });
   const [suggestions, setSuggestions] = useState([]);
   const setListData = useSetAtom(setListDataAtom);
@@ -74,6 +108,21 @@ function PostGenerator() {
     setMusic(item.name);
     setArtist(item.artist);
     setIsFocus({ music: false, artist: false });
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedUuid = e.target.value;
+
+    if (selectedUuid === "default") {
+      setContent(musicTemplate); // defaultの場合はmusicTemplateを設定
+    } else {
+      const selectedTemplate = musicTemplates.find(
+        (template) => template.uuid === selectedUuid,
+      );
+      if (selectedTemplate) {
+        setContent(selectedTemplate.content);
+      }
+    }
   };
 
   return (
@@ -158,67 +207,38 @@ function PostGenerator() {
           </button>
         </div>
       </div>
-      <PostPreview />
+      {musicTemplates.length > 0 && (
+        <div>
+          <select
+            className="w-full rounded border p-1.5 text-sm"
+            onChange={handleSelectChange}
+          >
+            <option value="default">デフォルト</option>
+            {musicTemplates.map((template) => (
+              <option key={template.uuid} value={template.uuid}>
+                {template.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      <PostPreview template={content} />
     </div>
   );
 }
 
-const musicTemplate = `🎤{{number}}:{{music}}/{{artist}}🎶
-
-{{liveTitle}}
-{{liveUrl}} @YouTubeより`;
-
-const streamTemplate = `{{liveTitle}}
-{{liveUrl}} @YouTubeより`;
-
-const setListTemplate = `{{liveTitle}}
-{{liveUrl}} @YouTubeより
-
-本日のセトリ
-@{{setList}}
-{{number}}:{{music}}/{{artist}}
-@{{end}}`;
-
-type TemplateVariables = {
-  [key: string]: string | string[] | { [key: string]: string }[];
+type PostPreviewProps = {
+  template: string;
 };
 
-function replacePlaceholders(
-  template: string,
-  variables: TemplateVariables,
-): string {
-  return template
-    .replace(
-      /@{{(\w+)}}([\s\S]*?)@{{end}}/g,
-      (_, key: string, content: string) => {
-        if (Array.isArray(variables[key])) {
-          return (variables[key] as { [key: string]: string }[])
-            .map((item) =>
-              content
-                .replace(
-                  /{{(.*?)}}/g,
-                  (_, varKey: string) => item[varKey.trim()] || "",
-                )
-                .trim(),
-            )
-            .join("\n");
-        }
-        return content.trim();
-      },
-    )
-    .replace(/{{(.*?)}}/g, (_, key: string) =>
-      String(variables[key.trim()] || ""),
-    );
-}
-
-function PostPreview() {
+function PostPreview({ template }: PostPreviewProps) {
   const [generatedText, setGeneratedText] = useState("");
   const liveStreamData = useAtomValue(liveStreamDataAtom);
   const data = useAtomValue(setListDataAtom);
 
   useEffect(() => {
     setGeneratedText(
-      replacePlaceholders(data.length > 0 ? musicTemplate : streamTemplate, {
+      replacePlaceholders(data.length > 0 ? template : streamTemplate, {
         number: String(data.length),
         music: data.slice(-1)[0]?.music,
         artist: data.slice(-1)[0]?.artist,
@@ -226,7 +246,7 @@ function PostPreview() {
         liveUrl: liveStreamData.url,
       }),
     );
-  }, [liveStreamData, data]);
+  }, [liveStreamData, data, template]);
 
   const handlePost = () => {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(generatedText)}`;
@@ -248,16 +268,52 @@ function PostPreview() {
   );
 }
 
-function SetListGenerator() {
+type setListGeneratorProps = {
+  setListTemplates: Array<Template>;
+};
+
+function SetListGenerator({ setListTemplates = [] }: setListGeneratorProps) {
   const [listData, setListData] = useAtom(setListDataAtom);
+  const [content, setContent] = useState(setListTemplate);
 
   const handleRemove = (index: number) => {
     setListData((prev) => prev.filter((_, i) => i !== index));
   };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedUuid = e.target.value;
+
+    if (selectedUuid === "default") {
+      setContent(musicTemplate); // defaultの場合はmusicTemplateを設定
+    } else {
+      const selectedTemplate = setListTemplates.find(
+        (template) => template.uuid === selectedUuid,
+      );
+      if (selectedTemplate) {
+        setContent(selectedTemplate.content);
+      }
+    }
+  };
+
   return (
     <div className="flex w-full flex-col gap-2">
       <div>
         <span>セットリスト</span>
+        {setListTemplates.length > 0 && (
+          <div>
+            <select
+              className="w-full rounded border p-1.5 text-sm"
+              onChange={handleSelectChange}
+            >
+              <option value="default">デフォルト</option>
+              {setListTemplates.map((template) => (
+                <option key={template.uuid} value={template.uuid}>
+                  {template.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <ul className="h-60 overflow-y-scroll rounded border border-gray-400 p-1.5">
           {listData.map((item, index) => (
             <li
@@ -275,19 +331,23 @@ function SetListGenerator() {
           ))}
         </ul>
       </div>
-      <SetListPreview />
+      <SetListPreview template={content} />
     </div>
   );
 }
 
-function SetListPreview() {
+type SetListPreviewProps = {
+  template: string;
+};
+
+function SetListPreview({ template }: SetListPreviewProps) {
   const [generatedText, setGeneratedText] = useState("");
   const liveStreamData = useAtomValue(liveStreamDataAtom);
   const data = useAtomValue(setListDataAtom);
 
   useEffect(() => {
     setGeneratedText(
-      replacePlaceholders(setListTemplate, {
+      replacePlaceholders(template, {
         liveTitle: liveStreamData.title,
         liveUrl: liveStreamData.url,
         setList: data.map((item, index) => ({
@@ -319,13 +379,42 @@ function SetListPreview() {
   );
 }
 
-export default function Home() {
+function Page() {
+  const user = useAtomValue(userAtom);
+  const [musicTemplates, setMusicTemplates] = useState([]);
+  const [setListTemplates, setSetListTemplates] = useState([]);
+
+  const loadTemplates = async () => {
+    const data = await fetchTemplates();
+    setMusicTemplates(data.filter((template) => template.type === "music"));
+    setSetListTemplates(data.filter((template) => template.type === "list"));
+  };
+
+  useEffect(() => {
+    loadTemplates();
+  }, []);
+
   return (
     <Layout>
-      <div className="flex flex-col gap-10 md:flex-row md:gap-5">
-        <PostGenerator />
-        <SetListGenerator />
+      <div className="p-6">
+        <h1 className="mb-4 text-2xl font-bold">ポストジェネレーター</h1>
+        {user && (
+          <div className="mb-4 flex justify-end">
+            <Link
+              href="/post-generator/edit/"
+              className="text-blue-600 underline"
+            >
+              テンプレートの編集
+            </Link>
+          </div>
+        )}
+        <div className="flex flex-col gap-10 md:flex-row md:gap-5">
+          <PostGenerator musicTemplates={musicTemplates} />
+          <SetListGenerator setListTemplates={setListTemplates} />
+        </div>
       </div>
     </Layout>
   );
 }
+
+export default Page;
