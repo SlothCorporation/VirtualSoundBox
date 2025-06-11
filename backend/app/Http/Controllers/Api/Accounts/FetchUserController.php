@@ -20,5 +20,4 @@ class FetchUserController extends Controller
             'admin_flg' => $user->admin_flg,
         ]);
     }
-
 }
