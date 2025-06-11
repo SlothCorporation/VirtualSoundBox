@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "eslint './**/*.{js,ts,tsx}'",
     "tsc": "tsc --noEmit",
-    "format-check": "prettier -c './**/*.{js,ts,tsx}'",
-    "format": "prettier -w './**/*.{js,ts,tsx}'"
+    "format:check": "prettier -c './**/*.{js,ts,tsx}'",
+    "format": "prettier -w './**/*.{js,ts,tsx}'",
+    "test": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
