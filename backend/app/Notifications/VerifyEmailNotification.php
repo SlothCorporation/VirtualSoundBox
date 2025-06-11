@@ -13,7 +13,7 @@ class VerifyEmailNotification extends BaseVerifyEmail
     {
         $verificationUrl = $this->verificationUrl($notifiable);
 
-        return (new MailMessage)
+        return (new MailMessage())
             ->subject('【Virtual Sound Box】メールアドレスの確認をお願いします')
             ->view('emails.verify-email', [
                 'url' => $verificationUrl,

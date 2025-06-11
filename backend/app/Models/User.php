@@ -12,7 +12,9 @@ use App\Notifications\VerifyEmailNotification;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     protected static function boot(): void
     {

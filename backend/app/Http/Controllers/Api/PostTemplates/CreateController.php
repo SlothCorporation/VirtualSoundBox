@@ -10,9 +10,9 @@ use Illuminate\Support\Str;
 
 class CreateController extends Controller
 {
-    const defaultTemplateName = '新しいテンプレート';
-    const defaultTemplateType = 'music';
-    const defaultTemplateContent = <<<EOT
+    public const defaultTemplateName = '新しいテンプレート';
+    public const defaultTemplateType = 'music';
+    public const defaultTemplateContent = <<<EOT
 🎤{{number}}:{{music}}/{{artist}}🎶
 
 {{liveTitle}}
