@@ -10,9 +10,9 @@ use Illuminate\Support\Str;
 
 class CreateController extends Controller
 {
-    const defaultTemplateName = '新しいテンプレート';
-    const defaultTemplateType = 'music';
-    const defaultTemplateContent = <<<EOT
+    public const DEFAULT_TEMPLATE_NAME = '新しいテンプレート';
+    public const DEFAULT_TEMPLATE_TYPE = 'music';
+    public const DEFAULT_TEMPLATE_CONTENT = <<<EOT
 🎤{{number}}:{{music}}/{{artist}}🎶
 
 {{liveTitle}}
@@ -30,9 +30,9 @@ EOT;
         $template = PostTemplate::create([
             'uuid' => Str::uuid(),
             'user_uuid' => $user->uuid,
-            'name' => self::defaultTemplateName,
-            'type' => self::defaultTemplateType,
-            'content' => self::defaultTemplateContent,
+            'name' => self::DEFAULT_TEMPLATE_NAME,
+            'type' => self::DEFAULT_TEMPLATE_TYPE,
+            'content' => self::DEFAULT_TEMPLATE_CONTENT,
         ]);
 
         return response()->json([

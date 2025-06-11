@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\Accounts\FetchUserProfileController;
 use App\Http\Controllers\Api\Accounts\FetchUserController;
 use App\Http\Controllers\Api\Accounts\FetchUsersController;
 use App\Http\Controllers\Api\Accounts\UpdateUserController;
-
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;
 use App\Models\User;
