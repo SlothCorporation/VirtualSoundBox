@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Music\IndexMusicRequest;
 use Illuminate\Http\JsonResponse;
 use App\Models\Musics;
-use Illuminate\Support\Facades\Log;
 
 class IndexMusicController extends Controller
 {
@@ -23,7 +22,9 @@ class IndexMusicController extends Controller
             });
         }
 
-        $query->orderBy('name', 'ASC');
+        $query
+            ->orderBy('artist', 'ASC')
+            ->orderBy('name', 'ASC');
 
         $music = $query->latest()->paginate($perPage);
         return response()->json($music);
