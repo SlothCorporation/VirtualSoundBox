@@ -6,6 +6,10 @@ const menu = [
     route: "/admin/users",
     label: "ユーザー管理",
   },
+  {
+    route: "/admin/music",
+    label: "楽曲管理",
+  },
 ];
 
 export default function Sidebar() {

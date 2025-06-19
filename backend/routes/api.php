@@ -80,5 +80,8 @@ Route::middleware('api')->group(function () {
         Route::get('/admin/users', FetchUsersController::class);
         Route::get('/admin/users/{id}', FetchUserController::class);
         Route::put('/admin/users/{id}', UpdateUserController::class);
+        Route::get('/admin/music', \App\Http\Controllers\Admin\Music\IndexMusicController::class);
+        Route::put('/admin/music/{id}', \App\Http\Controllers\Admin\Music\UpdateMusicController::class);
+        Route::delete('/admin/music/{id}', \App\Http\Controllers\Admin\Music\DeleteMusicController::class);
     });
 });
