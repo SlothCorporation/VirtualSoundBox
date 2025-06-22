@@ -6,6 +6,7 @@ import { useInitAuth } from "@/hooks/auth";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/userAtom";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/Spinner";
 
 interface LayoutProps {
   children: ReactNode;
@@ -36,10 +37,22 @@ function AdminLayout({ children }: LayoutProps) {
   const router = useRouter();
 
   useEffect(() => {
-    if (user?.admin_flg === 0) {
-      router.push("/");
+    if (user === undefined) return;
+
+    if (user === null) {
+      router.replace("/login");
+    } else if (user.admin_flg === 0) {
+      router.replace("/");
     }
   }, [user, router]);
+
+  if (user?.admin_flg !== 1) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white text-black">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <GlobalNavLayout sideNavContent={<SideNavContent />}>

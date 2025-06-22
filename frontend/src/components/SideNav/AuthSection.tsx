@@ -1,8 +1,8 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import { userAtom } from "@/atoms/userAtom";
-import { apiFetch } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { logout } from "@/lib/auth";
 
 function AuthSection() {
   const user = useAtomValue(userAtom);
@@ -10,7 +10,7 @@ function AuthSection() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    await apiFetch("/api/logout", { method: "POST" });
+    await logout();
     setUser(null);
     router.push("/login");
   };
