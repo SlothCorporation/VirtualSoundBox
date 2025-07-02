@@ -22,7 +22,8 @@ class Article extends Model
         'category_id',
     ];
 
-    public function tags() {
+    public function tags()
+    {
         return $this->belongsToMany(Tag::class);
     }
 
