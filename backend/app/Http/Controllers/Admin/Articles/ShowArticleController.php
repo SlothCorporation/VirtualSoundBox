@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Admin\Articles;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
-use Illuminate\Http\JsonResponse;
+use App\Http\Resources\Admin\Articles\ShowArticleResource;
 
 class ShowArticleController extends Controller
 {
-    public function __invoke($id): JsonResponse
+    public function __invoke($id)
     {
-        $article = Article::with('id', $id)->first();
-        return response()->json($article);
+        $article = Article::with(['tags', 'category'])->findOrFail($id);
+        return new ShowArticleResource($article);
     }
 }

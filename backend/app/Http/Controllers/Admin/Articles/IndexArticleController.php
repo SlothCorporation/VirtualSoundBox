@@ -4,20 +4,20 @@ namespace App\Http\Controllers\Admin\Articles;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Articles\IndexArticleRequest;
-use Illuminate\Http\JsonResponse;
+use App\Http\Resources\Admin\Articles\IndexArticleResource;
 use App\Models\Article;
 
 class IndexArticleController extends Controller
 {
-    public function __invoke(IndexArticleRequest $request): JsonResponse
+    public function __invoke(IndexArticleRequest $request)
     {
-        $perPage = $request->input('per_page');
+        $perPage = $request->input('per_page', 20);
 
-        $query = Article::query();
+        $articles = Article::query()
+            ->with(['tags', 'category']) // ← 必要であれば eager load
+            ->orderBy('updated_at', 'desc')
+            ->paginate($perPage);
 
-        $query->orderBy('updated_at', 'DESC');
-
-        $article = $query->latest()->paginate($perPage);
-        return response()->json($article);
+        return IndexArticleResource::collection($articles);
     }
 }
