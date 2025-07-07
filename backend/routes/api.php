@@ -90,5 +90,9 @@ Route::middleware('api')->group(function () {
         Route::get('/admin/articles/{id}', \App\Http\Controllers\Admin\Articles\ShowArticleController::class);
         Route::put('/admin/articles/{id}', \App\Http\Controllers\Admin\Articles\UpdateArticleController::class);
         Route::delete('/admin/articles/{id}', \App\Http\Controllers\Admin\Articles\DestroyArticleController::class);
+        // カテゴリー
+        Route::get('/admin/category', \App\Http\Controllers\Admin\Category\IndexCategoryController::class);
+        Route::post('/admin/category', \App\Http\Controllers\Admin\Category\StoreCategoryController::class);
+        Route::delete('/admin/category/{id}', \App\Http\Controllers\Admin\Category\DestroyCategoryController::class);
     });
 });
