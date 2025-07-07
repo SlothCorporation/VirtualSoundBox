@@ -189,6 +189,7 @@ function CategoryList() {
           <tbody>
             {category.map((item: Category) => (
               <CategoryListBody
+                key={item.id}
                 category={item}
                 fetchCategories={fetchCategories}
               />
