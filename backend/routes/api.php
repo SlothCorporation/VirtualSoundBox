@@ -94,5 +94,9 @@ Route::middleware('api')->group(function () {
         Route::get('/admin/category', \App\Http\Controllers\Admin\Category\IndexCategoryController::class);
         Route::post('/admin/category', \App\Http\Controllers\Admin\Category\StoreCategoryController::class);
         Route::delete('/admin/category/{id}', \App\Http\Controllers\Admin\Category\DestroyCategoryController::class);
+        // タグ
+        Route::get('/admin/tags', \App\Http\Controllers\Admin\Tags\IndexTagController::class);
+        Route::put('/admin/tags/{id}', \App\Http\Controllers\Admin\Tags\UpdateTagController::class);
+        Route::delete('/admin/tags/{id}', \App\Http\Controllers\Admin\Tags\DestroyTagController::class);
     });
 });
