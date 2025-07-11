@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SidebarPanel } from "./SidebarPanel";
 import { useAtom } from "jotai";
 import { editorArticleAtom } from "@/atoms/editorArticleAtom";
-
-const categories = [
-  { id: 1, name: "テクノロジー", value: "test1" },
-  { id: 2, name: "ライフスタイル", value: "test2" },
-  { id: 3, name: "ニュース", value: "test3" },
-  { id: 4, name: "エンタメ", value: "test4" },
-];
+import { type Category, fetchCategory } from "@/hooks/admin/category/api";
 
 export const CategoryPanel = () => {
   const [article, setArticle] = useAtom(editorArticleAtom);
+  const [category, setCategory] = useState<Category[]>([]);
+
+  const fetchCategories = async () => {
+    const res = await fetchCategory();
+    setCategory(res.data);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <SidebarPanel title="カテゴリー">
@@ -21,8 +25,8 @@ export const CategoryPanel = () => {
         onChange={(e) => setArticle({ ...article, category: e.target.value })}
       >
         <option value="">選択してください</option>
-        {categories.map((cat) => (
-          <option key={cat.id} value={cat.value}>
+        {category.map((cat) => (
+          <option key={cat.id} value={cat.slug}>
             {cat.name}
           </option>
         ))}
