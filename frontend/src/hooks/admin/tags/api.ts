@@ -1,8 +1,23 @@
 import { apiFetch } from "@/lib/api";
 
+export type Tag = {
+  id: number;
+  name: string;
+  slug: string;
+  count: number;
+  created_at: string;
+  updated_at: string;
+};
+
 type FetchTagsPaginationProps = {
   keyword: string;
   page: number;
+};
+
+export const fetchTags = async () => {
+  const response = await apiFetch("/api/admin/tags/all");
+
+  return await response.json();
 };
 
 export const fetchTagsPagination = async ({
