@@ -11,6 +11,7 @@ use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Helpers\SlugHelper;
 
 class StoreArticleController extends Controller
 {
@@ -32,9 +33,10 @@ class StoreArticleController extends Controller
 
             if ($request->has('tags')) {
                 foreach ($request->tags as $tagName) {
+                    $slug = SlugHelper::generateJapaneseSlug($tagName);
                     $tag = Tag::firstOrCreate(
                         ['name' => $tagName],
-                        ['slug' => Str::slug($tagName)]
+                        ['slug' => $slug]
                     );
 
                     ArticleTag::firstOrCreate([

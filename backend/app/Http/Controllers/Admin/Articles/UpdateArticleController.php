@@ -10,7 +10,7 @@ use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
+use App\Helpers\SlugHelper;
 
 class UpdateArticleController extends Controller
 {
@@ -39,13 +39,17 @@ class UpdateArticleController extends Controller
                 $article->save();
 
                 // タグの処理（多対多）
-                $tagIds = collect($request->tags)->map(function ($tagName) {
-                    return Tag::firstOrCreate(
-                        ['name' => $tagName],
-                        ['slug' => Str::slug($tagName)]
-                    )->id;
-                });
-                $article->tags()->sync($tagIds);
+                if ($request->has('tags')) {
+                    $tagIds = collect($request->tags)->map(function ($tagName) {
+                        $slug = SlugHelper::generateJapaneseSlug($tagName);
+                        return Tag::firstOrCreate(
+                            ['name' => $tagName],
+                            ['slug' => $slug]
+                        )->id;
+                    });
+
+                    $article->tags()->sync($tagIds);
+                }
             });
 
             return response()->json(['message' => '記事を更新しました。']);
