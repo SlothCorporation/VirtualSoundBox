@@ -1,40 +1,25 @@
 // components/editor/sidebar/TagPanel.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SidebarPanel } from "./SidebarPanel";
 import { useAtom } from "jotai";
 import { editorArticleAtom } from "@/atoms/editorArticleAtom";
-
-const predefinedTags = [
-  "React",
-  "Laravel",
-  "Next.js",
-  "TypeScript",
-  "Vue.js",
-  "Angular",
-  "Node.js",
-  "Django",
-  "Rails",
-  "Express",
-  "PHP",
-  "Python",
-  "JavaScript",
-  "CSS",
-  "HTML",
-  "Tailwind CSS",
-  "Bootstrap",
-  "GraphQL",
-  "REST API",
-  "Git",
-];
+import { fetchTags, type Tag } from "@/hooks/admin/tags/api";
 
 export const TagPanel = () => {
   const [inputValue, setInputValue] = useState("");
   const [article, setArticle] = useAtom(editorArticleAtom);
+  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
 
-  const filteredTags = predefinedTags.filter(
+  useEffect(() => {
+    fetchTags().then((tags) => {
+      setAvailableTags(tags.data);
+    });
+  }, []);
+
+  const filteredTags = availableTags.filter(
     (tag) =>
-      tag.toLowerCase().startsWith(inputValue.toLowerCase()) &&
-      !article.tags.includes(tag),
+      tag.name.toLowerCase().startsWith(inputValue.toLowerCase()) &&
+      !article.tags.includes(tag.name),
   );
 
   const handleAddTag = () => {
@@ -45,9 +30,9 @@ export const TagPanel = () => {
     }
   };
 
-  const handleSelectTag = (tag: string) => {
-    if (!article.tags.includes(tag)) {
-      setArticle({ ...article, tags: [...article.tags, tag] });
+  const handleSelectTag = (tagName: string) => {
+    if (!article.tags.includes(tagName)) {
+      setArticle({ ...article, tags: [...article.tags, tagName] });
     }
   };
 
@@ -74,11 +59,11 @@ export const TagPanel = () => {
           <div className="flex max-h-[5.6rem] flex-wrap gap-1 overflow-y-auto pr-1">
             {filteredTags.map((tag) => (
               <button
-                key={tag}
-                onClick={() => handleSelectTag(tag)}
+                key={tag.id}
+                onClick={() => handleSelectTag(tag.name)}
                 className="rounded bg-gray-200 px-2 py-1 text-xs hover:bg-gray-300"
               >
-                {tag}
+                {tag.name}
               </button>
             ))}
           </div>

@@ -1,5 +1,6 @@
 import AdminLayout from "@/components/AdminLayout";
 import { useEffect, useState } from "react";
+import type { Tag } from "@/hooks/admin/tags/api";
 import {
   fetchTagsPagination,
   updateTag,
@@ -15,15 +16,6 @@ import {
 } from "react-icons/md";
 import { Toast } from "@/components/Toast/Toast";
 import Modal from "@/components/Modal/Modal";
-
-type Tag = {
-  id: number;
-  name: string;
-  slug: string;
-  count: number;
-  created_at: string;
-  updated_at: string;
-};
 
 type TagListBodyProps = {
   tag: Tag;
