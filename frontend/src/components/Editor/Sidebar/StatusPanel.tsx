@@ -3,24 +3,63 @@ import React, { useState } from "react";
 import { SidebarPanel } from "./SidebarPanel";
 import { editorArticleAtom } from "@/atoms/editorArticleAtom";
 import { useAtom } from "jotai";
-import { saveEditorArticle } from "@/hooks/admin/articles/api";
+import {
+  saveEditorArticle,
+  updatePublishSetting,
+} from "@/hooks/admin/articles/api";
+import { Toast } from "@/components/Toast/Toast";
+
+const articleStatus = {
+  draft: "下書き",
+  published: "公開済み",
+  scheduled: "公開予約",
+  unpublished: "非公開",
+};
 
 export const StatusPanel = () => {
   const [article, setArticle] = useAtom(editorArticleAtom);
   const [scheduledAt, setScheduledAt] = useState("");
   const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSaveDraft = async () => {
-    const res = await saveEditorArticle(article);
-    console.log("下書き保存");
+    await saveEditorArticle(article);
+    Toast({
+      title: "保存成功",
+      description: "記事が下書きとして保存されました。",
+    });
   };
 
   const handlePreview = () => {
     console.log("プレビュー");
   };
 
-  const handlePublish = () => {
-    console.log("公開実行");
+  const handleTogglePublish = async () => {
+    if (!article.id) return;
+
+    try {
+      setLoading(true);
+      const res = await updatePublishSetting(String(article.id));
+      setArticle({
+        ...article,
+        status: res.status,
+        publishAt: res.publish_at,
+      });
+
+      Toast({
+        title: "ステータス更新",
+        description: `記事を「${articleStatus[res.status]}」に更新しました。`,
+      });
+    } catch (error) {
+      console.error(error);
+      Toast({
+        title: "エラー",
+        description: "公開状態の更新に失敗しました。",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleScheduleConfirm = () => {
@@ -47,12 +86,9 @@ export const StatusPanel = () => {
 
         <div className="flex items-center text-sm">
           <span className="text-gray-600">ステータス</span>
-          <span className="ml-auto w-1/2 text-right text-gray-800">下書き</span>
-        </div>
-
-        <div className="flex items-center text-sm">
-          <span className="text-gray-600">公開状態</span>
-          <span className="ml-auto w-1/2 text-right text-gray-800">公開</span>
+          <span className="ml-auto w-1/2 text-right text-gray-800">
+            {articleStatus[article.status] || "未設定"}
+          </span>
         </div>
 
         <div className="text-sm">
@@ -85,10 +121,11 @@ export const StatusPanel = () => {
         </div>
 
         <button
-          onClick={handlePublish}
+          onClick={handleTogglePublish}
+          disabled={loading}
           className="w-full rounded bg-blue-600 py-2 text-sm text-white hover:bg-blue-700"
         >
-          公開する
+          {article.status === "published" ? "非公開にする" : "公開する"}
         </button>
       </div>
 

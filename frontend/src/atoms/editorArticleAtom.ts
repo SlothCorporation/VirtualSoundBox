@@ -9,7 +9,7 @@ export type EditorArticle = {
   body: string;
   tags: string[];
   category: string | undefined;
-  status: "draft" | "public";
+  status: "draft" | "published";
   publishAt: string | null;
 };
 
