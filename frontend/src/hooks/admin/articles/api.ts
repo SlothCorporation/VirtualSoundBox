@@ -52,7 +52,14 @@ export const saveEditorArticle = async (article: EditorArticle) => {
   }
 };
 
-export const updatePublishSetting = async (id: string) => {
+type UpdateArticleStatusResponse = {
+  status: "draft" | "published" | "scheduled" | "unpublished";
+  publish_at: string | null;
+};
+
+export const updatePublishSetting = async (
+  id: string,
+): Promise<UpdateArticleStatusResponse> => {
   const response = await apiFetch(`/api/admin/articles/${id}/toggle-publish`, {
     method: "POST",
   });
