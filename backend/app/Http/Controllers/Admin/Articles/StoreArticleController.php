@@ -29,6 +29,7 @@ class StoreArticleController extends Controller
                 'external_description' => $request->external_description,
                 'status' => 'draft',
                 'category_id' => $category?->id,
+                'limited_access_token' => Str::random(40),
             ]);
 
             if ($request->has('tags')) {

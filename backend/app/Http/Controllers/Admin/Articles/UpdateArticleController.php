@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\SlugHelper;
+use Illuminate\Support\Str;
 
 class UpdateArticleController extends Controller
 {
@@ -34,6 +35,10 @@ class UpdateArticleController extends Controller
                     }
                 } else {
                     $article->category()->dissociate();
+                }
+
+                if (empty($article->limited_access_token)) {
+                    $article->limited_access_token = Str::random(40);
                 }
 
                 $article->save();
