@@ -1,6 +1,5 @@
 import { apiFetch } from "@/lib/api";
 import type { EditorArticle } from "@/atoms/editorArticleAtom";
-import articleId from "@/pages/admin/articles/[articleId]";
 
 type FetchArticlesPagination = {
   page: number;
@@ -53,24 +52,19 @@ export const saveEditorArticle = async (article: EditorArticle) => {
   }
 };
 
-type UpdatePublishSettingProps = {
-  articleId: number;
-  data: {
-    status: "draft" | "published";
-    publish_at: string | null;
-  };
+type UpdateArticleStatusResponse = {
+  status: "draft" | "published" | "scheduled" | "unpublished";
+  publish_at: string | null;
 };
 
-export const updatePublishSetting = async ({
-  articleId,
-  data,
-}: UpdatePublishSettingProps) => {
-  const response = await apiFetch(
-    `/api/admin/articles/${articleId}/publish-settings`,
-    {
-      method: "PUT",
-      body: JSON.stringify(data),
-    },
-  );
-  return response.json();
+export const updatePublishSetting = async (
+  id: string,
+): Promise<UpdateArticleStatusResponse> => {
+  const response = await apiFetch(`/api/admin/articles/${id}/toggle-publish`, {
+    method: "POST",
+  });
+  if (!response.ok) {
+    throw new Error("Update to status Article");
+  }
+  return await response.json();
 };
