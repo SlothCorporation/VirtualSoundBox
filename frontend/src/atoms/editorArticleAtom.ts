@@ -10,6 +10,8 @@ export type EditorArticle = {
   tags: string[];
   category: string | undefined;
   status: "draft" | "published" | "scheduled" | "unpublished";
+  coverImage?: string | null; // アイキャッチ画像のURL
+  thumbnailImage?: string | null; // サムネイル画像のURL
   publishAt: string | null;
 };
 

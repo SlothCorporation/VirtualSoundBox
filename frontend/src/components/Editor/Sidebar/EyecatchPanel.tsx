@@ -1,33 +1,59 @@
-// components/editor/sidebar/EyecatchPanel.tsx
 import React, { useRef, useState } from "react";
 import { SidebarPanel } from "./SidebarPanel";
+import { useAtom } from "jotai";
+import { editorArticleAtom } from "@/atoms/editorArticleAtom";
+import { uploadImageToS3 } from "@/hooks/admin/images/api";
+import { Toast } from "@/components/Toast/Toast";
 
 export const EyecatchPanel = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [article, setArticle] = useAtom(editorArticleAtom);
+  const coverImageUrl = article.coverImage;
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImageUrl(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    if (!file || !article.id) return;
+
+    try {
+      setUploading(true);
+      const res = await uploadImageToS3(file, article.id, "cover");
+      setArticle({
+        ...article,
+        coverImage: res.data.url,
+      });
+
+      Toast({
+        title: "アップロード成功",
+        description: "アイキャッチ画像がアップロードされました。",
+      });
+    } catch (error) {
+      console.error(error);
+      Toast({
+        title: "アップロード失敗",
+        description: "画像のアップロードに失敗しました。",
+        type: "error",
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleRemoveImage = () => {
-    setImageUrl(null);
+    setArticle({ ...article, coverImage: null });
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
     <SidebarPanel title="アイキャッチ">
       <div className="space-y-2">
-        {imageUrl ? (
+        {coverImageUrl ? (
           <div className="relative">
             <img
-              src={imageUrl}
+              src={coverImageUrl}
               alt="アイキャッチ画像"
               className="w-full rounded border object-cover"
             />
@@ -40,7 +66,7 @@ export const EyecatchPanel = () => {
           </div>
         ) : (
           <div className="rounded border border-dashed p-4 text-center text-sm text-gray-500">
-            画像が未設定です
+            {uploading ? "アップロード中..." : "画像が未設定です"}
           </div>
         )}
 
@@ -53,7 +79,8 @@ export const EyecatchPanel = () => {
         />
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="w-full rounded bg-blue-500 px-3 py-2 text-sm text-white hover:bg-blue-600"
+          disabled={uploading}
+          className="w-full rounded bg-blue-500 px-3 py-2 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
         >
           画像を選択
         </button>

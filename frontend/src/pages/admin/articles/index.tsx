@@ -3,8 +3,12 @@ import Input from "@/components/Form/Input";
 import Link from "next/link";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import { useEffect, useState } from "react";
-import { fetchArticlesPagination } from "@/hooks/admin/articles/api";
+import {
+  createEmptyArticle,
+  fetchArticlesPagination,
+} from "@/hooks/admin/articles/api";
 import type { Article } from "@/schema/admin/articles";
+import { router } from "next/client";
 
 function ArticleList() {
   const [articles, setArticles] = useState([]);
@@ -15,6 +19,11 @@ function ArticleList() {
     const res = await fetchArticlesPagination({ page });
     setArticles(res.data);
     setLastPage(res.last_page);
+  };
+
+  const handleCreateArticle = async () => {
+    const res = await createEmptyArticle(); // ← APIで空記事作成
+    router.push(`/admin/articles/${res.article_id}`);
   };
 
   useEffect(() => {
@@ -33,8 +42,11 @@ function ArticleList() {
           </button>
         </div>
         <div className="text-nowrap">
-          <button className="rounded bg-blue-500 px-3.5 py-1.5 text-white">
-            <Link href="/admin/articles/new">+ 新規作成</Link>
+          <button
+            className="rounded bg-blue-500 px-3.5 py-1.5 text-white"
+            onClick={handleCreateArticle}
+          >
+            + 新規作成
           </button>
         </div>
       </div>

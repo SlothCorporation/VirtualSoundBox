@@ -20,7 +20,6 @@ const menu = [
     icon: <MdArticle />,
     children: [
       { route: "/admin/articles", label: "記事一覧", icon: <MdList /> },
-      { route: "/admin/articles/new", label: "新規作成", icon: <MdAdd /> },
       { route: "/admin/category", label: "カテゴリー", icon: <MdCategory /> },
       { route: "/admin/tag", label: "タグ", icon: <MdTag /> },
     ],
