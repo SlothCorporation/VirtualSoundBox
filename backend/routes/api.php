@@ -88,7 +88,7 @@ Route::middleware('api')->group(function () {
         Route::delete('/admin/music/{id}', \App\Http\Controllers\Admin\Music\DeleteMusicController::class);
         // 記事管理
         Route::get('/admin/articles', \App\Http\Controllers\Admin\Articles\IndexArticleController::class);
-        Route::post('/admin/articles', \App\Http\Controllers\Admin\Articles\StoreArticleController::class);
+        Route::post('/admin/articles', \App\Http\Controllers\Admin\Articles\CreateEmptyArticleController::class);
         Route::get('/admin/articles/{id}', \App\Http\Controllers\Admin\Articles\ShowArticleController::class);
         Route::put('/admin/articles/{id}', \App\Http\Controllers\Admin\Articles\UpdateArticleController::class);
         Route::delete('/admin/articles/{id}', \App\Http\Controllers\Admin\Articles\DestroyArticleController::class);
