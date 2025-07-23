@@ -26,6 +26,16 @@ export const fetchArticle = async (id: string) => {
   return await response.json();
 };
 
+export const createEmptyArticle = async () => {
+  const response = await apiFetch("/api/admin/articles", {
+    method: "POST",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to create empty Article");
+  }
+  return await response.json();
+};
+
 export const saveEditorArticle = async (article: EditorArticle) => {
   const payload = {
     title: article.title,
@@ -37,19 +47,11 @@ export const saveEditorArticle = async (article: EditorArticle) => {
     category: article.category ?? null,
   };
 
-  if (article.id === null) {
-    const response = await apiFetch("/api/admin/articles", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-    return response.json();
-  } else {
-    const response = await apiFetch(`/api/admin/articles/${article.id}`, {
-      method: "PUT",
-      body: JSON.stringify(payload),
-    });
-    return response.json();
-  }
+  const response = await apiFetch(`/api/admin/articles/${article.id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return response.json();
 };
 
 type UpdateArticleStatusResponse = {
