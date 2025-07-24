@@ -10,7 +10,7 @@ class ShowArticleController extends Controller
 {
     public function __invoke($id)
     {
-        $article = Article::with(['tags', 'category'])->findOrFail($id);
+        $article = Article::with(['tags', 'category', 'coverImage', 'thumbnailImage'])->findOrFail($id);
         return new ShowArticleResource($article);
     }
 }

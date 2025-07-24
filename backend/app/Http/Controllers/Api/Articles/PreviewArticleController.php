@@ -11,7 +11,7 @@ class PreviewArticleController extends Controller
 {
     public function __invoke(string $token): JsonResource
     {
-        $article = Article::with(['category', 'tags'])
+        $article = Article::with(['category', 'tags', 'coverImage', 'thumbnailImage'])
             ->where('limited_access_token', $token)
             ->firstOrFail();
 

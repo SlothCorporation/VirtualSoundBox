@@ -99,7 +99,13 @@ function Page() {
               </span>
             ))}
           </div>
-
+          {article.coverImage && (
+            <img
+              src={article.coverImage.url}
+              alt="Cover Image"
+              className="mb-6 w-full object-cover"
+            />
+          )}
           <article
             className="prose prose-blue max-w-none"
             dangerouslySetInnerHTML={{ __html: article.body }}
