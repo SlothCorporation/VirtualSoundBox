@@ -18,9 +18,16 @@ class ShowArticleResource extends JsonResource
             'body'                 => $this->body,
             'tags'                 => $this->tags->pluck('name'),
             'category'             => $this->category?->slug,
+            'coverImage' => $this->coverImage ? [
+                'id' => $this->coverImage->id,
+                'url' => $this->coverImage->url,
+            ] : null,
+            'thumbnailImage' => $this->thumbnailImage ? [
+                'id' => $this->thumbnailImage->id,
+                'url' => $this->thumbnailImage->url,
+            ] : null,
             'status'               => $this->status,
             'publishAt'            => $this->publish_at,
-
         ];
     }
 }

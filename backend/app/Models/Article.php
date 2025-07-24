@@ -31,4 +31,19 @@ class Article extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(ArticleImage::class);
+    }
+
+    public function coverImage()
+    {
+        return $this->hasOne(ArticleImage::class)->where('type', 'cover');
+    }
+
+    public function thumbnailImage()
+    {
+        return $this->hasOne(ArticleImage::class)->where('type', 'thumbnail');
+    }
 }
