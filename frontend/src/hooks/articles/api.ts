@@ -6,6 +6,14 @@ export type PreviewArticle = {
   body: string;
   category: string | null;
   tags: string[];
+  coverImage: {
+    id: number;
+    url: string;
+  } | null;
+  thumbnailImage: {
+    id: number;
+    url: string;
+  } | null;
   publishAt: string;
 };
 

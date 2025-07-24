@@ -39,6 +39,8 @@ function Page() {
         body: data.data.body,
         tags: data.data.tags,
         category: data.data.category,
+        coverImage: data.data.coverImage?.url || null,
+        thumbnailImage: data.data.thumbnailImage?.url || null,
         status: data.data.status,
         publishAt: data.data.publishAt,
       });
