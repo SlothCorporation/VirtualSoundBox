@@ -8,7 +8,7 @@ import ArticleSideBar from "@/components/Articles/ArticleSideBar";
 
 function Page() {
   const params = useParams();
-  const token = params?.token;
+  const token = params?.articleId;
   const [article, setArticle] = useState<Article | null>(null);
 
   useEffect(() => {
@@ -21,8 +21,6 @@ function Page() {
 
     fetchArticle();
   }, [token]);
-
-  console.log(article);
 
   if (!article) {
     return (
