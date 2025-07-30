@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/graphiql', function () {
+    return view('graphiql');
+});
+
 Route::get('/sanctum/csrf-cookie', function () {
     return response()->noContent();
 });
