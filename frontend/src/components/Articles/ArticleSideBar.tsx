@@ -4,22 +4,9 @@ export default function ArticleSideBar() {
       <div className="rounded border bg-white p-4 shadow">
         <h2 className="mb-2 text-lg font-semibold text-gray-800">関連記事</h2>
         <ul className="space-y-1 text-sm text-blue-600">
-          <li>・おすすめ記事１</li>
-          <li>・おすすめ記事２</li>
-          <li>・おすすめ記事３</li>
+          <li>・記事がまだ投稿されていません。</li>
         </ul>
       </div>
-
-      {/*<div className="rounded border bg-white p-4 shadow">*/}
-      {/*  <h2 className="mb-2 text-lg font-semibold text-gray-800">タグ一覧</h2>*/}
-      {/*  <div className="flex flex-wrap gap-2">*/}
-      {/*    {article.tags.map((tag) => (*/}
-      {/*      <span key={tag} className="text-xs text-gray-600">*/}
-      {/*        #{tag}*/}
-      {/*      </span>*/}
-      {/*    ))}*/}
-      {/*  </div>*/}
-      {/*</div>*/}
     </aside>
   );
 }

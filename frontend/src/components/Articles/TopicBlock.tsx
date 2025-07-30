@@ -16,7 +16,7 @@ function ArticleCard({ article }: { article: Article }) {
       </div>
 
       {/* テキストエリア */}
-      <div className="min-h-[5.5rem] space-y-1 p-3 text-sm">
+      <div className="min-h-[112px] space-y-1 p-3 text-sm">
         {/* タイトル（2行まで） */}
         <h3 className="line-clamp-2 min-h-10 overflow-y-hidden font-semibold text-gray-800">
           {article.title}
@@ -83,32 +83,26 @@ export default function TopicBlock({ articles }: { articles: Article[] }) {
       </div>
 
       {/* 記事本体エリア */}
-      <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-4">
-        <div className="col-span-1">{a && <ArticleCard article={a} />}</div>
-        <div className="col-span-1">{b && <ArticleCard article={b} />}</div>
-        <div className="col-span-1 flex flex-col">
-          {cGroup.map((article) => (
-            <ArticleMiniCard key={article.id} article={article} />
-          ))}
+      {articles.length === 0 ? (
+        <div className="flex min-h-[340px] items-center justify-center p-8 text-center text-gray-500">
+          <p>記事がまだ投稿されていません。</p>
         </div>
-        <div className="col-span-1 flex flex-col">
-          {dGroup.map((article) => (
-            <ArticleMiniCard key={article.id} article={article} />
-          ))}
-        </div>
-      </div>
-
-      {/* フッターリンク */}
-      <div className="border-t border-gray-200">
-        <Link href="/articles" className="text-sm">
-          <div className="flex justify-end p-2 hover:bg-gray-50">
-            <span className="flex items-center gap-1">
-              最新記事をもっと見る
-              <MdChevronRight />
-            </span>
+      ) : (
+        <div className="grid min-h-[340px] grid-cols-1 gap-4 p-4 md:grid-cols-4">
+          <div className="col-span-1">{a && <ArticleCard article={a} />}</div>
+          <div className="col-span-1">{b && <ArticleCard article={b} />}</div>
+          <div className="col-span-1 flex flex-col">
+            {cGroup.map((article) => (
+              <ArticleMiniCard key={article.id} article={article} />
+            ))}
           </div>
-        </Link>
-      </div>
+          <div className="col-span-1 flex flex-col">
+            {dGroup.map((article) => (
+              <ArticleMiniCard key={article.id} article={article} />
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

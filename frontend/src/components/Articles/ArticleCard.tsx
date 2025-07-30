@@ -6,7 +6,7 @@ import type { Article } from "@/hooks/articles/api";
 export default function ArticleCard({ article }: { article: Article }) {
   return (
     <Link href={`/articles/${article.id}`}>
-      <div className="flex overflow-hidden rounded border bg-white shadow-sm transition hover:cursor-pointer hover:shadow-md">
+      <div className="flex min-h-[172px] overflow-hidden rounded border bg-white shadow-sm transition hover:cursor-pointer hover:shadow-md">
         {/* 画像エリア */}
         <div className="relative aspect-video w-1/3 shrink-0">
           <img
