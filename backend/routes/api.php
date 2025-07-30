@@ -57,6 +57,7 @@ Route::middleware('api')->group(function () {
     Route::post('/login', LoginController::class);
 
     Route::get('/articles/preview/{token}', \App\Http\Controllers\Api\Articles\PreviewArticleController::class);
+    Route::get('/articles', \App\Http\Controllers\Api\Articles\IndexArticleController::class);
 
     // ✅ 認証が必要なエリア
     Route::middleware('auth:sanctum')->group(function () {
