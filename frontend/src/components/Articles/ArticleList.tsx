@@ -1,6 +1,6 @@
 // components/articles/ArticleListPage.tsx
 
-import type { Article } from "@/hooks/articles/api";
+import type { Article } from "@/generated/graphql";
 import ArticleCard from "@/components/Articles/ArticleCard";
 import ArticleSideBar from "@/components/Articles/ArticleSideBar";
 
