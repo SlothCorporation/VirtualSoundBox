@@ -8,6 +8,11 @@ generates:
       - typescript
       - typescript-operations
       - typescript-graphql-request
+    config:
+      useTypeImports: true
+      avoidOptionals: true
+      scalars:
+        DateTime: 'string'
 
 hooks:
     afterAllFileWrite: 'prettier --write'

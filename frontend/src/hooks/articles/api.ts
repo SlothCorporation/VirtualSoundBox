@@ -1,8 +1,6 @@
 import { apiFetch } from "@/lib/api";
-import { graphql } from "@/lib/graphql-client";
+import { sdk } from "@/lib/graphql-client";
 import { useQuery } from "@tanstack/react-query";
-import type { FetchArticlesQuery } from "@/generated/graphql";
-import { FetchArticlesDocument } from "@/generated/graphql";
 
 export type Article = {
   id: number;
@@ -33,7 +31,7 @@ export const useArticles = (filter = {}, page = 0, perPage = 10) => {
   const { data, isPending } = useQuery({
     queryKey: ["articles", filter, page, perPage],
     queryFn: () =>
-      graphql.request<FetchArticlesQuery>(FetchArticlesDocument, {
+      sdk.fetchArticles({
         filter,
         page,
         perPage,
