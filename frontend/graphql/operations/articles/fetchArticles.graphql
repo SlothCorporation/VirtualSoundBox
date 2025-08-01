@@ -1,0 +1,35 @@
+query fetchArticles($filter: ArticleFilterInput, $page: Int, $perPage: Int) {
+    Articles(filter: $filter, page: $page, perPage: $perPage) {
+        data {
+            id
+            title
+            type
+            body
+            externalUrl
+            externalDescription
+            category {
+                id
+                name
+                slug
+            }
+            tags {
+                id
+                name
+                slug
+            }
+            coverImage
+            thumbnailImage
+            publishedAt
+        }
+        paginatorInfo {
+            count
+            currentPage
+            firstItem
+            hasMorePages
+            lastItem
+            lastPage
+            perPage
+            total
+        }
+    }
+}
