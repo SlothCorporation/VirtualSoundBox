@@ -1,26 +1,14 @@
 import Layout from "../components/Layout";
-import type { Article } from "@/hooks/articles/api";
-import { fetchArticles } from "@/hooks/articles/api";
+import { useArticles } from "@/hooks/articles/api";
 import TopicBlock from "@/components/Articles/TopicBlock";
 import ArticleCard from "@/components/Articles/ArticleCard";
 import ArticleSideBar from "@/components/Articles/ArticleSideBar";
 import Link from "next/link";
 import { MdChevronRight } from "react-icons/md";
-import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [articles, setArticles] = useState<Article[]>([]);
-
-  useEffect(() => {
-    fetchArticles()
-      .then((res) => {
-        setArticles(res.data);
-      })
-      .catch((error) => {
-        console.error("記事の取得に失敗しました:", error);
-      });
-  }, []);
-
+  const { articles, pagination, isLoading } = useArticles();
+  console.log(articles, pagination, isLoading);
   return (
     <Layout>
       <div className="mx-auto mt-5 max-w-6xl rounded border">

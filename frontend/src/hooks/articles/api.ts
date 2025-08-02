@@ -1,4 +1,7 @@
 import { apiFetch } from "@/lib/api";
+import { sdk } from "@/lib/graphql-client";
+import { useQuery } from "@tanstack/react-query";
+import type { ArticleFilterInput } from "@/generated/graphql";
 
 export type Article = {
   id: number;
@@ -25,29 +28,27 @@ export const fetchPreviewArticle = async (token: string) => {
   return await response.json();
 };
 
-type FetchArticlesParams = {
-  tag?: string;
-  category?: string;
-  keyword?: string;
-  page?: number;
-};
-
-export const fetchArticles = async (params: FetchArticlesParams = {}) => {
-  const query = new URLSearchParams();
-
-  if (params.tag) query.append("tag", params.tag);
-  if (params.category) query.append("category", params.category);
-  if (params.keyword) query.append("keyword", params.keyword);
-  if (params.page) query.append("page", String(params.page));
-  console.log(params);
-  console.log(query.toString());
-  const response = await apiFetch(
-    `/api/articles${query.toString() ? `?${query.toString()}` : ""}`,
-  );
-
-  if (!response.ok) {
-    throw new Error("記事一覧の取得に失敗しました");
+export const useArticles = (
+  filter: ArticleFilterInput = {},
+  page: number = 1,
+  perPage: number = 10,
+) => {
+  const { data, isPending } = useQuery({
+    queryKey: ["articles", filter, page, perPage],
+    queryFn: () =>
+      sdk.fetchArticles({
+        filter,
+        page,
+        perPage,
+      }),
+  });
+  if (!data) {
+    return { articles: [], isLoading: isPending };
   }
 
-  return await response.json();
+  return {
+    articles: data.Articles.data,
+    pagination: data.Articles.paginatorInfo,
+    isLoading: isPending,
+  };
 };

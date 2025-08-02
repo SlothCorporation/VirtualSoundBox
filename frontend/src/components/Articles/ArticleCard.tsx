@@ -1,7 +1,5 @@
-// components/articles/ArticleCardHorizontal.tsx
-
 import Link from "next/link";
-import type { Article } from "@/hooks/articles/api";
+import type { Article } from "@/generated/graphql";
 
 export default function ArticleCard({ article }: { article: Article }) {
   return (
@@ -10,7 +8,7 @@ export default function ArticleCard({ article }: { article: Article }) {
         {/* 画像エリア */}
         <div className="relative aspect-video w-1/3 shrink-0">
           <img
-            src={article.thumbnailImage?.url}
+            src={article.thumbnailImage ?? ""}
             alt={article.title}
             className="size-full object-cover"
           />
@@ -26,25 +24,25 @@ export default function ArticleCard({ article }: { article: Article }) {
 
             {/* カテゴリ */}
             <div className="mt-1 text-sm font-medium text-blue-600">
-              {article.category}
+              {article.category.name}
             </div>
 
-            {/* タグ */}
             <div className="mt-2 flex flex-wrap gap-2">
-              {article.tags.map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-700"
-                >
-                  {tag}
-                </span>
-              ))}
+              {article.tags &&
+                article.tags.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-700"
+                  >
+                    {tag?.name}
+                  </span>
+                ))}
             </div>
           </div>
 
           {/* 投稿日（任意） */}
           <div className="mt-4 text-xs text-gray-400">
-            {new Date(article.publishAt).toLocaleDateString("ja-JP")}
+            {new Date(article.publishedAt).toLocaleDateString("ja-JP")}
           </div>
         </div>
       </div>

@@ -1,21 +1,9 @@
 import Layout from "@/components/Layout";
 import ArticleListPage from "@/components/Articles/ArticleList";
-import type { Article } from "@/hooks/articles/api";
-import { fetchArticles } from "@/hooks/articles/api";
-import { useEffect, useState } from "react";
+import { useArticles } from "@/hooks/articles/api";
 
 function Page() {
-  const [articles, setArticles] = useState<Article[]>([]);
-
-  useEffect(() => {
-    fetchArticles()
-      .then((res) => {
-        setArticles(res.data);
-      })
-      .catch((error) => {
-        console.error("記事の取得に失敗しました:", error);
-      });
-  }, []);
+  const { articles, pagination, isLoading } = useArticles();
 
   return (
     <Layout>

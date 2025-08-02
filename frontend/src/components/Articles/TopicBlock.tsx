@@ -1,6 +1,4 @@
-import type { Article } from "@/hooks/articles/api";
-import Link from "next/link";
-import { MdChevronRight } from "react-icons/md";
+import type { Article } from "@/generated/graphql";
 
 function ArticleCard({ article }: { article: Article }) {
   return (
@@ -8,7 +6,7 @@ function ArticleCard({ article }: { article: Article }) {
       {/* 画像エリア */}
       <div className="group relative h-48">
         <img
-          src={article.thumbnailImage?.url}
+          src={article.thumbnailImage ?? ""}
           alt={article.title}
           className="size-full object-cover"
         />
@@ -24,19 +22,20 @@ function ArticleCard({ article }: { article: Article }) {
 
         {/* カテゴリ */}
         <div className="text-xs font-medium text-blue-600">
-          {article.category}
+          {article.category.name}
         </div>
 
         {/* タグ */}
         <div className="flex max-h-6 flex-wrap gap-1 overflow-hidden">
-          {article.tags.map((tag, index) => (
-            <span
-              key={index}
-              className="rounded bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700"
-            >
-              {tag}
-            </span>
-          ))}
+          {article.tags &&
+            article.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="rounded bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700"
+              >
+                {tag?.name}
+              </span>
+            ))}
         </div>
       </div>
     </div>
@@ -49,7 +48,7 @@ function ArticleMiniCard({ article }: { article: Article }) {
       {/* 左：グレーバックの画像枠（1） */}
       <div className="flex w-1/3 items-center justify-center bg-gray-100">
         <img
-          src={article.thumbnailImage?.url}
+          src={article.thumbnailImage ?? ""}
           alt={article.title}
           className="h-full object-cover"
         />

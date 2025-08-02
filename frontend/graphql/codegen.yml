@@ -1,0 +1,18 @@
+overwrite: true
+
+generates:
+  generated/graphql.ts:
+    schema: '../backend/graphql/schema.graphql'
+    documents: './graphql/operations/**/*.graphql'
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
+      maybeValue: 'T | undefined'
+      useTypeImports: true
+      scalars:
+        DateTime: 'string'
+
+hooks:
+    afterAllFileWrite: 'prettier --write'
