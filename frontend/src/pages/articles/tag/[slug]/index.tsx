@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 function Page() {
   const params = useParams();
-  const slug = params?.slug;
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
   const { articles, pagination, isLoading } = useArticles({
     tag: slug,
   });
