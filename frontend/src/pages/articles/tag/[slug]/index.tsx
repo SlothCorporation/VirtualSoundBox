@@ -1,13 +1,12 @@
 import Layout from "@/components/Layout";
 import ArticleListPage from "@/components/Articles/ArticleList";
 import { useArticles } from "@/hooks/articles/api";
-import { useParams } from "next/navigation";
+import { useTagSlug } from "@/hooks/common/article";
 
 function Page() {
-  const params = useParams();
-  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+  const tagSlug = useTagSlug();
   const { articles, pagination, isLoading } = useArticles({
-    tag: slug,
+    tag: tagSlug,
   });
 
   return (
