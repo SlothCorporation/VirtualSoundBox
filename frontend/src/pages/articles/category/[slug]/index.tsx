@@ -1,13 +1,12 @@
 import Layout from "@/components/Layout";
 import ArticleListPage from "@/components/Articles/ArticleList";
 import { useArticles } from "@/hooks/articles/api";
-import { useParams } from "next/navigation";
+import { useCategorySlug } from "@/hooks/common/article";
 
 function Page() {
-  const params = useParams();
-  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+  const categorySlug = useCategorySlug();
   const { articles, pagination, isLoading } = useArticles({
-    category: slug,
+    category: categorySlug,
   });
 
   return (
