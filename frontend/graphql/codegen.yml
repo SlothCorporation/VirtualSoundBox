@@ -9,8 +9,8 @@ generates:
       - typescript-operations
       - typescript-graphql-request
     config:
+      maybeValue: 'T | undefined'
       useTypeImports: true
-      avoidOptionals: true
       scalars:
         DateTime: 'string'
 
