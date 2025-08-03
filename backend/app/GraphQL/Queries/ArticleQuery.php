@@ -5,10 +5,11 @@ namespace App\GraphQL\Queries;
 use App\Http\Resources\GraphQL\ArticleResource;
 use App\Http\Resources\GraphQL\GraphQLPaginatorResource;
 use App\Models\Article;
+use Illuminate\Support\Facades\Log;
 
 class ArticleQuery
 {
-    public function paginatedArticles($_, array $args): array
+    public function paginatedArticles($_, array $args): ?array
     {
         $filter = $args['filter'] ?? [];
 
@@ -39,5 +40,15 @@ class ArticleQuery
 
         $articles = $query->paginate($args['perPage'] ?? 10);
         return GraphQLPaginatorResource::format($articles, ArticleResource::class);
+    }
+
+    public function article($_, array $args): ?array
+    {
+        $article = Article::with(['tags', 'category', 'coverImage', 'thumbnailImage'])
+            ->where('id', $args['id'])
+            ->whereNotNull('publish_at')
+            ->first();
+
+        return (new ArticleResource($article))->toArray(request());
     }
 }

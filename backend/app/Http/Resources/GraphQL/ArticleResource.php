@@ -27,7 +27,7 @@ class ArticleResource extends JsonResource
                     'slug' => $tag->slug,
                 ];
             }),
-            'corverImage' => $this->coverImage?->url,
+            'coverImage' => $this->coverImage?->url,
             'thumbnailImage' => $this->thumbnailImage?->url,
             'publishedAt' => $this->publish_at,
         ];
