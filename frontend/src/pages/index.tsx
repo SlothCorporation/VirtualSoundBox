@@ -7,8 +7,8 @@ import Link from "next/link";
 import { MdChevronRight } from "react-icons/md";
 
 export default function Home() {
-  const { articles, pagination, isLoading } = useArticles();
-  console.log(articles, pagination, isLoading);
+  const { articles } = useArticles();
+
   return (
     <Layout>
       <div className="mx-auto mt-5 max-w-6xl rounded border">
