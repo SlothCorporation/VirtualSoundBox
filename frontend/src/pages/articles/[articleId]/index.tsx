@@ -1,28 +1,15 @@
 import Layout from "@/components/Layout";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { fetchPreviewArticle, type Article } from "@/hooks/articles/api";
+import { useArticle } from "@/hooks/articles/api";
 import Head from "next/head";
 import ArticleShareButtons from "@/components/Articles/ArticleShareButtons";
 import ArticleSideBar from "@/components/Articles/ArticleSideBar";
+import { useArticleId } from "@/hooks/common/article";
 
 function Page() {
-  const params = useParams();
-  const token = params?.articleId;
-  const [article, setArticle] = useState<Article | null>(null);
+  const articleId = useArticleId();
+  const { article, isLoading } = useArticle(articleId);
 
-  useEffect(() => {
-    if (!token || typeof token !== "string") return;
-
-    const fetchArticle = async () => {
-      const res = await fetchPreviewArticle(token);
-      setArticle(res.data);
-    };
-
-    fetchArticle();
-  }, [token]);
-
-  if (!article) {
+  if (!article || isLoading) {
     return (
       <Layout auth={false}>
         <div className="p-8 text-center text-gray-600">読み込み中...</div>
@@ -44,26 +31,30 @@ function Page() {
           </h1>
 
           <div className="mb-4 flex gap-4 text-sm text-gray-500">
-            <span>カテゴリ: {article.category}</span>
+            <span>カテゴリ: {article.category.name}</span>
           </div>
 
           <div className="mb-6 flex flex-wrap gap-2 text-sm text-blue-700">
-            {article.tags.map((tag) => (
-              <span key={tag} className="rounded bg-blue-100 px-2 py-1 text-xs">
-                #{tag}
-              </span>
-            ))}
+            {article.tags &&
+              article.tags.map((tag) => (
+                <span
+                  key={tag?.id}
+                  className="rounded bg-blue-100 px-2 py-1 text-xs"
+                >
+                  #{tag?.name}
+                </span>
+              ))}
           </div>
           {article.coverImage && (
             <img
-              src={article.coverImage.url}
+              src={article.coverImage}
               alt="Cover Image"
               className="mb-6 w-full object-cover"
             />
           )}
           <article
             className="prose prose-blue max-w-none"
-            dangerouslySetInnerHTML={{ __html: article.body }}
+            dangerouslySetInnerHTML={{ __html: article.body ?? "" }}
           />
           <ArticleShareButtons />
         </main>

@@ -83,7 +83,12 @@ export type PaginatorInfo = {
 
 export type Query = {
   __typename?: "Query";
+  Article: Article;
   Articles: ArticlePaginator;
+};
+
+export type QueryArticleArgs = {
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryArticlesArgs = {
@@ -97,6 +102,38 @@ export type Tag = {
   id: Scalars["ID"]["output"];
   name: Scalars["String"]["output"];
   slug: Scalars["String"]["output"];
+};
+
+export type FetchArticleQueryVariables = Exact<{
+  id: Scalars["ID"]["input"];
+}>;
+
+export type FetchArticleQuery = {
+  __typename?: "Query";
+  Article: {
+    __typename?: "Article";
+    id: string;
+    title: string;
+    type: ArticleType;
+    body?: string | undefined;
+    externalUrl?: string | undefined;
+    externalDescription?: string | undefined;
+    coverImage?: string | undefined;
+    thumbnailImage?: string | undefined;
+    publishedAt: string;
+    category: {
+      __typename?: "Category";
+      id: string;
+      name: string;
+      slug: string;
+    };
+    tags?:
+      | Array<
+          | { __typename?: "Tag"; id: string; name: string; slug: string }
+          | undefined
+        >
+      | undefined;
+  };
 };
 
 export type FetchArticlesQueryVariables = Exact<{
@@ -147,6 +184,31 @@ export type FetchArticlesQuery = {
   };
 };
 
+export const FetchArticleDocument = gql`
+  query fetchArticle($id: ID!) {
+    Article(id: $id) {
+      id
+      title
+      type
+      body
+      externalUrl
+      externalDescription
+      category {
+        id
+        name
+        slug
+      }
+      tags {
+        id
+        name
+        slug
+      }
+      coverImage
+      thumbnailImage
+      publishedAt
+    }
+  }
+`;
 export const FetchArticlesDocument = gql`
   query fetchArticles($filter: ArticleFilterInput, $page: Int, $perPage: Int) {
     Articles(filter: $filter, page: $page, perPage: $perPage) {
@@ -204,6 +266,24 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
+    fetchArticle(
+      variables: FetchArticleQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit["signal"],
+    ): Promise<FetchArticleQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FetchArticleQuery>({
+            document: FetchArticleDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        "fetchArticle",
+        "query",
+        variables,
+      );
+    },
     fetchArticles(
       variables?: FetchArticlesQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,

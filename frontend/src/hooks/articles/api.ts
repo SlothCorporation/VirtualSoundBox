@@ -28,6 +28,22 @@ export const fetchPreviewArticle = async (token: string) => {
   return await response.json();
 };
 
+export const useArticle = (articleId: string) => {
+  const { data, isPending } = useQuery({
+    queryKey: ["article", articleId],
+    queryFn: () => sdk.fetchArticle({ id: articleId }),
+  });
+
+  if (!data) {
+    return { article: null, isLoading: isPending };
+  }
+
+  return {
+    article: data.Article,
+    isLoading: isPending,
+  };
+};
+
 export const useArticles = (
   filter: ArticleFilterInput = {},
   page: number = 1,
