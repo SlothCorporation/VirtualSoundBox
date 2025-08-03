@@ -66,6 +66,7 @@ input ArticleFilterInput {
 #====================================================
 type Query {
     Articles(filter: ArticleFilterInput, page: Int, perPage: Int): ArticlePaginator! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@paginatedArticles")
+    Article(id: ID!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@article")
 }
 
 #====================================================
