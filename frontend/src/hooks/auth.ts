@@ -1,10 +1,10 @@
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { userAtom } from "@/atoms/userAtom";
 import { useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 
 export const useInitAuth = () => {
-  const [user, setUser] = useAtom(userAtom);
+  const setUser = useSetAtom(userAtom);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -21,8 +21,7 @@ export const useInitAuth = () => {
         console.error(e);
       }
     };
-    if (!user) {
-      checkAuth();
-    }
-  }, [user, setUser]);
+
+    checkAuth();
+  }, [setUser]);
 };
