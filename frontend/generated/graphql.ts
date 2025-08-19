@@ -151,10 +151,8 @@ export type FetchArticlesQuery = {
       id: string;
       title: string;
       type: ArticleType;
-      body?: string | undefined;
       externalUrl?: string | undefined;
       externalDescription?: string | undefined;
-      coverImage?: string | undefined;
       thumbnailImage?: string | undefined;
       publishedAt: string;
       category: {
@@ -216,7 +214,6 @@ export const FetchArticlesDocument = gql`
         id
         title
         type
-        body
         externalUrl
         externalDescription
         category {
@@ -229,7 +226,6 @@ export const FetchArticlesDocument = gql`
           name
           slug
         }
-        coverImage
         thumbnailImage
         publishedAt
       }

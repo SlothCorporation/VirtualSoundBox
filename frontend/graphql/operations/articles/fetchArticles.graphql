@@ -4,7 +4,6 @@ query fetchArticles($filter: ArticleFilterInput, $page: Int, $perPage: Int) {
             id
             title
             type
-            body
             externalUrl
             externalDescription
             category {
@@ -17,7 +16,6 @@ query fetchArticles($filter: ArticleFilterInput, $page: Int, $perPage: Int) {
                 name
                 slug
             }
-            coverImage
             thumbnailImage
             publishedAt
         }
