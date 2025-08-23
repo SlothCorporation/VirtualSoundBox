@@ -1,13 +1,18 @@
 import Layout from "../components/Layout";
-import { useArticles } from "@/hooks/articles/api";
 import TopicBlock from "@/components/Articles/TopicBlock";
 import ArticleCard from "@/components/Articles/ArticleCard";
 import ArticleSideBar from "@/components/Articles/ArticleSideBar";
 import Link from "next/link";
 import { MdChevronRight } from "react-icons/md";
+import { sdk } from "@/lib/graphql-client";
+import type { Article } from "@/generated/graphql";
 
-export default function Home() {
-  const { articles } = useArticles();
+export default function Home({
+  initialArticles,
+}: {
+  initialArticles: Article[];
+}) {
+  const articles = initialArticles;
 
   return (
     <Layout>
@@ -51,4 +56,18 @@ export default function Home() {
       </div>
     </Layout>
   );
+}
+
+export async function getServerSideProps() {
+  // サーバーサイドでのデータ取得は不要
+  let data;
+  try {
+    data = await sdk.fetchArticles({ filter: {}, page: 1, perPage: 10 });
+  } catch (error) {
+    data = { Articles: { data: [] } };
+  }
+
+  return {
+    props: { initialArticles: data?.Articles?.data ?? [] },
+  };
 }
