@@ -13,6 +13,7 @@ class ArticleResource extends JsonResource
             'title' => $this->title,
             'type' => $this->type,
             'body' => $this->body,
+            'excerpt' => $this->excerpt,
             'externalUrl' => $this->external_url,
             'externalDescription' => $this->external_description,
             'category' => [
