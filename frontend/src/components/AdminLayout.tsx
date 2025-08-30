@@ -1,5 +1,5 @@
 import React, { type ReactNode, useEffect } from "react";
-import GlobalNavLayout from "@/components/Layouts/GlobalNavLayout";
+import AdminGlobalNavLayout from "@/components/Layouts/AdminGlobalNavLayout";
 import { SideNavHeading, SideNavLink } from "@/components/SideNav/SideNav";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { useInitAuth } from "@/hooks/auth";
@@ -55,12 +55,12 @@ function AdminLayout({ children }: LayoutProps) {
   }
 
   return (
-    <GlobalNavLayout sideNavContent={<SideNavContent />}>
+    <AdminGlobalNavLayout sideNavContent={<SideNavContent />}>
       <main className="flex w-full flex-1 justify-center bg-white text-black">
         <Sidebar />
         <div className="ml-72 w-full px-4">{children}</div>
       </main>
-    </GlobalNavLayout>
+    </AdminGlobalNavLayout>
   );
 }
 
