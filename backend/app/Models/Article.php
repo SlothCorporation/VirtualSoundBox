@@ -26,7 +26,7 @@ class Article extends Model
 
     public function getExcerptAttribute(): ?string
     {
-        if (!$this->body){
+        if (!$this->body) {
             return null;
         }
 
