@@ -4,15 +4,35 @@ import ArticleCard from "@/components/Articles/ArticleCard";
 import ArticleSideBar from "@/components/Articles/ArticleSideBar";
 import Link from "next/link";
 import { MdChevronRight } from "react-icons/md";
+import type { GetServerSideProps } from "next";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { sdk } from "@/lib/graphql-client";
-import type { Article } from "@/generated/graphql";
+import { useArticles } from "@/hooks/articles/api";
 
-export default function Home({
-  initialArticles,
-}: {
-  initialArticles: Article[];
-}) {
-  const articles = initialArticles;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const page = ctx.query.page ? Number(ctx.query.page) : 1;
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["articles", {}, page, 10],
+    queryFn: () =>
+      sdk.fetchArticles({
+        filter: {},
+        page: 1,
+        perPage: 10,
+      }),
+  });
+
+  return {
+    props: {
+      page,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
+
+export default function Home() {
+  const { articles } = useArticles({ filter: {}, page: 1, perPage: 10 });
 
   return (
     <Layout>
@@ -56,18 +76,4 @@ export default function Home({
       </div>
     </Layout>
   );
-}
-
-export async function getServerSideProps() {
-  // サーバーサイドでのデータ取得は不要
-  let data;
-  try {
-    data = await sdk.fetchArticles({ filter: {}, page: 1, perPage: 10 });
-  } catch (error) {
-    data = { Articles: { data: [] } };
-  }
-
-  return {
-    props: { initialArticles: data?.Articles?.data ?? [] },
-  };
 }
