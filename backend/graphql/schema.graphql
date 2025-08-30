@@ -27,6 +27,7 @@ type Article {
     title: String!
     type: ArticleType!
     body: String
+    excerpt: String
     externalUrl: String
     externalDescription: String
     category: Category!

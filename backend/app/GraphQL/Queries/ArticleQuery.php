@@ -5,7 +5,6 @@ namespace App\GraphQL\Queries;
 use App\Http\Resources\GraphQL\ArticleResource;
 use App\Http\Resources\GraphQL\GraphQLPaginatorResource;
 use App\Models\Article;
-use Illuminate\Support\Facades\Log;
 
 class ArticleQuery
 {
@@ -38,7 +37,7 @@ class ArticleQuery
             });
         }
 
-        $articles = $query->paginate($args['perPage'] ?? 10);
+        $articles = $query->paginate($args['perPage'] ?? 10, ['*'], 'page', $args['page'] ?? 1);
         return GraphQLPaginatorResource::format($articles, ArticleResource::class);
     }
 

@@ -5,6 +5,7 @@ import { fetchPreviewArticle, type Article } from "@/hooks/articles/api";
 import Head from "next/head";
 import ArticleShareButtons from "@/components/Articles/ArticleShareButtons";
 import ArticleSideBar from "@/components/Articles/ArticleSideBar";
+import { NEXT_PUBLIC_FRONTEND_URL } from "@/config/env-client";
 
 function Page() {
   const params = useParams();
@@ -67,7 +68,9 @@ function Page() {
             className="prose prose-blue max-w-none"
             dangerouslySetInnerHTML={{ __html: article.body }}
           />
-          <ArticleShareButtons />
+          <ArticleShareButtons
+            url={`${NEXT_PUBLIC_FRONTEND_URL}/articles/${article.id}`}
+          />
         </main>
 
         {/* 右：サイドバー（関連記事など） */}

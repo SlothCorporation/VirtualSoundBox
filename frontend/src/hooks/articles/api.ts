@@ -28,28 +28,22 @@ export const fetchPreviewArticle = async (token: string) => {
   return await response.json();
 };
 
-export const useArticle = (articleId: string) => {
-  const { data, isPending } = useQuery({
-    queryKey: ["article", articleId],
-    queryFn: () => sdk.fetchArticle({ id: articleId }),
-  });
+type ArticlesResponse = Awaited<ReturnType<typeof sdk.fetchArticles>>;
 
-  if (!data) {
-    return { article: null, isLoading: isPending };
-  }
-
-  return {
-    article: data.Article,
-    isLoading: isPending,
-  };
+type UseArticlesOptions = {
+  filter?: ArticleFilterInput;
+  page?: number;
+  perPage?: number;
+  initialData?: ArticlesResponse;
 };
 
-export const useArticles = (
-  filter: ArticleFilterInput = {},
-  page: number = 1,
-  perPage: number = 10,
-) => {
-  const { data, isPending } = useQuery({
+export const useArticles = ({
+  filter = {},
+  page = 1,
+  perPage = 10,
+  initialData,
+}: UseArticlesOptions) => {
+  const { data, isPending, isFetching } = useQuery<ArticlesResponse>({
     queryKey: ["articles", filter, page, perPage],
     queryFn: () =>
       sdk.fetchArticles({
@@ -57,14 +51,35 @@ export const useArticles = (
         page,
         perPage,
       }),
+    initialData, // SSR/ISRから渡されたデータをセット
+    placeholderData: (prev) => prev, // ページ遷移時に前データを保持してチラつきを防ぐ
   });
-  if (!data) {
-    return { articles: [], isLoading: isPending };
-  }
 
   return {
-    articles: data.Articles.data,
-    pagination: data.Articles.paginatorInfo,
+    articles: data?.Articles?.data ?? [],
+    pagination: data?.Articles?.paginatorInfo,
     isLoading: isPending,
+    isRefreshing: isFetching && !isPending, // 既存データがある状態で更新中
+  };
+};
+
+type ArticleResponse = Awaited<ReturnType<typeof sdk.fetchArticle>>;
+
+type UseArticleOptions = {
+  articleId: string;
+  initialData?: ArticleResponse;
+};
+
+export const useArticle = ({ articleId, initialData }: UseArticleOptions) => {
+  const { data, isPending, isFetching } = useQuery<ArticleResponse>({
+    queryKey: ["article", articleId],
+    queryFn: () => sdk.fetchArticle({ id: articleId }),
+    initialData,
+  });
+
+  return {
+    article: data?.Article ?? null,
+    isLoading: isPending,
+    isRefreshing: isFetching && !isPending,
   };
 };

@@ -22,6 +22,18 @@ class Article extends Model
         'category_id',
     ];
 
+    protected $appends = ['excerpt'];
+
+    public function getExcerptAttribute(): ?string
+    {
+        if (!$this->body) {
+            return null;
+        }
+
+        $plain = strip_tags($this->body);
+        return mb_strimwidth($plain, 0, 100, '...');
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);

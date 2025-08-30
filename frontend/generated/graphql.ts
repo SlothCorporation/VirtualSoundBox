@@ -35,6 +35,7 @@ export type Article = {
   body?: Maybe<Scalars["String"]["output"]>;
   category: Category;
   coverImage?: Maybe<Scalars["String"]["output"]>;
+  excerpt?: Maybe<Scalars["String"]["output"]>;
   externalDescription?: Maybe<Scalars["String"]["output"]>;
   externalUrl?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["ID"]["output"];
@@ -116,6 +117,7 @@ export type FetchArticleQuery = {
     title: string;
     type: ArticleType;
     body?: string | undefined;
+    excerpt?: string | undefined;
     externalUrl?: string | undefined;
     externalDescription?: string | undefined;
     coverImage?: string | undefined;
@@ -189,6 +191,7 @@ export const FetchArticleDocument = gql`
       title
       type
       body
+      excerpt
       externalUrl
       externalDescription
       category {
