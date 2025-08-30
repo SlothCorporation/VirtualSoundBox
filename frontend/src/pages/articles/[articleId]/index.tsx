@@ -3,11 +3,36 @@ import { useArticle } from "@/hooks/articles/api";
 import Head from "next/head";
 import ArticleShareButtons from "@/components/Articles/ArticleShareButtons";
 import ArticleSideBar from "@/components/Articles/ArticleSideBar";
-import { useArticleId } from "@/hooks/common/article";
+import type { GetStaticPaths, GetStaticProps } from "next";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { sdk } from "@/lib/graphql-client";
+import { NEXT_PUBLIC_FRONTEND_URL } from "@/config/env-client";
 
-function Page() {
-  const articleId = useArticleId();
-  const { article, isLoading } = useArticle(articleId);
+export const getStaticPaths: GetStaticPaths = async () => {
+  return { paths: [], fallback: "blocking" };
+};
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  const articleId = ctx.params?.articleId;
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["article", articleId],
+    queryFn: () => sdk.fetchArticle({ id: articleId as string }),
+  });
+
+  return {
+    props: {
+      articleId,
+      dehydratedState: dehydrate(queryClient),
+    },
+    revalidate: 60,
+  };
+};
+
+function Page({ articleId }: { articleId: string }) {
+  const { article, isLoading } = useArticle({ articleId });
+  const ogUrl = `${NEXT_PUBLIC_FRONTEND_URL}/articles/${articleId}`;
 
   if (!article || isLoading) {
     return (
@@ -20,7 +45,32 @@ function Page() {
   return (
     <Layout auth={false}>
       <Head>
-        <title>{article.title} | プレビュー</title>
+        <title>{article.title}</title>
+
+        {/* --- OGP meta tags --- */}
+        <meta property="og:title" content={article.title} />
+        <meta
+          property="og:description"
+          content={article.excerpt ?? "音楽と出会う新しいプラットフォーム"}
+        />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={ogUrl} />
+        <meta
+          property="og:image"
+          content={article.coverImage ?? "/default-ogp.png"}
+        />
+
+        {/* Twitterカード */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={article.title} />
+        <meta
+          name="twitter:description"
+          content={article.excerpt ?? "音楽と出会う新しいプラットフォーム"}
+        />
+        <meta
+          name="twitter:image"
+          content={article.coverImage ?? "/default-ogp.png"}
+        />
       </Head>
 
       <div className="mx-auto mt-10 flex max-w-6xl flex-col gap-8 md:flex-row md:px-4">
@@ -56,7 +106,7 @@ function Page() {
             className="prose prose-blue max-w-none"
             dangerouslySetInnerHTML={{ __html: article.body ?? "" }}
           />
-          <ArticleShareButtons />
+          <ArticleShareButtons url={ogUrl} />
         </main>
 
         {/* 右：サイドバー（関連記事など） */}
