@@ -70,6 +70,27 @@ export type Category = {
   slug: Scalars["String"]["output"];
 };
 
+export type ContactInput = {
+  email: Scalars["String"]["input"];
+  message: Scalars["String"]["input"];
+  name: Scalars["String"]["input"];
+};
+
+export type ContactResponse = {
+  __typename?: "ContactResponse";
+  message?: Maybe<Scalars["String"]["output"]>;
+  success: Scalars["Boolean"]["output"];
+};
+
+export type Mutation = {
+  __typename?: "Mutation";
+  contact: ContactResponse;
+};
+
+export type MutationContactArgs = {
+  input: ContactInput;
+};
+
 export type PaginatorInfo = {
   __typename?: "PaginatorInfo";
   count: Scalars["Int"]["output"];
@@ -184,6 +205,19 @@ export type FetchArticlesQuery = {
   };
 };
 
+export type SendContactMutationVariables = Exact<{
+  input: ContactInput;
+}>;
+
+export type SendContactMutation = {
+  __typename?: "Mutation";
+  contact: {
+    __typename?: "ContactResponse";
+    success: boolean;
+    message?: string | undefined;
+  };
+};
+
 export const FetchArticleDocument = gql`
   query fetchArticle($id: ID!) {
     Article(id: $id) {
@@ -245,6 +279,14 @@ export const FetchArticlesDocument = gql`
     }
   }
 `;
+export const SendContactDocument = gql`
+  mutation sendContact($input: ContactInput!) {
+    contact(input: $input) {
+      success
+      message
+    }
+  }
+`;
 
 export type SdkFunctionWrapper = <T>(
   action: (requestHeaders?: Record<string, string>) => Promise<T>,
@@ -298,6 +340,24 @@ export function getSdk(
           }),
         "fetchArticles",
         "query",
+        variables,
+      );
+    },
+    sendContact(
+      variables: SendContactMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit["signal"],
+    ): Promise<SendContactMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<SendContactMutation>({
+            document: SendContactDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        "sendContact",
+        "mutation",
         variables,
       );
     },
