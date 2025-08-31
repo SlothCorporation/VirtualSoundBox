@@ -1,0 +1,6 @@
+mutation sendContact($input: ContactInput!) {
+  contact(input: $input) {
+    success
+    message
+  }
+}

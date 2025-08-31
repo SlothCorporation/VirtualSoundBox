@@ -53,6 +53,11 @@ type PaginatorInfo {
     total: Int!
 }
 
+type ContactResponse {
+    success: Boolean!
+    message: String
+}
+
 #====================================================
 # input types
 #====================================================
@@ -60,6 +65,12 @@ input ArticleFilterInput {
     tag: String
     category: String
     keyword: String
+}
+
+input ContactInput {
+    name: String!
+    email: String!
+    message: String!
 }
 
 #====================================================
@@ -73,4 +84,6 @@ type Query {
 #====================================================
 # mutations
 #====================================================
-#type Mutation {}
+type Mutation {
+    contact(input: ContactInput!): ContactResponse! @field(resolver: "App\\GraphQL\\Mutations\\ContactResolver")
+}
