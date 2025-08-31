@@ -1,7 +1,32 @@
 import Head from "next/head";
 import Layout from "@/components/Layout";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSendContact } from "@/hooks/contact/api";
+import { type ContactFormData, contactSchema } from "@/schema/contact";
+import Input from "@/components/Form/Input";
 
 export default function ContactPage() {
+  const { mutateAsync: sendContact } = useSendContact();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      await sendContact(data);
+      reset();
+      alert("お問い合わせを送信しました。");
+    } catch (error) {
+      alert("お問い合わせの送信中にエラーが発生しました。");
+    }
+  };
   return (
     <Layout>
       <Head>
@@ -18,32 +43,22 @@ export default function ContactPage() {
           VirtualSoundBoxへのご意見・ご質問などは、以下のフォームからお気軽にお問い合わせください。
         </p>
 
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* 名前 */}
           <div>
-            <label className="mb-1 block text-sm font-medium" htmlFor="name">
-              お名前
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              className="w-full rounded-md border border-gray-300 p-2"
+            <Input
+              label="お名前"
+              {...register("name")}
+              error={errors.name?.message}
             />
           </div>
 
           {/* メールアドレス */}
           <div>
-            <label className="mb-1 block text-sm font-medium" htmlFor="email">
-              メールアドレス
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              className="w-full rounded-md border border-gray-300 p-2"
+            <Input
+              label="メールアドレス"
+              {...register("email")}
+              error={errors.email?.message}
             />
           </div>
 
@@ -54,10 +69,10 @@ export default function ContactPage() {
             </label>
             <textarea
               id="message"
-              name="message"
               rows={6}
               required
               className="w-full rounded-md border border-gray-300 p-2"
+              {...register("message")}
             ></textarea>
           </div>
 
