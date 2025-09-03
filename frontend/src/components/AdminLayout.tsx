@@ -7,6 +7,7 @@ import { useAtomValue } from "jotai";
 import { userAtom } from "@/atoms/userAtom";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
+import Head from "next/head";
 
 interface LayoutProps {
   children: ReactNode;
@@ -56,6 +57,9 @@ function AdminLayout({ children }: LayoutProps) {
 
   return (
     <AdminGlobalNavLayout sideNavContent={<SideNavContent />}>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
       <main className="flex w-full flex-1 justify-center bg-white text-black">
         <Sidebar />
         <div className="ml-72 w-full px-4">{children}</div>
