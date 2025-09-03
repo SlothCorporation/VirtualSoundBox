@@ -6,6 +6,7 @@ export type EditorArticle = {
   contentType: "article" | "external";
   externalUrl: string;
   externalDescription: string;
+  previewToken?: string; // プレビュー用トークン
   body: string;
   tags: string[];
   category: string | undefined;
@@ -21,6 +22,7 @@ export const editorArticleAtom = atom<EditorArticle>({
   contentType: "article",
   externalUrl: "",
   externalDescription: "",
+  previewToken: undefined,
   body: "",
   tags: [],
   category: undefined,
