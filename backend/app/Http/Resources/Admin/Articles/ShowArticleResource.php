@@ -15,6 +15,7 @@ class ShowArticleResource extends JsonResource
             'contentType'          => $this->type,
             'externalUrl'          => $this->external_url,
             'externalDescription'  => $this->external_description,
+            'previewToken'         => $this->limited_access_token,
             'body'                 => $this->body,
             'tags'                 => $this->tags->pluck('name'),
             'category'             => $this->category?->slug,

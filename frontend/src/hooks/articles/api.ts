@@ -9,6 +9,7 @@ export type Article = {
   body: string;
   category: string | null;
   tags: string[];
+  previewToken?: string;
   coverImage: {
     id: number;
     url: string;

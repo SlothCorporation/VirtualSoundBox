@@ -31,7 +31,8 @@ export const StatusPanel = () => {
   };
 
   const handlePreview = () => {
-    console.log("プレビュー");
+    const previewUrl = `/articles/preview/${article.previewToken}`; // プレビューのURLに置き換える
+    window.open(previewUrl, "_blank"); // "_blank" で別タブ
   };
 
   const handleTogglePublish = async () => {
