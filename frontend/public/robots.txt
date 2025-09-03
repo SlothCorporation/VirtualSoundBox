@@ -1,0 +1,11 @@
+# すべてのクローラーに対するルール
+User-agent: *
+Disallow: /preview        # プレビューURLをクロール禁止
+Disallow: /admin          # 管理画面もクロール禁止
+Disallow: /mypage        # マイページもクロール禁止
+Disallow: /email       # メール関連のページもクロール禁止
+Disallow: /artist        # アーティスト関連のページもクロール禁止
+
+# 許可したいページ
+Allow: /articles          # 記事一覧や記事詳細はクロールOK
+Allow: /                  # トップページはクロールOK

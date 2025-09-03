@@ -28,6 +28,9 @@ function Page() {
   if (!article) {
     return (
       <Layout auth={false}>
+        <Head>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
         <div className="p-8 text-center text-gray-600">読み込み中...</div>
       </Layout>
     );
@@ -36,6 +39,7 @@ function Page() {
   return (
     <Layout auth={false}>
       <Head>
+        <meta name="robots" content="noindex, nofollow" />
         <title>{article.title} | プレビュー</title>
       </Head>
 
