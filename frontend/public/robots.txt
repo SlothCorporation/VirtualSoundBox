@@ -1,6 +1,6 @@
 # すべてのクローラーに対するルール
 User-agent: *
-Disallow: /preview        # プレビューURLをクロール禁止
+Disallow: /articles/preview        # プレビューURLをクロール禁止
 Disallow: /admin          # 管理画面もクロール禁止
 Disallow: /mypage        # マイページもクロール禁止
 Disallow: /email       # メール関連のページもクロール禁止
