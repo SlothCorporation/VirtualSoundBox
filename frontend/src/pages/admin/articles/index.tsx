@@ -9,6 +9,14 @@ import {
 } from "@/hooks/admin/articles/api";
 import type { Article } from "@/schema/admin/articles";
 import { router } from "next/client";
+import dayjs from "dayjs";
+
+const ARTICLE_STATUS = {
+  draft: "下書き",
+  pending: "レビュー待ち",
+  published: "公開",
+  private: "限定公開",
+};
 
 function ArticleList() {
   const [articles, setArticles] = useState([]);
@@ -58,25 +66,27 @@ function ArticleList() {
               <th className="border px-4 py-2">タイプ</th>
               <th className="border px-4 py-2">ステータス</th>
               <th className="border px-4 py-2">更新日</th>
-              <th className="border px-4 py-2">操作</th>
             </tr>
           </thead>
           <tbody>
             {articles.map((article: Article) => (
               <tr key={article.id}>
-                <td className="border px-4 py-2">{article.title}</td>
-                <td className="border px-4 py-2">
-                  {article.type === "internal" ? "記事" : "外部リンク"}
-                </td>
-                <td className="border px-4 py-2">{article.status}</td>
-                <td className="border px-4 py-2">{article.updated_at}</td>
                 <td className="border px-4 py-2">
                   <Link
                     href={`/admin/articles/${article.id}`}
                     className="text-blue-600 underline"
                   >
-                    編集
+                    {article.title}
                   </Link>
+                </td>
+                <td className="border px-4 py-2">
+                  {article.type === "article" ? "記事" : "外部リンク"}
+                </td>
+                <td className="border px-4 py-2">
+                  {ARTICLE_STATUS[article.status]}
+                </td>
+                <td className="border px-4 py-2">
+                  {dayjs(article.updated_at).format("YYYY-MM-DD HH:mm:ss")}
                 </td>
               </tr>
             ))}
