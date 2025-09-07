@@ -57,6 +57,9 @@ class ArticleQuery
             ->where('limited_access_token', $args['token'])
             ->first();
 
+        // publish_atに現在時刻を文字列でセットして、プレビュー可能にする
+        $article->publish_at = now()->toDateTimeString();
+
         return (new ArticleResource($article))->toArray(request());
     }
 }
