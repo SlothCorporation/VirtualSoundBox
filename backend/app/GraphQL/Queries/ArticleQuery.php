@@ -50,4 +50,13 @@ class ArticleQuery
 
         return (new ArticleResource($article))->toArray(request());
     }
+
+    public function previewArticle($_, array $args): ?array
+    {
+        $article = Article::with(['tags', 'category', 'coverImage', 'thumbnailImage'])
+            ->where('limited_access_token', $args['token'])
+            ->first();
+
+        return (new ArticleResource($article))->toArray(request());
+    }
 }
