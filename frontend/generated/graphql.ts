@@ -107,6 +107,7 @@ export type Query = {
   __typename?: "Query";
   Article: Article;
   Articles: ArticlePaginator;
+  PreviewArticle: Article;
 };
 
 export type QueryArticleArgs = {
@@ -117,6 +118,10 @@ export type QueryArticlesArgs = {
   filter?: InputMaybe<ArticleFilterInput>;
   page?: InputMaybe<Scalars["Int"]["input"]>;
   perPage?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type QueryPreviewArticleArgs = {
+  token: Scalars["String"]["input"];
 };
 
 export type Tag = {
@@ -205,6 +210,39 @@ export type FetchArticlesQuery = {
   };
 };
 
+export type FetchPreviewArticleQueryVariables = Exact<{
+  token: Scalars["String"]["input"];
+}>;
+
+export type FetchPreviewArticleQuery = {
+  __typename?: "Query";
+  PreviewArticle: {
+    __typename?: "Article";
+    id: string;
+    title: string;
+    type: ArticleType;
+    body?: string | undefined;
+    excerpt?: string | undefined;
+    externalUrl?: string | undefined;
+    externalDescription?: string | undefined;
+    coverImage?: string | undefined;
+    thumbnailImage?: string | undefined;
+    publishedAt: string;
+    category: {
+      __typename?: "Category";
+      id: string;
+      name: string;
+      slug: string;
+    };
+    tags?:
+      | Array<
+          | { __typename?: "Tag"; id: string; name: string; slug: string }
+          | undefined
+        >
+      | undefined;
+  };
+};
+
 export type SendContactMutationVariables = Exact<{
   input: ContactInput;
 }>;
@@ -279,6 +317,32 @@ export const FetchArticlesDocument = gql`
     }
   }
 `;
+export const FetchPreviewArticleDocument = gql`
+  query fetchPreviewArticle($token: String!) {
+    PreviewArticle(token: $token) {
+      id
+      title
+      type
+      body
+      excerpt
+      externalUrl
+      externalDescription
+      category {
+        id
+        name
+        slug
+      }
+      tags {
+        id
+        name
+        slug
+      }
+      coverImage
+      thumbnailImage
+      publishedAt
+    }
+  }
+`;
 export const SendContactDocument = gql`
   mutation sendContact($input: ContactInput!) {
     contact(input: $input) {
@@ -339,6 +403,24 @@ export function getSdk(
             signal,
           }),
         "fetchArticles",
+        "query",
+        variables,
+      );
+    },
+    fetchPreviewArticle(
+      variables: FetchPreviewArticleQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit["signal"],
+    ): Promise<FetchPreviewArticleQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FetchPreviewArticleQuery>({
+            document: FetchPreviewArticleDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        "fetchPreviewArticle",
         "query",
         variables,
       );
