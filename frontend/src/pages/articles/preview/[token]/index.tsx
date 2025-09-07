@@ -1,31 +1,40 @@
 import Layout from "@/components/Layout";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { fetchPreviewArticle, type Article } from "@/hooks/articles/api";
+import { usePreviewArticle } from "@/hooks/articles/api";
 import Head from "next/head";
 import ArticleShareButtons from "@/components/Articles/ArticleShareButtons";
 import ArticleSideBar from "@/components/Articles/ArticleSideBar";
 import { NEXT_PUBLIC_FRONTEND_URL } from "@/config/env-client";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import type { GetStaticPropsContext } from "next";
+import { sdk } from "@/lib/graphql-client";
 
-function Page() {
-  const params = useParams();
-  const token = params?.token;
-  const [article, setArticle] = useState<Article | null>(null);
+export const getStaticPaths = async () => {
+  return { paths: [], fallback: "blocking" };
+};
 
-  useEffect(() => {
-    if (!token || typeof token !== "string") return;
+export const getStaticProps = async (ctx: GetStaticPropsContext) => {
+  const token = ctx.params?.token;
+  const queryClient = new QueryClient();
 
-    const fetchArticle = async () => {
-      const res = await fetchPreviewArticle(token);
-      setArticle(res.data);
-    };
+  await queryClient.prefetchQuery({
+    queryKey: ["preview-article", token],
+    queryFn: () => sdk.fetchPreviewArticle({ token: token as string }),
+  });
 
-    fetchArticle();
-  }, [token]);
+  return {
+    props: {
+      token,
+      dehydratedState: dehydrate(queryClient),
+    },
+    revalidate: 60,
+  };
+};
 
-  console.log(article);
+function Page({ token }: { token: string }) {
+  const { article, isLoading } = usePreviewArticle({ token });
+  const ogUrl = `${NEXT_PUBLIC_FRONTEND_URL}/articles/preview/${token}`;
 
-  if (!article) {
+  if (!article || isLoading) {
     return (
       <Layout auth={false}>
         <Head>
@@ -51,30 +60,32 @@ function Page() {
           </h1>
 
           <div className="mb-4 flex gap-4 text-sm text-gray-500">
-            <span>カテゴリ: {article.category}</span>
+            <span>カテゴリ: {article.category.name}</span>
           </div>
 
           <div className="mb-6 flex flex-wrap gap-2 text-sm text-blue-700">
-            {article.tags.map((tag) => (
-              <span key={tag} className="rounded bg-blue-100 px-2 py-1 text-xs">
-                #{tag}
-              </span>
-            ))}
+            {article.tags &&
+              article.tags.map((tag) => (
+                <span
+                  key={tag?.id}
+                  className="rounded bg-blue-100 px-2 py-1 text-xs"
+                >
+                  #{tag?.name}
+                </span>
+              ))}
           </div>
           {article.coverImage && (
             <img
-              src={article.coverImage.url}
+              src={article.coverImage}
               alt="Cover Image"
               className="mb-6 w-full object-cover"
             />
           )}
           <article
             className="prose prose-blue max-w-none"
-            dangerouslySetInnerHTML={{ __html: article.body }}
+            dangerouslySetInnerHTML={{ __html: article.body ?? "" }}
           />
-          <ArticleShareButtons
-            url={`${NEXT_PUBLIC_FRONTEND_URL}/articles/${article.id}`}
-          />
+          <ArticleShareButtons url={ogUrl} />
         </main>
 
         {/* 右：サイドバー（関連記事など） */}

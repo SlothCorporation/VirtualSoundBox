@@ -20,14 +20,14 @@ export type Article = {
   } | null;
   publishAt: string;
 };
-
-export const fetchPreviewArticle = async (token: string) => {
-  const response = await apiFetch(`/api/articles/preview/${token}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch preview article");
-  }
-  return await response.json();
-};
+//
+// export const fetchPreviewArticle = async (token: string) => {
+//   const response = await apiFetch(`/api/articles/preview/${token}`);
+//   if (!response.ok) {
+//     throw new Error("Failed to fetch preview article");
+//   }
+//   return await response.json();
+// };
 
 type ArticlesResponse = Awaited<ReturnType<typeof sdk.fetchArticles>>;
 
@@ -80,6 +80,32 @@ export const useArticle = ({ articleId, initialData }: UseArticleOptions) => {
 
   return {
     article: data?.Article ?? null,
+    isLoading: isPending,
+    isRefreshing: isFetching && !isPending,
+  };
+};
+
+type PreviewArticleResponse = Awaited<
+  ReturnType<typeof sdk.fetchPreviewArticle>
+>;
+
+type UsePreviewArticleOptions = {
+  token: string;
+  initialData?: PreviewArticleResponse;
+};
+
+export const usePreviewArticle = ({
+  token,
+  initialData,
+}: UsePreviewArticleOptions) => {
+  const { data, isPending, isFetching } = useQuery<PreviewArticleResponse>({
+    queryKey: ["preview-article", token],
+    queryFn: () => sdk.fetchPreviewArticle({ token }),
+    initialData,
+  });
+
+  return {
+    article: data?.PreviewArticle ?? null,
     isLoading: isPending,
     isRefreshing: isFetching && !isPending,
   };
