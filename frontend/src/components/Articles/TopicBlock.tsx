@@ -8,7 +8,7 @@ function ArticleCard({ article }: { article: Article }) {
         {/* 画像エリア */}
         <div className="group relative h-48">
           <img
-            src={article.thumbnailImage ?? ""}
+            src={article.thumbnailImage?.url ?? ""}
             alt={article.title}
             className="size-full object-cover"
           />
@@ -52,7 +52,7 @@ function ArticleMiniCard({ article }: { article: Article }) {
         {/* 左：グレーバックの画像枠（1） */}
         <div className="flex w-1/3 items-center justify-center bg-gray-100">
           <img
-            src={article.thumbnailImage ?? ""}
+            src={article.thumbnailImage?.url ?? ""}
             alt={article.title}
             className="h-full object-cover"
           />

@@ -44,7 +44,7 @@ export const StatusPanel = () => {
       setArticle({
         ...article,
         status: res.status,
-        publishAt: res.publish_at,
+        publishAt: res.published_at,
       });
 
       Toast({

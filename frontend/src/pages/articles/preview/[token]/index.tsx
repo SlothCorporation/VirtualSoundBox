@@ -76,7 +76,7 @@ function Page({ token }: { token: string }) {
           </div>
           {article.coverImage && (
             <img
-              src={article.coverImage}
+              src={article.coverImage?.url}
               alt="Cover Image"
               className="mb-6 w-full object-cover"
             />

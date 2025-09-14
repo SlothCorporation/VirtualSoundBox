@@ -8,7 +8,7 @@ export default function ArticleCard({ article }: { article: Article }) {
         {/* 画像エリア */}
         <div className="relative aspect-video w-1/3 shrink-0">
           <img
-            src={article.thumbnailImage ?? ""}
+            src={article.thumbnailImage?.url ?? ""}
             alt={article.title}
             className="size-full object-cover"
           />
