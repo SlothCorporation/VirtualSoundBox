@@ -2,8 +2,7 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Http\Resources\GraphQL\ArticleResource;
-use App\Http\Resources\GraphQL\GraphQLPaginatorResource;
+use App\Helpers\GraphQLHelper;
 use App\Models\Article;
 
 class ArticleQuery
@@ -13,8 +12,8 @@ class ArticleQuery
         $filter = $args['filter'] ?? [];
 
         $query = Article::with(['tags', 'category', 'coverImage', 'thumbnailImage'])
-            ->whereNotNull('publish_at')
-            ->orderBy('publish_at', 'desc');
+            ->whereNotNull('published_at')
+            ->orderBy('published_at', 'desc');
 
         if (isset($filter['category'])) {
             $query->whereHas('category', function ($q) use ($filter) {
@@ -38,17 +37,16 @@ class ArticleQuery
         }
 
         $articles = $query->paginate($args['perPage'] ?? 10, ['*'], 'page', $args['page'] ?? 1);
-        return GraphQLPaginatorResource::format($articles, ArticleResource::class);
+        return GraphQLHelper::toGraphQLPaginated($articles);
     }
 
     public function article($_, array $args): ?array
     {
         $article = Article::with(['tags', 'category', 'coverImage', 'thumbnailImage'])
             ->where('id', $args['id'])
-            ->whereNotNull('publish_at')
+            ->whereNotNull('published_at')
             ->first();
-
-        return (new ArticleResource($article))->toArray(request());
+        return GraphQLHelper::toGraphQLObject($article);
     }
 
     public function previewArticle($_, array $args): ?array
@@ -57,9 +55,8 @@ class ArticleQuery
             ->where('limited_access_token', $args['token'])
             ->first();
 
-        // publish_atに現在時刻を文字列でセットして、プレビュー可能にする
-        $article->publish_at = now()->toDateTimeString();
-
-        return (new ArticleResource($article))->toArray(request());
+        // published_atに現在時刻を文字列でセットして、プレビュー可能にする
+        $article->published_at = now()->toDateTimeString();
+        return GraphQLHelper::toGraphQLObject($article);
     }
 }
