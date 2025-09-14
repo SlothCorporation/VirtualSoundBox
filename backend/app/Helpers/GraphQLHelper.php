@@ -11,7 +11,7 @@ class GraphQLHelper
     {
         return [
             'data' => array_map(
-                fn($item) => CaseConvertHelper::camelizeArrayRecursive($item->toArray()),
+                fn ($item) => CaseConvertHelper::camelizeArrayRecursive($item->toArray()),
                 $paginator->items()
             ),
             'paginatorInfo' => [
@@ -26,7 +26,7 @@ class GraphQLHelper
     public static function toGraphQLObject($item)
     {
         if ($item instanceof Collection) {
-            return $item->map(fn($i) => CaseConvertHelper::camelizeArrayRecursive($i->toArray()))->all();
+            return $item->map(fn ($i) => CaseConvertHelper::camelizeArrayRecursive($i->toArray()))->all();
         }
 
         if (is_array($item)) {
