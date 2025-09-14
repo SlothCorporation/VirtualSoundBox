@@ -56,7 +56,7 @@ export const saveEditorArticle = async (article: EditorArticle) => {
 
 type UpdateArticleStatusResponse = {
   status: "draft" | "published" | "scheduled" | "unpublished";
-  publish_at: string | null;
+  published_at: string | null;
 };
 
 export const updatePublishSetting = async (

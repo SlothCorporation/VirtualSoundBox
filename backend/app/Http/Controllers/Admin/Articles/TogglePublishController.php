@@ -20,18 +20,18 @@ class TogglePublishController extends Controller
                 case 'published':
                     // 公開中 → 非公開に
                     $article->status = 'unpublished';
-                    $article->publish_at = null;
+                    $article->published_at = null;
                     break;
 
                 case 'unpublished':
                 case 'draft':
                     // 非公開 or 下書き → 今すぐ公開
                     $article->status = 'published';
-                    $article->publish_at = $now;
+                    $article->published_at = $now;
                     break;
 
                 case 'scheduled':
-                    if ($article->publish_at && $article->publish_at->lte($now)) {
+                    if ($article->published_at && $article->published_at->lte($now)) {
                         // 公開予定が今を過ぎていれば公開に切り替え
                         $article->status = 'published';
                     }
@@ -44,7 +44,7 @@ class TogglePublishController extends Controller
             return response()->json([
                 'message' => '公開状態を切り替えました。',
                 'status' => $article->status,
-                'publish_at' => $article->publish_at,
+                'published_at' => $article->published_at,
             ]);
         } catch (\Throwable $e) {
             Log::error('記事の公開状態切り替えでエラー', [

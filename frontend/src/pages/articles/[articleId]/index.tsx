@@ -57,7 +57,7 @@ function Page({ articleId }: { articleId: string }) {
         <meta property="og:url" content={ogUrl} />
         <meta
           property="og:image"
-          content={article.coverImage ?? "/default-ogp.png"}
+          content={article.coverImage?.url ?? "/default-ogp.png"}
         />
 
         {/* Twitterカード */}
@@ -69,7 +69,7 @@ function Page({ articleId }: { articleId: string }) {
         />
         <meta
           name="twitter:image"
-          content={article.coverImage ?? "/default-ogp.png"}
+          content={article.coverImage?.url ?? "/default-ogp.png"}
         />
       </Head>
 
@@ -97,7 +97,7 @@ function Page({ articleId }: { articleId: string }) {
           </div>
           {article.coverImage && (
             <img
-              src={article.coverImage}
+              src={article.coverImage?.url}
               alt="Cover Image"
               className="mb-6 w-full object-cover"
             />
