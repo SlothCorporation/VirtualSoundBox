@@ -28,7 +28,7 @@ class ShowArticleResource extends JsonResource
                 'url' => $this->thumbnailImage->url,
             ] : null,
             'status'               => $this->status,
-            'publishAt'            => $this->publish_at,
+            'publishAt'            => $this->published_at,
         ];
     }
 }
