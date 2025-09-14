@@ -16,15 +16,14 @@ query fetchArticles($filter: ArticleFilterInput, $page: Int, $perPage: Int) {
                 name
                 slug
             }
-            thumbnailImage
+            thumbnailImage {
+                id
+                url
+            }
             publishedAt
         }
         paginatorInfo {
-            count
             currentPage
-            firstItem
-            hasMorePages
-            lastItem
             lastPage
             perPage
             total

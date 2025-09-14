@@ -34,14 +34,14 @@ export type Article = {
   __typename?: "Article";
   body?: Maybe<Scalars["String"]["output"]>;
   category: Category;
-  coverImage?: Maybe<Scalars["String"]["output"]>;
+  coverImage?: Maybe<CoverImage>;
   excerpt?: Maybe<Scalars["String"]["output"]>;
   externalDescription?: Maybe<Scalars["String"]["output"]>;
   externalUrl?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["ID"]["output"];
   publishedAt: Scalars["String"]["output"];
   tags?: Maybe<Array<Maybe<Tag>>>;
-  thumbnailImage?: Maybe<Scalars["String"]["output"]>;
+  thumbnailImage?: Maybe<ThumbnailImage>;
   title: Scalars["String"]["output"];
   type: ArticleType;
 };
@@ -82,6 +82,12 @@ export type ContactResponse = {
   success: Scalars["Boolean"]["output"];
 };
 
+export type CoverImage = {
+  __typename?: "CoverImage";
+  id: Scalars["ID"]["output"];
+  url: Scalars["String"]["output"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   contact: ContactResponse;
@@ -93,11 +99,7 @@ export type MutationContactArgs = {
 
 export type PaginatorInfo = {
   __typename?: "PaginatorInfo";
-  count: Scalars["Int"]["output"];
   currentPage: Scalars["Int"]["output"];
-  firstItem?: Maybe<Scalars["Int"]["output"]>;
-  hasMorePages: Scalars["Boolean"]["output"];
-  lastItem?: Maybe<Scalars["Int"]["output"]>;
   lastPage: Scalars["Int"]["output"];
   perPage: Scalars["Int"]["output"];
   total: Scalars["Int"]["output"];
@@ -131,6 +133,12 @@ export type Tag = {
   slug: Scalars["String"]["output"];
 };
 
+export type ThumbnailImage = {
+  __typename?: "ThumbnailImage";
+  id: Scalars["ID"]["output"];
+  url: Scalars["String"]["output"];
+};
+
 export type FetchArticleQueryVariables = Exact<{
   id: Scalars["ID"]["input"];
 }>;
@@ -146,8 +154,6 @@ export type FetchArticleQuery = {
     excerpt?: string | undefined;
     externalUrl?: string | undefined;
     externalDescription?: string | undefined;
-    coverImage?: string | undefined;
-    thumbnailImage?: string | undefined;
     publishedAt: string;
     category: {
       __typename?: "Category";
@@ -160,6 +166,12 @@ export type FetchArticleQuery = {
           | { __typename?: "Tag"; id: string; name: string; slug: string }
           | undefined
         >
+      | undefined;
+    coverImage?:
+      | { __typename?: "CoverImage"; id: string; url: string }
+      | undefined;
+    thumbnailImage?:
+      | { __typename?: "ThumbnailImage"; id: string; url: string }
       | undefined;
   };
 };
@@ -181,7 +193,6 @@ export type FetchArticlesQuery = {
       type: ArticleType;
       externalUrl?: string | undefined;
       externalDescription?: string | undefined;
-      thumbnailImage?: string | undefined;
       publishedAt: string;
       category: {
         __typename?: "Category";
@@ -195,14 +206,13 @@ export type FetchArticlesQuery = {
             | undefined
           >
         | undefined;
+      thumbnailImage?:
+        | { __typename?: "ThumbnailImage"; id: string; url: string }
+        | undefined;
     }>;
     paginatorInfo: {
       __typename?: "PaginatorInfo";
-      count: number;
       currentPage: number;
-      firstItem?: number | undefined;
-      hasMorePages: boolean;
-      lastItem?: number | undefined;
       lastPage: number;
       perPage: number;
       total: number;
@@ -225,8 +235,6 @@ export type FetchPreviewArticleQuery = {
     excerpt?: string | undefined;
     externalUrl?: string | undefined;
     externalDescription?: string | undefined;
-    coverImage?: string | undefined;
-    thumbnailImage?: string | undefined;
     publishedAt: string;
     category: {
       __typename?: "Category";
@@ -239,6 +247,12 @@ export type FetchPreviewArticleQuery = {
           | { __typename?: "Tag"; id: string; name: string; slug: string }
           | undefined
         >
+      | undefined;
+    coverImage?:
+      | { __typename?: "CoverImage"; id: string; url: string }
+      | undefined;
+    thumbnailImage?:
+      | { __typename?: "ThumbnailImage"; id: string; url: string }
       | undefined;
   };
 };
@@ -276,8 +290,14 @@ export const FetchArticleDocument = gql`
         name
         slug
       }
-      coverImage
-      thumbnailImage
+      coverImage {
+        id
+        url
+      }
+      thumbnailImage {
+        id
+        url
+      }
       publishedAt
     }
   }
@@ -301,15 +321,14 @@ export const FetchArticlesDocument = gql`
           name
           slug
         }
-        thumbnailImage
+        thumbnailImage {
+          id
+          url
+        }
         publishedAt
       }
       paginatorInfo {
-        count
         currentPage
-        firstItem
-        hasMorePages
-        lastItem
         lastPage
         perPage
         total
@@ -337,8 +356,14 @@ export const FetchPreviewArticleDocument = gql`
         name
         slug
       }
-      coverImage
-      thumbnailImage
+      coverImage {
+        id
+        url
+      }
+      thumbnailImage {
+        id
+        url
+      }
       publishedAt
     }
   }

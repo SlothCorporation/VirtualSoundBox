@@ -17,8 +17,14 @@ query fetchArticle($id: ID!) {
             name
             slug
         }
-        coverImage
-        thumbnailImage
+        coverImage {
+            id
+            url
+        }
+        thumbnailImage {
+            id
+            url
+        }
         publishedAt
     }
 }

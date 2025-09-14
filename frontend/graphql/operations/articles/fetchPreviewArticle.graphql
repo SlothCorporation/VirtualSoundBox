@@ -17,8 +17,14 @@ query fetchPreviewArticle($token: String!) {
             name
             slug
         }
-        coverImage
-        thumbnailImage
+        coverImage {
+            id
+            url
+        }
+        thumbnailImage {
+            id
+            url
+        }
         publishedAt
     }
 }

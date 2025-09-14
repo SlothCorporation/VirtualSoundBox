@@ -22,6 +22,16 @@ type Tag {
     slug: String!
 }
 
+type CoverImage{
+    id: ID!
+    url: String!
+}
+
+type ThumbnailImage {
+    id: ID!
+    url: String!
+}
+
 type Article {
     id: ID!
     title: String!
@@ -32,8 +42,8 @@ type Article {
     externalDescription: String
     category: Category!
     tags: [Tag]
-    coverImage: String
-    thumbnailImage: String
+    coverImage: CoverImage
+    thumbnailImage: ThumbnailImage
     publishedAt: String!
 }
 
@@ -43,11 +53,7 @@ type ArticlePaginator {
 }
 
 type PaginatorInfo {
-    count: Int!
     currentPage: Int!
-    firstItem: Int
-    hasMorePages: Boolean!
-    lastItem: Int
     lastPage: Int!
     perPage: Int!
     total: Int!
