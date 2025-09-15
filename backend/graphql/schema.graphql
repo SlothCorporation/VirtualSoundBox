@@ -47,6 +47,12 @@ type Article {
     publishedAt: String!
 }
 
+type Topic {
+    id: ID!
+    article: Article!
+    position: Int!
+}
+
 type ArticlePaginator {
     data: [Article!]!
     paginatorInfo: PaginatorInfo!
@@ -86,6 +92,7 @@ type Query {
     Articles(filter: ArticleFilterInput, page: Int, perPage: Int): ArticlePaginator! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@paginatedArticles")
     Article(id: ID!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@article")
     PreviewArticle(token: String!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@previewArticle")
+    Topics: [Topic!]! @field(resolver: "App\\GraphQL\\Queries\\TopicQuery@topics")
 }
 
 #====================================================
@@ -93,4 +100,7 @@ type Query {
 #====================================================
 type Mutation {
     contact(input: ContactInput!): ContactResponse! @field(resolver: "App\\GraphQL\\Mutations\\ContactResolver")
+    addTopic(articleId: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@addTopic")
+    removeTopic(id: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@removeTopic")
+    reorderTopics(ids: [ID!]!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@reorderTopics")
 }
