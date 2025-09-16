@@ -90,11 +90,26 @@ export type CoverImage = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  addTopic: Scalars["Boolean"]["output"];
   contact: ContactResponse;
+  removeTopic: Scalars["Boolean"]["output"];
+  reorderTopics: Scalars["Boolean"]["output"];
+};
+
+export type MutationAddTopicArgs = {
+  articleId: Scalars["ID"]["input"];
 };
 
 export type MutationContactArgs = {
   input: ContactInput;
+};
+
+export type MutationRemoveTopicArgs = {
+  id: Scalars["ID"]["input"];
+};
+
+export type MutationReorderTopicsArgs = {
+  ids: Array<Scalars["ID"]["input"]>;
 };
 
 export type PaginatorInfo = {
@@ -110,6 +125,7 @@ export type Query = {
   Article: Article;
   Articles: ArticlePaginator;
   PreviewArticle: Article;
+  Topics: Array<Topic>;
 };
 
 export type QueryArticleArgs = {
@@ -137,6 +153,13 @@ export type ThumbnailImage = {
   __typename?: "ThumbnailImage";
   id: Scalars["ID"]["output"];
   url: Scalars["String"]["output"];
+};
+
+export type Topic = {
+  __typename?: "Topic";
+  article: Article;
+  id: Scalars["ID"]["output"];
+  position: Scalars["Int"]["output"];
 };
 
 export type FetchArticleQueryVariables = Exact<{
