@@ -90,6 +90,7 @@ input ContactInput {
 #====================================================
 type Query {
     Articles(filter: ArticleFilterInput, page: Int, perPage: Int): ArticlePaginator! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@paginatedArticles")
+    RecommendedArticles(articleId: ID!, limit: Int = 5): [Article!]! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@recommendedArticles")
     Article(id: ID!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@article")
     PreviewArticle(token: String!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@previewArticle")
     Topics: [Topic!]! @field(resolver: "App\\GraphQL\\Queries\\TopicQuery@topics")

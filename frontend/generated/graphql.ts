@@ -125,6 +125,7 @@ export type Query = {
   Article: Article;
   Articles: ArticlePaginator;
   PreviewArticle: Article;
+  RecommendedArticles: Array<Article>;
   Topics: Array<Topic>;
 };
 
@@ -140,6 +141,11 @@ export type QueryArticlesArgs = {
 
 export type QueryPreviewArticleArgs = {
   token: Scalars["String"]["input"];
+};
+
+export type QueryRecommendedArticlesArgs = {
+  articleId: Scalars["ID"]["input"];
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type Tag = {
@@ -197,6 +203,30 @@ export type FetchArticleQuery = {
       | { __typename?: "ThumbnailImage"; id: string; url: string }
       | undefined;
   };
+  RecommendedArticles: Array<{
+    __typename?: "Article";
+    id: string;
+    title: string;
+    type: ArticleType;
+    externalUrl?: string | undefined;
+    externalDescription?: string | undefined;
+    publishedAt: string;
+    category: {
+      __typename?: "Category";
+      id: string;
+      name: string;
+      slug: string;
+    };
+    tags?:
+      | Array<
+          | { __typename?: "Tag"; id: string; name: string; slug: string }
+          | undefined
+        >
+      | undefined;
+    thumbnailImage?:
+      | { __typename?: "ThumbnailImage"; id: string; url: string }
+      | undefined;
+  }>;
 };
 
 export type FetchArticlesQueryVariables = Exact<{
@@ -316,6 +346,28 @@ export const FetchArticleDocument = gql`
       coverImage {
         id
         url
+      }
+      thumbnailImage {
+        id
+        url
+      }
+      publishedAt
+    }
+    RecommendedArticles(articleId: $id, limit: 5) {
+      id
+      title
+      type
+      externalUrl
+      externalDescription
+      category {
+        id
+        name
+        slug
+      }
+      tags {
+        id
+        name
+        slug
       }
       thumbnailImage {
         id
