@@ -9,7 +9,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import { Iframe } from "@/components/Editor/Extensions/Iframe";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import EditorToolbar from "@/components/Editor/EditorToolbar";
 import { useAtom, useAtomValue } from "jotai";
 import { editorArticleAtom, editorModeAtom } from "@/atoms/editorArticleAtom";
@@ -17,7 +17,9 @@ import { editorArticleAtom, editorModeAtom } from "@/atoms/editorArticleAtom";
 function EditorMain() {
   const [article, setArticle] = useAtom(editorArticleAtom);
   const editorMode = useAtomValue(editorModeAtom);
+  const editorRef = useRef<any>(null);
 
+  // editorは一度だけ作成
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -31,30 +33,31 @@ function EditorMain() {
       Iframe,
       Image,
     ],
-    content: "<h2>ここに記事を入力してください…</h2><p></p>",
+    content: article.body || "<h2>ここに記事を入力してください…</h2><p></p>",
     editorProps: {
       attributes: {
         class: "prose max-w-none min-h-[400px] focus:outline-none",
       },
     },
     onUpdate({ editor }) {
-      setArticle({ ...article, body: editor.getHTML() });
+      // 編集中はstate保存のみ
+      setArticle((prev) => ({ ...prev, body: editor.getHTML() }));
     },
   });
 
-  // ✅ ① Jotai の body がある場合、Tiptap に反映
+  editorRef.current = editor;
+
+  // 記事切替時に content を editor に反映
   useEffect(() => {
     if (editor && article.body) {
-      editor.commands.setContent(article.body);
+      const currentContent = editor.getHTML();
+      if (currentContent !== article.body) {
+        editor.commands.setContent(article.body, false); // resetSelection=false
+      }
     }
-  }, [editor, article]);
+  }, [article.id, article.body, editor]); // article.id を依存に入れることで切替時に更新
 
-  // ✅ ② 初期化（Jotai の body が空の場合）
-  useEffect(() => {
-    if (editor && !article.body) {
-      editor.commands.clearContent();
-    }
-  }, [editor, article?.body]);
+  if (!editor) return null;
 
   return (
     <div className="flex-1 rounded-md border bg-gray-50">
@@ -63,18 +66,14 @@ function EditorMain() {
       </div>
       <div className="p-4">
         {editorMode === "visual" ? (
-          editor ? (
-            <EditorContent editor={editor} className="prose max-w-none" />
-          ) : (
-            <div>読み込み中...</div>
-          )
+          <EditorContent editor={editor} className="prose max-w-none" />
         ) : (
           <textarea
             className="h-[400px] w-full rounded border p-2 font-mono text-sm"
             value={article.body}
             onChange={(e) => {
-              setArticle({ ...article, body: e.target.value });
-              editor?.commands.setContent(e.target.value, false);
+              setArticle((prev) => ({ ...prev, body: e.target.value }));
+              editor.commands.setContent(e.target.value, false); // カーソル位置保持
             }}
           />
         )}
