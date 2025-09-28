@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import typography from "@tailwindcss/typography";
+import lineClamp from "@tailwindcss/line-clamp";
 
 const config: Config = {
   content: [
@@ -16,7 +17,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [typography],
+  plugins: [typography, lineClamp],
   darkMode: "class",
 };
 export default config;
