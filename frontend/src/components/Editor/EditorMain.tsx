@@ -1,4 +1,4 @@
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Heading from "@tiptap/extension-heading";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -17,7 +17,7 @@ import { editorArticleAtom, editorModeAtom } from "@/atoms/editorArticleAtom";
 function EditorMain() {
   const [article, setArticle] = useAtom(editorArticleAtom);
   const editorMode = useAtomValue(editorModeAtom);
-  const editorRef = useRef<any>(null);
+  const editorRef = useRef<Editor | null>(null);
 
   // editorは一度だけ作成
   const editor = useEditor({
