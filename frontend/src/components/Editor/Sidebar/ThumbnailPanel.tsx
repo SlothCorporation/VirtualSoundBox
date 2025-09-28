@@ -48,7 +48,7 @@ export const ThumbnailPanel = () => {
   };
 
   return (
-    <SidebarPanel title="アイキャッチ">
+    <SidebarPanel title="サムネイル">
       <div className="space-y-2">
         {thumbnailImageUrl ? (
           <div className="relative">
