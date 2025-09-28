@@ -59,4 +59,30 @@ class ArticleQuery
         $article->published_at = now()->toDateTimeString();
         return GraphQLHelper::toGraphQLObject($article);
     }
+
+    public function recommendedArticles($_, array $args): ?array
+    {
+        $article = Article::with(['tags', 'category'])->findOrFail($args['articleId']);
+
+        $tagIds = $article->tags->pluck('id')->toArray();
+        $categoryId = $article->category_id;
+
+        $articles = Article::with(['tags', 'category', 'coverImage', 'thumbnailImage'])
+            ->where('articles.id', '!=', $article->id)
+            ->whereNotNull('published_at')
+            ->leftJoin('article_tag', 'articles.id', '=', 'article_tag.article_id')
+            ->select('articles.*')
+            ->selectRaw('
+                SUM(CASE WHEN article_tag.tag_id IN (?) THEN 5 ELSE 0 END) +
+                CASE WHEN articles.category_id = ? THEN 3 ELSE 0 END
+                as score
+            ', [implode(',', $tagIds), $categoryId])
+            ->groupBy('articles.id')
+            ->orderByDesc('score')
+            ->orderByDesc('published_at')
+            ->limit($args['limit'] ?? 5)
+            ->get();
+
+        return GraphQLHelper::toGraphQLObject($articles);
+    }
 }

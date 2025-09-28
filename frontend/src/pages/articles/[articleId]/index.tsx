@@ -2,11 +2,11 @@ import Layout from "@/components/Layout";
 import { useArticle } from "@/hooks/articles/api";
 import Head from "next/head";
 import ArticleShareButtons from "@/components/Articles/ArticleShareButtons";
-import ArticleSideBar from "@/components/Articles/ArticleSideBar";
 import type { GetStaticPaths, GetStaticProps } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { sdk } from "@/lib/graphql-client";
 import { NEXT_PUBLIC_FRONTEND_URL } from "@/config/env-client";
+import type { Article } from "@/generated/graphql";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return { paths: [], fallback: "blocking" };
@@ -30,8 +30,57 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
+type SideBarProps = {
+  recommendedArticles: Article[];
+};
+
+function SideBar({ recommendedArticles }: SideBarProps) {
+  return (
+    <aside className="w-full space-y-4 md:sticky md:top-20 md:w-1/3 md:shrink-0">
+      <div className="rounded border bg-white p-4 shadow">
+        <h2 className="mb-2 text-lg font-semibold text-gray-800">関連記事</h2>
+
+        {recommendedArticles.length === 0 ? (
+          <p className="text-sm text-gray-500">
+            関連記事はまだ投稿されていません。
+          </p>
+        ) : (
+          <ul>
+            {recommendedArticles.map((article, index) => (
+              <li
+                key={article.id}
+                className={`flex items-start gap-4 py-2 ${
+                  index < recommendedArticles.length - 1
+                    ? "border-b border-gray-200"
+                    : ""
+                }`}
+              >
+                {article.thumbnailImage?.url && (
+                  <div className="aspect-video w-24 shrink-0 overflow-hidden rounded">
+                    <img
+                      src={article.thumbnailImage.url}
+                      alt={article.title}
+                      className="size-full object-cover"
+                    />
+                  </div>
+                )}
+                <a
+                  href={`/articles/${article.id}`}
+                  className="line-clamp-2 text-sm text-blue-600 hover:underline"
+                >
+                  {article.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </aside>
+  );
+}
+
 function Page({ articleId }: { articleId: string }) {
-  const { article, isLoading } = useArticle({ articleId });
+  const { article, recommendedArticles, isLoading } = useArticle({ articleId });
   const ogUrl = `${NEXT_PUBLIC_FRONTEND_URL}/articles/${articleId}`;
 
   if (!article || isLoading) {
@@ -110,7 +159,7 @@ function Page({ articleId }: { articleId: string }) {
         </main>
 
         {/* 右：サイドバー（関連記事など） */}
-        <ArticleSideBar />
+        <SideBar recommendedArticles={recommendedArticles} />
       </div>
     </Layout>
   );

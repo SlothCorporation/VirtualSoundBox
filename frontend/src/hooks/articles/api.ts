@@ -80,6 +80,7 @@ export const useArticle = ({ articleId, initialData }: UseArticleOptions) => {
 
   return {
     article: data?.Article ?? null,
+    recommendedArticles: data?.RecommendedArticles ?? [],
     isLoading: isPending,
     isRefreshing: isFetching && !isPending,
   };
