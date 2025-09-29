@@ -4,7 +4,7 @@ import type { Article } from "@/generated/graphql";
 export default function ArticleCard({ article }: { article: Article }) {
   return (
     <Link href={`/articles/${article.id}`}>
-      <div className="flex min-h-[100px] overflow-hidden rounded border bg-white shadow-sm transition hover:cursor-pointer hover:shadow-md md:min-h-[152px]">
+      <div className="flex h-[100px] overflow-hidden rounded border bg-white shadow-sm transition hover:cursor-pointer hover:shadow-md md:h-[152px]">
         {/* 画像エリア */}
         <div className="relative flex w-[180px] shrink-0 items-center justify-center overflow-hidden bg-gray-100 md:w-[270px]">
           <div className="aspect-video w-full">
@@ -17,7 +17,7 @@ export default function ArticleCard({ article }: { article: Article }) {
         </div>
 
         {/* テキストエリア */}
-        <div className="flex flex-1 flex-col justify-between p-2 md:p-4">
+        <div className="flex flex-1 flex-col justify-between p-2">
           <div>
             {/* タイトル */}
             <h3 className="line-clamp-2 min-h-11 text-base font-semibold text-gray-800 md:text-lg">
@@ -43,7 +43,7 @@ export default function ArticleCard({ article }: { article: Article }) {
           </div>
 
           {/* 投稿日 */}
-          <div className="mt-4 hidden text-xs text-gray-400 md:block">
+          <div className="mt-2 hidden text-xs text-gray-400 md:block">
             {new Date(article.publishedAt).toLocaleDateString("ja-JP")}
           </div>
         </div>
