@@ -4,21 +4,23 @@ import type { Article } from "@/generated/graphql";
 export default function ArticleCard({ article }: { article: Article }) {
   return (
     <Link href={`/articles/${article.id}`}>
-      <div className="flex min-h-[172px] overflow-hidden rounded border bg-white shadow-sm transition hover:cursor-pointer hover:shadow-md">
+      <div className="flex min-h-[100px] overflow-hidden rounded border bg-white shadow-sm transition hover:cursor-pointer hover:shadow-md md:min-h-[152px]">
         {/* 画像エリア */}
-        <div className="relative aspect-video w-1/3 shrink-0">
-          <img
-            src={article.thumbnailImage?.url ?? ""}
-            alt={article.title}
-            className="size-full object-cover"
-          />
+        <div className="relative flex w-[180px] shrink-0 items-center justify-center overflow-hidden bg-gray-100 md:w-[270px]">
+          <div className="aspect-video w-full">
+            <img
+              src={article.thumbnailImage?.url ?? ""}
+              alt={article.title}
+              className="size-full object-contain object-center"
+            />
+          </div>
         </div>
 
         {/* テキストエリア */}
-        <div className="flex w-2/3 flex-col justify-between p-4">
+        <div className="flex flex-1 flex-col justify-between p-2 md:p-4">
           <div>
             {/* タイトル */}
-            <h3 className="line-clamp-2 min-h-11 text-lg font-semibold text-gray-800">
+            <h3 className="line-clamp-2 min-h-11 text-base font-semibold text-gray-800 md:text-lg">
               {article.title}
             </h3>
 
@@ -27,21 +29,21 @@ export default function ArticleCard({ article }: { article: Article }) {
               {article.category.name}
             </div>
 
-            <div className="mt-2 flex flex-wrap gap-2">
-              {article.tags &&
-                article.tags.map((tag, idx) => (
-                  <span
-                    key={idx}
-                    className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-700"
-                  >
-                    {tag?.name}
-                  </span>
-                ))}
+            {/* タグ */}
+            <div className="mt-2 hidden flex-wrap gap-2 md:flex">
+              {article.tags?.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-700"
+                >
+                  {tag?.name}
+                </span>
+              ))}
             </div>
           </div>
 
-          {/* 投稿日（任意） */}
-          <div className="mt-4 text-xs text-gray-400">
+          {/* 投稿日 */}
+          <div className="mt-4 hidden text-xs text-gray-400 md:block">
             {new Date(article.publishedAt).toLocaleDateString("ja-JP")}
           </div>
         </div>
