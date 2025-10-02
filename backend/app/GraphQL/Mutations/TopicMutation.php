@@ -4,8 +4,6 @@ namespace App\GraphQL\Mutations;
 
 use App\Models\Topic;
 use App\Support\Authorize;
-use Illuminate\Support\Facades\Log;
-use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class TopicMutation
 {
@@ -14,12 +12,13 @@ class TopicMutation
         Authorize::authorizeAdmin();
 
         if (Topic::count() >= 10) {
-            throw new \Exception("トピック記事は10件までしか作成できません");
+            throw new \Exception('トピック記事は10件までしか作成できません');
         }
         Topic::create([
             'article_id' => $args['articleId'],
             'position' => Topic::max('position') + 1,
         ]);
+
         return true;
     }
 
@@ -28,6 +27,7 @@ class TopicMutation
         Authorize::authorizeAdmin();
 
         Topic::where('id', $args['id'])->delete();
+
         return true;
     }
 
@@ -38,6 +38,7 @@ class TopicMutation
         foreach ($args['ids'] as $index => $id) {
             Topic::where('id', $id)->update(['position' => $index + 1]);
         }
+
         return true;
     }
 }

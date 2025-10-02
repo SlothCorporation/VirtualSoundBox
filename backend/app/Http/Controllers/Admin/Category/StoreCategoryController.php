@@ -18,7 +18,7 @@ class StoreCategoryController extends Controller
 
         return response()->json([
             'message' => 'カテゴリーを保存しました。',
-            'category_id' => $category->id
+            'category_id' => $category->id,
         ]);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Notifications;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Auth\Notifications\VerifyEmail as BaseVerifyEmail;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\URL;
 
 class VerifyEmailNotification extends BaseVerifyEmail
 {

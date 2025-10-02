@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin\Tags;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Tags\UpdateTagRequest;
-use Illuminate\Http\JsonResponse;
 use App\Models\Tag;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
 class UpdateTagController extends Controller

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Accounts;
 
-use App\Http\Requests\Accounts\UpdateUserRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
+use App\Http\Requests\Accounts\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 
 class UpdateUserController extends Controller
 {

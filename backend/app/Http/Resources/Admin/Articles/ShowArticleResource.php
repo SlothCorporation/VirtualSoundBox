@@ -10,15 +10,15 @@ class ShowArticleResource extends JsonResource
     public function toArray(Request $request)
     {
         return [
-            'id'                   => $this->id,
-            'title'                => $this->title,
-            'contentType'          => $this->type,
-            'externalUrl'          => $this->external_url,
-            'externalDescription'  => $this->external_description,
-            'previewToken'         => $this->limited_access_token,
-            'body'                 => $this->body,
-            'tags'                 => $this->tags->pluck('name'),
-            'category'             => $this->category?->slug,
+            'id' => $this->id,
+            'title' => $this->title,
+            'contentType' => $this->type,
+            'externalUrl' => $this->external_url,
+            'externalDescription' => $this->external_description,
+            'previewToken' => $this->limited_access_token,
+            'body' => $this->body,
+            'tags' => $this->tags->pluck('name'),
+            'category' => $this->category?->slug,
             'coverImage' => $this->coverImage ? [
                 'id' => $this->coverImage->id,
                 'url' => $this->coverImage->url,
@@ -27,8 +27,8 @@ class ShowArticleResource extends JsonResource
                 'id' => $this->thumbnailImage->id,
                 'url' => $this->thumbnailImage->url,
             ] : null,
-            'status'               => $this->status,
-            'publishAt'            => $this->published_at,
+            'status' => $this->status,
+            'publishAt' => $this->published_at,
         ];
     }
 }

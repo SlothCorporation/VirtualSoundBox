@@ -31,6 +31,7 @@ class Article extends Model
         }
 
         $plain = strip_tags($this->body);
+
         return mb_strimwidth($plain, 0, 100, '...');
     }
 

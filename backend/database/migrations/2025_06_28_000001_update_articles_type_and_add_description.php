@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class () extends Migration {
     public function up(): void
     {
         Schema::table('articles', function (Blueprint $table) {
@@ -12,8 +12,8 @@ return new class extends Migration {
         });
 
         Schema::table('articles', function (Blueprint $table) {
-           $table->enum('type', ['article', 'external'])->default('article')->after('slug');
-           $table->text('external_description')->nullable()->after('external_url');
+            $table->enum('type', ['article', 'external'])->default('article')->after('slug');
+            $table->text('external_description')->nullable()->after('external_url');
         });
     }
 

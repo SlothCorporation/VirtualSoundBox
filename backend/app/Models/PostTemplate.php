@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PostTemplate extends Model
@@ -16,6 +15,6 @@ class PostTemplate extends Model
         'user_uuid',
         'name',
         'type',
-        'content'
+        'content',
     ];
 }

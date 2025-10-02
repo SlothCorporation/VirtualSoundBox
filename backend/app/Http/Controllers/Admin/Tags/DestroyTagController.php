@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\Tags;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use App\Models\Tag;
+use Illuminate\Http\JsonResponse;
 
 class DestroyTagController extends Controller
 {

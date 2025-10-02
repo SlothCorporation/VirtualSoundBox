@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin\Music;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Music\IndexMusicRequest;
-use Illuminate\Http\JsonResponse;
 use App\Models\Musics;
+use Illuminate\Http\JsonResponse;
 
 class IndexMusicController extends Controller
 {
@@ -27,6 +27,7 @@ class IndexMusicController extends Controller
             ->orderBy('name', 'ASC');
 
         $music = $query->latest()->paginate($perPage);
+
         return response()->json($music);
     }
 }
