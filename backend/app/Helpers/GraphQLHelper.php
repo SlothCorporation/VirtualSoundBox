@@ -16,10 +16,10 @@ class GraphQLHelper
             ),
             'paginatorInfo' => [
                 'currentPage' => $paginator->currentPage(),
-                'lastPage'    => $paginator->lastPage(),
-                'perPage'     => $paginator->perPage(),
-                'total'       => $paginator->total(),
-            ]
+                'lastPage' => $paginator->lastPage(),
+                'perPage' => $paginator->perPage(),
+                'total' => $paginator->total(),
+            ],
         ];
     }
 

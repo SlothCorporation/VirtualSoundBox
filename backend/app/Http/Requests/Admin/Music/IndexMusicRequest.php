@@ -16,7 +16,7 @@ class IndexMusicRequest extends FormRequest
         return [
             'page' => ['sometimes', 'integer', 'min:1'],
             'per_page' => ['sometimes', 'integer', 'min:1', 'max:100'],
-            'keyword' => ['nullable', 'string', 'max:255']
+            'keyword' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

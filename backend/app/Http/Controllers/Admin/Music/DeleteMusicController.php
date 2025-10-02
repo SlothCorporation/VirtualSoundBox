@@ -20,11 +20,12 @@ class DeleteMusicController extends Controller
             }
 
             $music->delete();
+
             return response()->json(['message' => '楽曲を削除しました']);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => '楽曲の削除に失敗しました。',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

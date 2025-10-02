@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\PostTemplates;
 
+use App\Http\Controllers\Controller;
 use App\Models\PostTemplate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 
 class CreateController extends Controller
@@ -37,7 +37,7 @@ EOT;
 
         return response()->json([
             'message' => 'テンプレートが作成されました。',
-            'template' => $template
+            'template' => $template,
         ]);
     }
 }

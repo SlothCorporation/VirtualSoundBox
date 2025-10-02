@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api\PostTemplates;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostTemplates\SaveRequest;
+use App\Models\PostTemplate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use App\Models\PostTemplate;
 
 class SaveController extends Controller
 {
@@ -35,12 +35,12 @@ class SaveController extends Controller
 
             return response()->json([
                 'message' => 'テンプレートが保存されました。',
-                'template' => $postTemplate
+                'template' => $postTemplate,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'テンプレートの保存に失敗しました。',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

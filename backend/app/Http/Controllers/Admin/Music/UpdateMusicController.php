@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin\Music;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Music\UpdateMusicRequest;
-use Illuminate\Http\JsonResponse;
 use App\Models\Musics;
+use Illuminate\Http\JsonResponse;
 
 class UpdateMusicController extends Controller
 {
@@ -22,14 +22,14 @@ class UpdateMusicController extends Controller
 
             $music->update([
                 'name' => $request->input('name'),
-                'artist' => $request->input('artist')
+                'artist' => $request->input('artist'),
             ]);
 
             return response()->json(['message' => '楽曲を更新しました']);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => '楽曲の更新に失敗しました。',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

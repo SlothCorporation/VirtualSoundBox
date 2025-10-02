@@ -11,6 +11,7 @@ class EnsureUserIsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
+
         if (!$user || !$user->admin_flg) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }

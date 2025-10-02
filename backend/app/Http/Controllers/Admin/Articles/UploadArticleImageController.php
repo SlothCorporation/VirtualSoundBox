@@ -7,7 +7,6 @@ use App\Http\Requests\Admin\Articles\UploadArticleImageRequest;
 use App\Http\Resources\Admin\Articles\UploadArticleImageResource;
 use App\Models\Article;
 use App\Models\ArticleImage;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

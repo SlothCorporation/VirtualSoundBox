@@ -37,6 +37,7 @@ class ArticleQuery
         }
 
         $articles = $query->paginate($args['perPage'] ?? 10, ['*'], 'page', $args['page'] ?? 1);
+
         return GraphQLHelper::toGraphQLPaginated($articles);
     }
 
@@ -46,6 +47,7 @@ class ArticleQuery
             ->where('id', $args['id'])
             ->whereNotNull('published_at')
             ->first();
+
         return GraphQLHelper::toGraphQLObject($article);
     }
 
@@ -57,6 +59,7 @@ class ArticleQuery
 
         // published_atに現在時刻を文字列でセットして、プレビュー可能にする
         $article->published_at = now()->toDateTimeString();
+
         return GraphQLHelper::toGraphQLObject($article);
     }
 

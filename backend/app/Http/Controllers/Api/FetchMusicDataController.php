@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FetchMusicDataRequest;
-use Illuminate\Http\JsonResponse;
 use App\Models\Musics;
+use Illuminate\Http\JsonResponse;
 
 class FetchMusicDataController extends Controller
 {
@@ -15,14 +15,17 @@ class FetchMusicDataController extends Controller
         $artist = $request->query('artist');
 
         $query = Musics::query();
+
         if ($music) {
             $query->where('name', 'like', "$music%");
         }
+
         if ($artist) {
             $query->where('artist', 'like', "$artist%");
         }
 
         $result = $query->get();
+
         if ($result->isNotEmpty()) {
             return response()->json($result);
         }

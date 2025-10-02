@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\PostTemplates;
 
 use App\Http\Controllers\Controller;
+use App\Models\PostTemplate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use App\Models\PostTemplate;
 
 class FindController extends Controller
 {

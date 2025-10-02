@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FetchYoutubeDataRequest;
-use Illuminate\Http\JsonResponse;
 use Google_Client;
 use Google_Service_YouTube;
+use Illuminate\Http\JsonResponse;
 
 class FetchYoutubeDataController extends Controller
 {
@@ -22,6 +22,7 @@ class FetchYoutubeDataController extends Controller
         $youtube = new Google_Service_YouTube($client);
         try {
             $live = $youtube->videos->listVideos('snippet, liveStreamingDetails', ['id' => $videoId]);
+
             return response()->json($live['items'][0]['snippet']);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Invalid video URL', $e->getMessage()], 400);

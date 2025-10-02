@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Accounts;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 
 class FetchUsersController extends Controller
 {

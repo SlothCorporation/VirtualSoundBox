@@ -26,14 +26,14 @@ class ContactResolver
 
             return [
                 'success' => true,
-                'message' => 'お問い合わせを送信しました。'
+                'message' => 'お問い合わせを送信しました。',
             ];
         } catch (\Exception $e) {
             Log::error('Slack通知の送信に失敗しました: ' . $e->getMessage());
 
             return [
                 'success' => false,
-                'message' => 'お問い合わせの送信に失敗しました。'
+                'message' => 'お問い合わせの送信に失敗しました。',
             ];
         }
     }
