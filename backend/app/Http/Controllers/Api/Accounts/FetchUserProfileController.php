@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Api\Accounts;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class FetchUserProfileController extends Controller
 {
     public function __invoke(): JsonResponse
     {
         $user = Auth::user();
+
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }

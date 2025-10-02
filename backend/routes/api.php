@@ -1,19 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\FetchYoutubeDataController;
-use App\Http\Controllers\Api\FetchMusicDataController;
-use App\Http\Controllers\Api\SetMusicDataController;
-use App\Http\Controllers\Api\Accounts\RegisterController;
+use App\Http\Controllers\Api\Accounts\FetchUserController;
+use App\Http\Controllers\Api\Accounts\FetchUserProfileController;
+use App\Http\Controllers\Api\Accounts\FetchUsersController;
 use App\Http\Controllers\Api\Accounts\LoginController;
 use App\Http\Controllers\Api\Accounts\LogoutController;
-use App\Http\Controllers\Api\Accounts\FetchUserProfileController;
-use App\Http\Controllers\Api\Accounts\FetchUserController;
-use App\Http\Controllers\Api\Accounts\FetchUsersController;
+use App\Http\Controllers\Api\Accounts\RegisterController;
 use App\Http\Controllers\Api\Accounts\UpdateUserController;
-use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Verified;
+use App\Http\Controllers\Api\FetchMusicDataController;
+use App\Http\Controllers\Api\FetchYoutubeDataController;
+use App\Http\Controllers\Api\SetMusicDataController;
 use App\Models\User;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

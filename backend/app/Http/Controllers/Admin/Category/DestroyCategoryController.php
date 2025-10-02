@@ -19,6 +19,7 @@ class DestroyCategoryController
         }
 
         $category->delete();
+
         return response()->json(['message' => 'カテゴリーを削除しました']);
     }
 }

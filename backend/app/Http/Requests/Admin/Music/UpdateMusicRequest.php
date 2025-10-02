@@ -15,7 +15,7 @@ class UpdateMusicRequest extends FormRequest
     {
         return [
             'name' => ['string', 'required'],
-            'artist' => ['string', 'required']
+            'artist' => ['string', 'required'],
         ];
     }
 }

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Accounts;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Accounts\RegisterRequest;
-use Illuminate\Http\JsonResponse;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 
 class RegisterController extends Controller
 {
@@ -19,7 +19,7 @@ class RegisterController extends Controller
         $user->sendEmailVerificationNotification();
 
         return response()->json([
-           'message' => 'ユーザー登録が完了しました。確認メールをご確認ください。'
+           'message' => 'ユーザー登録が完了しました。確認メールをご確認ください。',
         ]);
     }
 }

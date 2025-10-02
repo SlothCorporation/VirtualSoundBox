@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Articles;
 
+use App\Helpers\SlugHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Articles\UpdateArticleRequest;
 use App\Models\Article;
@@ -10,7 +11,6 @@ use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Helpers\SlugHelper;
 use Illuminate\Support\Str;
 
 class UpdateArticleController extends Controller
@@ -30,6 +30,7 @@ class UpdateArticleController extends Controller
                 // カテゴリーの設定（1:1）
                 if ($request->filled('category')) {
                     $category = Category::where('slug', $request->category)->first();
+
                     if ($category) {
                         $article->category()->associate($category);
                     }
@@ -47,6 +48,7 @@ class UpdateArticleController extends Controller
                 if ($request->has('tags')) {
                     $tagIds = collect($request->tags)->map(function ($tagName) {
                         $slug = SlugHelper::generateJapaneseSlug($tagName);
+
                         return Tag::firstOrCreate(
                             ['name' => $tagName],
                             ['slug' => $slug]

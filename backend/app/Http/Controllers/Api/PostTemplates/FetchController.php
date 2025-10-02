@@ -18,6 +18,7 @@ class FetchController extends Controller
         }
 
         $postTemplates = PostTemplate::where('user_uuid', $user->uuid)->get();
+
         return response()->json($postTemplates);
     }
 }

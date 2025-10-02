@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SetMusicDataRequest;
-use Illuminate\Http\JsonResponse;
 use App\Models\Musics;
+use Illuminate\Http\JsonResponse;
 
 class SetMusicDataController extends Controller
 {
@@ -13,6 +13,7 @@ class SetMusicDataController extends Controller
     {
         try {
             $data = $request->input('data');
+
             foreach ($data as $item) {
                 Musics::firstOrCreate(
                     ['name' => $item['music'], 'artist' => $item['artist']]

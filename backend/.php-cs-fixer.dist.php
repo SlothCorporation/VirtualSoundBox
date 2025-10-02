@@ -24,7 +24,7 @@ return (new PhpCsFixer\Config())
             'imports_order' => ['class', 'function', 'const'],
         ],
         'trailing_comma_in_multiline' => ['elements' => ['arrays']],
-        'binary_operator_spaces' => ['default' => 'align_single_space_minimal'],
+        'binary_operator_spaces' => ['default' => 'single_space'],
         'no_whitespace_in_blank_line' => true,
         'blank_line_before_statement' => [
             'statements' => ['return', 'throw', 'if', 'for', 'foreach', 'while', 'do', 'switch'],
