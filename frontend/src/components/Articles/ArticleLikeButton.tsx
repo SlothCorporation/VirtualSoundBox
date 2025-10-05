@@ -18,7 +18,7 @@ export default function ArticleLikeButton({
 
   useEffect(() => {
     const likedArticles = JSON.parse(
-      localStorage.getItem("likedArticles") || "[]"
+      localStorage.getItem("likedArticles") || "[]",
     );
     if (likedArticles.includes(articleId)) {
       setLiked(true);
@@ -33,11 +33,11 @@ export default function ArticleLikeButton({
 
     // ローカル保存
     const likedArticles = JSON.parse(
-      localStorage.getItem("likedArticles") || "[]"
+      localStorage.getItem("likedArticles") || "[]",
     );
     localStorage.setItem(
       "likedArticles",
-      JSON.stringify([...new Set([...likedArticles, articleId])])
+      JSON.stringify([...new Set([...likedArticles, articleId])]),
     );
 
     try {
@@ -56,7 +56,7 @@ export default function ArticleLikeButton({
         "mx-auto mt-8 flex items-center gap-2 rounded-full border px-5 py-2 text-sm font-medium transition",
         liked
           ? "cursor-default border-pink-300 bg-pink-100 text-pink-600"
-          : "border-gray-300 text-gray-700 hover:bg-gray-50"
+          : "border-gray-300 text-gray-700 hover:bg-gray-50",
       )}
     >
       <span className="text-lg">{liked ? "❤️" : "🤍"}</span>
