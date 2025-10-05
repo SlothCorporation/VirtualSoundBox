@@ -1,0 +1,30 @@
+query fetchPreviewArticle($token: String!) {
+    PreviewArticle(token: $token) {
+        id
+        title
+        type
+        body
+        excerpt
+        externalUrl
+        externalDescription
+        category {
+            id
+            name
+            slug
+        }
+        tags {
+            id
+            name
+            slug
+        }
+        coverImage {
+            id
+            url
+        }
+        thumbnailImage {
+            id
+            url
+        }
+        publishedAt
+    }
+}

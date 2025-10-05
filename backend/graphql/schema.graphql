@@ -1,0 +1,107 @@
+#====================================================
+# enums
+#====================================================
+enum ArticleType {
+    article
+    external
+}
+
+#====================================================
+# types
+#====================================================
+
+type Category {
+    id: ID!
+    name: String!
+    slug: String!
+}
+
+type Tag {
+    id: ID!
+    name: String!
+    slug: String!
+}
+
+type CoverImage{
+    id: ID!
+    url: String!
+}
+
+type ThumbnailImage {
+    id: ID!
+    url: String!
+}
+
+type Article {
+    id: ID!
+    title: String!
+    type: ArticleType!
+    body: String
+    excerpt: String
+    externalUrl: String
+    externalDescription: String
+    category: Category!
+    tags: [Tag]
+    coverImage: CoverImage
+    thumbnailImage: ThumbnailImage
+    publishedAt: String!
+}
+
+type Topic {
+    id: ID!
+    article: Article!
+    position: Int!
+}
+
+type ArticlePaginator {
+    data: [Article!]!
+    paginatorInfo: PaginatorInfo!
+}
+
+type PaginatorInfo {
+    currentPage: Int!
+    lastPage: Int!
+    perPage: Int!
+    total: Int!
+}
+
+type ContactResponse {
+    success: Boolean!
+    message: String
+}
+
+#====================================================
+# input types
+#====================================================
+input ArticleFilterInput {
+    tag: String
+    category: String
+    keyword: String
+}
+
+input ContactInput {
+    name: String!
+    email: String!
+    message: String!
+}
+
+#====================================================
+# queries
+#====================================================
+type Query {
+    Articles(filter: ArticleFilterInput, page: Int, perPage: Int): ArticlePaginator! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@paginatedArticles")
+    RecommendedArticles(articleId: ID!, limit: Int = 5): [Article!]! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@recommendedArticles")
+    Article(id: ID!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@article")
+    PreviewArticle(token: String!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@previewArticle")
+    Topics: [Topic!]! @field(resolver: "App\\GraphQL\\Queries\\TopicQuery@topics")
+}
+
+#====================================================
+# mutations
+#====================================================
+type Mutation {
+    contact(input: ContactInput!): ContactResponse! @field(resolver: "App\\GraphQL\\Mutations\\ContactResolver")
+    addTopic(articleId: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@addTopic")
+    removeTopic(id: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@removeTopic")
+    reorderTopics(ids: [ID!]!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@reorderTopics")
+}

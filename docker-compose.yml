@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8900:443"
+    volumes:
+      - ./backend:/var/www/web
+    depends_on:
+      - php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/var/www/web
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    ports:
+      - "8906:3306"
+    environment:
+      - MYSQL_DATABASE=virtual-soundbox
+      - MYSQL_ROOT_PASSWORD=virtual-soundbox
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    command: --default-time-zone=Asia/Tokyo --local-infile=1 --character-set-server=utf8 --collation-server=utf8_general_ci

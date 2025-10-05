@@ -1,0 +1,51 @@
+{
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always",
+    "source.organizeImports": "always"
+  },
+
+  // =========================
+  // Next.js (TypeScript/JS/React)
+  // =========================
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+
+  // =========================
+  // PHP (Laravel)
+  // =========================
+  "intelephense.diagnostics.enable": true,
+  "[php]": {
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": null,
+    "editor.tabSize": 4
+  },
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.php$",
+        "cmd": "docker compose exec -T php composer format",
+        "isAsync": true
+      }
+    ]
+  } 
+  
+}

@@ -1,0 +1,52 @@
+query fetchArticle($id: ID!) {
+    Article(id: $id) {
+        id
+        title
+        type
+        body
+        excerpt
+        externalUrl
+        externalDescription
+        category {
+            id
+            name
+            slug
+        }
+        tags {
+            id
+            name
+            slug
+        }
+        coverImage {
+            id
+            url
+        }
+        thumbnailImage {
+            id
+            url
+        }
+        publishedAt
+    }
+    RecommendedArticles(articleId: $id, limit: 5) {
+        id
+        title
+        type
+        externalUrl
+        externalDescription
+        category {
+            id
+            name
+            slug
+        }
+        tags {
+            id
+            name
+            slug
+        }
+        thumbnailImage {
+            id
+            url
+        }
+        publishedAt
+    }
+}

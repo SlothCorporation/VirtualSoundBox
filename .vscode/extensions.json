@@ -1,0 +1,21 @@
+{
+    "recommendations": [
+        // =========================
+        // PHP / Laravel / GraphQL
+        // =========================
+        "bmewburn.vscode-intelephense-client",
+        "GraphQL.vscode-graphql",
+        "GraphQL.vscode-graphql-syntax",
+
+        // =========================
+        // Next.js / JS / TS
+        // =========================
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+
+        // =========================
+        // 共通便利系
+        // =========================
+        "emeraldwalk.RunOnSave",
+    ]
+}
