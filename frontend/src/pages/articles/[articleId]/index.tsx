@@ -1,12 +1,13 @@
-import Layout from "@/components/Layout";
-import { useArticle } from "@/hooks/articles/api";
-import Head from "next/head";
 import ArticleShareButtons from "@/components/Articles/ArticleShareButtons";
-import type { GetStaticPaths, GetStaticProps } from "next";
-import { dehydrate, QueryClient } from "@tanstack/react-query";
-import { sdk } from "@/lib/graphql-client";
+import Layout from "@/components/Layout";
 import { NEXT_PUBLIC_FRONTEND_URL } from "@/config/env-client";
 import type { Article } from "@/generated/graphql";
+import { useArticle } from "@/hooks/articles/api";
+import { sdk } from "@/lib/graphql-client";
+import ArticleLikeButton from "@/src/components/Articles/ArticleLikeButton";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import type { GetStaticPaths, GetStaticProps } from "next";
+import Head from "next/head";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return { paths: [], fallback: "blocking" };
@@ -154,6 +155,10 @@ function Page({ articleId }: { articleId: string }) {
           <article
             className="prose prose-blue max-w-none"
             dangerouslySetInnerHTML={{ __html: article.body ?? "" }}
+          />
+          <ArticleLikeButton
+            articleId={article.id}
+            initialCount={article.likeCount ?? 0}
           />
           <ArticleShareButtons url={ogUrl} />
         </main>
