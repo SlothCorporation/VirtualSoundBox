@@ -1,33 +1,6 @@
-import { apiFetch } from "@/lib/api";
-import { sdk } from "@/lib/graphql-client";
-import { useQuery } from "@tanstack/react-query";
 import type { ArticleFilterInput } from "@/generated/graphql";
-
-export type Article = {
-  id: number;
-  title: string;
-  body: string;
-  category: string | null;
-  tags: string[];
-  previewToken?: string;
-  coverImage: {
-    id: number;
-    url: string;
-  } | null;
-  thumbnailImage: {
-    id: number;
-    url: string;
-  } | null;
-  publishAt: string;
-};
-//
-// export const fetchPreviewArticle = async (token: string) => {
-//   const response = await apiFetch(`/api/articles/preview/${token}`);
-//   if (!response.ok) {
-//     throw new Error("Failed to fetch preview article");
-//   }
-//   return await response.json();
-// };
+import { sdk } from "@/lib/graphql-client";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 type ArticlesResponse = Awaited<ReturnType<typeof sdk.fetchArticles>>;
 
@@ -110,4 +83,17 @@ export const usePreviewArticle = ({
     isLoading: isPending,
     isRefreshing: isFetching && !isPending,
   };
+};
+
+export const useIncrementArticleLike = (articleId: string) => {
+  const { error, ...rest } = useMutation({
+    mutationKey: ["incrementArticleLike", articleId],
+    mutationFn: () => sdk.incrementArticleLike({ articleId }),
+  });
+
+  if (error) {
+    return { error: error.message, ...rest };
+  }
+
+  return { error: null, ...rest };
 };

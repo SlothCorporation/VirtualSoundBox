@@ -4,6 +4,7 @@ query fetchPreviewArticle($token: String!) {
         title
         type
         body
+        likeCount
         excerpt
         externalUrl
         externalDescription
