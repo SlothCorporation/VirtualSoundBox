@@ -4,6 +4,7 @@ query fetchArticle($id: ID!) {
         title
         type
         body
+        likeCount
         excerpt
         externalUrl
         externalDescription

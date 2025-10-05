@@ -39,6 +39,7 @@ export type Article = {
   externalDescription?: Maybe<Scalars["String"]["output"]>;
   externalUrl?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["ID"]["output"];
+  likeCount?: Maybe<Scalars["Int"]["output"]>;
   publishedAt: Scalars["String"]["output"];
   tags?: Maybe<Array<Maybe<Tag>>>;
   thumbnailImage?: Maybe<ThumbnailImage>;
@@ -92,6 +93,7 @@ export type Mutation = {
   __typename?: "Mutation";
   addTopic: Scalars["Boolean"]["output"];
   contact: ContactResponse;
+  likeArticle: Scalars["Boolean"]["output"];
   removeTopic: Scalars["Boolean"]["output"];
   reorderTopics: Scalars["Boolean"]["output"];
 };
@@ -102,6 +104,10 @@ export type MutationAddTopicArgs = {
 
 export type MutationContactArgs = {
   input: ContactInput;
+};
+
+export type MutationLikeArticleArgs = {
+  articleId: Scalars["ID"]["input"];
 };
 
 export type MutationRemoveTopicArgs = {
@@ -180,6 +186,7 @@ export type FetchArticleQuery = {
     title: string;
     type: ArticleType;
     body?: string | undefined;
+    likeCount?: number | undefined;
     excerpt?: string | undefined;
     externalUrl?: string | undefined;
     externalDescription?: string | undefined;
@@ -285,6 +292,7 @@ export type FetchPreviewArticleQuery = {
     title: string;
     type: ArticleType;
     body?: string | undefined;
+    likeCount?: number | undefined;
     excerpt?: string | undefined;
     externalUrl?: string | undefined;
     externalDescription?: string | undefined;
@@ -310,6 +318,15 @@ export type FetchPreviewArticleQuery = {
   };
 };
 
+export type IncrementArticleLikeMutationVariables = Exact<{
+  articleId: Scalars["ID"]["input"];
+}>;
+
+export type IncrementArticleLikeMutation = {
+  __typename?: "Mutation";
+  likeArticle: boolean;
+};
+
 export type SendContactMutationVariables = Exact<{
   input: ContactInput;
 }>;
@@ -330,6 +347,7 @@ export const FetchArticleDocument = gql`
       title
       type
       body
+      likeCount
       excerpt
       externalUrl
       externalDescription
@@ -418,6 +436,7 @@ export const FetchPreviewArticleDocument = gql`
       title
       type
       body
+      likeCount
       excerpt
       externalUrl
       externalDescription
@@ -441,6 +460,11 @@ export const FetchPreviewArticleDocument = gql`
       }
       publishedAt
     }
+  }
+`;
+export const IncrementArticleLikeDocument = gql`
+  mutation incrementArticleLike($articleId: ID!) {
+    likeArticle(articleId: $articleId)
   }
 `;
 export const SendContactDocument = gql`
@@ -522,6 +546,24 @@ export function getSdk(
           }),
         "fetchPreviewArticle",
         "query",
+        variables,
+      );
+    },
+    incrementArticleLike(
+      variables: IncrementArticleLikeMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit["signal"],
+    ): Promise<IncrementArticleLikeMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<IncrementArticleLikeMutation>({
+            document: IncrementArticleLikeDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        "incrementArticleLike",
+        "mutation",
         variables,
       );
     },

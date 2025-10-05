@@ -37,6 +37,7 @@ type Article {
     title: String!
     type: ArticleType!
     body: String
+    likeCount: Int
     excerpt: String
     externalUrl: String
     externalDescription: String
@@ -100,6 +101,7 @@ type Query {
 # mutations
 #====================================================
 type Mutation {
+    likeArticle(articleId: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\ArticleMutation@likeArticle")
     contact(input: ContactInput!): ContactResponse! @field(resolver: "App\\GraphQL\\Mutations\\ContactResolver")
     addTopic(articleId: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@addTopic")
     removeTopic(id: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@removeTopic")
