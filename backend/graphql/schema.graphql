@@ -6,6 +6,12 @@ enum ArticleType {
     external
 }
 
+enum AnalyticsPeriod {
+    DAILY
+    WEEKLY
+    MONTHLY
+}
+
 #====================================================
 # types
 #====================================================
@@ -71,6 +77,41 @@ type ContactResponse {
     message: String
 }
 
+type AnalyticsData {
+  startDate: String!
+  endDate: String!
+  current: Analytics!
+  previous: Analytics!
+}
+
+type Analytics {
+  summary: AnalyticsSummary!
+  articleViews: [AnalyticsArticleViews!]!
+  trafficSources: [AnalyticsTrafficSource!]!
+  deviceUsage: [AnalyticsDeviceUsage!]!
+}
+
+type AnalyticsSummary {
+  pageViews: Int!
+  users: Int!
+  sessions: Int!
+}
+
+type AnalyticsArticleViews {
+  title: String!
+  pageViews: Int!
+}
+
+type AnalyticsTrafficSource {
+  source: String!
+  sessions: Int!
+}
+
+type AnalyticsDeviceUsage {
+  device: String!
+  users: Int!
+}
+
 #====================================================
 # input types
 #====================================================
@@ -95,6 +136,7 @@ type Query {
     Article(id: ID!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@article")
     PreviewArticle(token: String!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@previewArticle")
     Topics: [Topic!]! @field(resolver: "App\\GraphQL\\Queries\\TopicQuery@topics")
+    Analytics(period: AnalyticsPeriod!): AnalyticsData! @field(resolver: "App\\GraphQL\\Queries\\AnalyticsQuery@analytics")
 }
 
 #====================================================
