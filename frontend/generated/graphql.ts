@@ -30,6 +30,53 @@ export type Scalars = {
   Float: { input: number; output: number };
 };
 
+export type Analytics = {
+  __typename?: "Analytics";
+  articleViews: Array<AnalyticsArticleViews>;
+  deviceUsage: Array<AnalyticsDeviceUsage>;
+  summary: AnalyticsSummary;
+  trafficSources: Array<AnalyticsTrafficSource>;
+};
+
+export type AnalyticsArticleViews = {
+  __typename?: "AnalyticsArticleViews";
+  pageViews: Scalars["Int"]["output"];
+  title: Scalars["String"]["output"];
+};
+
+export type AnalyticsData = {
+  __typename?: "AnalyticsData";
+  current: Analytics;
+  endDate: Scalars["String"]["output"];
+  previous: Analytics;
+  startDate: Scalars["String"]["output"];
+};
+
+export type AnalyticsDeviceUsage = {
+  __typename?: "AnalyticsDeviceUsage";
+  device: Scalars["String"]["output"];
+  users: Scalars["Int"]["output"];
+};
+
+export enum AnalyticsPeriod {
+  Daily = "DAILY",
+  Monthly = "MONTHLY",
+  Weekly = "WEEKLY",
+}
+
+export type AnalyticsSummary = {
+  __typename?: "AnalyticsSummary";
+  pageViews: Scalars["Int"]["output"];
+  sessions: Scalars["Int"]["output"];
+  users: Scalars["Int"]["output"];
+};
+
+export type AnalyticsTrafficSource = {
+  __typename?: "AnalyticsTrafficSource";
+  sessions: Scalars["Int"]["output"];
+  source: Scalars["String"]["output"];
+};
+
 export type Article = {
   __typename?: "Article";
   body?: Maybe<Scalars["String"]["output"]>;
@@ -128,11 +175,16 @@ export type PaginatorInfo = {
 
 export type Query = {
   __typename?: "Query";
+  Analytics: AnalyticsData;
   Article: Article;
   Articles: ArticlePaginator;
   PreviewArticle: Article;
   RecommendedArticles: Array<Article>;
   Topics: Array<Topic>;
+};
+
+export type QueryAnalyticsArgs = {
+  period: AnalyticsPeriod;
 };
 
 export type QueryArticleArgs = {
@@ -172,6 +224,18 @@ export type Topic = {
   article: Article;
   id: Scalars["ID"]["output"];
   position: Scalars["Int"]["output"];
+};
+
+export type FetchTopicsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FetchTopicsQuery = {
+  __typename?: "Query";
+  Topics: Array<{
+    __typename?: "Topic";
+    id: string;
+    position: number;
+    article: { __typename?: "Article"; id: string; title: string };
+  }>;
 };
 
 export type FetchArticleQueryVariables = Exact<{
@@ -340,6 +404,18 @@ export type SendContactMutation = {
   };
 };
 
+export const FetchTopicsDocument = gql`
+  query fetchTopics {
+    Topics {
+      id
+      position
+      article {
+        id
+        title
+      }
+    }
+  }
+`;
 export const FetchArticleDocument = gql`
   query fetchArticle($id: ID!) {
     Article(id: $id) {
@@ -495,6 +571,24 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
+    fetchTopics(
+      variables?: FetchTopicsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit["signal"],
+    ): Promise<FetchTopicsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FetchTopicsQuery>({
+            document: FetchTopicsDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        "fetchTopics",
+        "query",
+        variables,
+      );
+    },
     fetchArticle(
       variables: FetchArticleQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
