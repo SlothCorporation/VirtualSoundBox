@@ -6,12 +6,12 @@ use Aws\SecretsManager\SecretsManagerClient;
 use Google\Analytics\Data\V1beta\Client\BetaAnalyticsDataClient;
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
-use Google\Analytics\Data\V1beta\Metric;
-use Google\Analytics\Data\V1beta\RunReportRequest;
 use Google\Analytics\Data\V1beta\Filter;
+use Google\Analytics\Data\V1beta\Filter\StringFilter;
 use Google\Analytics\Data\V1beta\FilterExpression;
 use Google\Analytics\Data\V1beta\FilterExpressionList;
-use Google\Analytics\Data\V1beta\Filter\StringFilter;
+use Google\Analytics\Data\V1beta\Metric;
+use Google\Analytics\Data\V1beta\RunReportRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
@@ -27,7 +27,7 @@ class Ga4Service
             'version' => 'latest',
             'region' => env('AWS_DEFAULT_REGION', 'ap-northeast-1'),
             'credentials' => [
-                'key'    => env('AWS_ACCESS_KEY_ID'),
+                'key' => env('AWS_ACCESS_KEY_ID'),
                 'secret' => env('AWS_SECRET_ACCESS_KEY'),
             ],
         ]);
@@ -41,10 +41,12 @@ class Ga4Service
                 $result = $client->getSecretValue([
                     'SecretId' => self::SECRET_NAME_CREDENTIALS,
                 ]);
+
                 return json_decode($result['SecretString'], true);
             } catch (\Exception $e) {
-                \Log::error("Error fetching GA4 credentials: " . $e->getMessage());
-                throw new \RuntimeException("Failed to retrieve GA4 credentials.");
+                Log::error('Error fetching GA4 credentials: ' . $e->getMessage());
+
+                throw new \RuntimeException('Failed to retrieve GA4 credentials.');
             }
         });
     }
@@ -57,10 +59,12 @@ class Ga4Service
                 $result = $client->getSecretValue([
                     'SecretId' => self::SECRET_NAME_PROPERTY_ID,
                 ]);
+
                 return trim($result['SecretString']);
             } catch (\Exception $e) {
-                \Log::error("Error fetching GA4 property ID: " . $e->getMessage());
-                throw new \RuntimeException("Failed to retrieve GA4 property ID.");
+                Log::error('Error fetching GA4 property ID: ' . $e->getMessage());
+
+                throw new \RuntimeException('Failed to retrieve GA4 property ID.');
             }
         });
     }
@@ -95,7 +99,7 @@ class Ga4Service
 
         $response = $client->runReport($request);
         $row = $response->getRows()[0] ?? null;
-        
+
         return $row ? [
             'pageViews' => (int) $row->getMetricValues()[0]->getValue(),
             'users' => (int) $row->getMetricValues()[1]->getValue(),
@@ -150,6 +154,7 @@ class Ga4Service
         $response = $client->runReport($request);
 
         $result = [];
+
         foreach ($response->getRows() as $row) {
             $result[] = [
                 'title' => $row->getDimensionValues()[0]->getValue(),
@@ -160,7 +165,7 @@ class Ga4Service
         return $result;
     }
 
-     public static function fetchTrafficSources(string $startDate, string $endDate): array
+    public static function fetchTrafficSources(string $startDate, string $endDate): array
     {
         $propertyId = self::getPropertyId();
         $client = self::analyticsClient();
@@ -177,6 +182,7 @@ class Ga4Service
         $response = $client->runReport($request);
 
         $result = [];
+
         foreach ($response->getRows() as $row) {
             $result[] = [
                 'source' => $row->getDimensionValues()[0]->getValue(),
@@ -207,6 +213,7 @@ class Ga4Service
         $response = $client->runReport($request);
 
         $result = [];
+
         foreach ($response->getRows() as $row) {
             $result[] = [
                 'device' => $row->getDimensionValues()[0]->getValue(),

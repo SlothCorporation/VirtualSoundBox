@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Services\Analytics\DbService;
 use App\Services\Analytics\Ga4Service;
 use Carbon\Carbon;
 

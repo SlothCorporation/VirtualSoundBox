@@ -2,8 +2,8 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Services\AnalyticsService;
 use App\Helpers\GraphQLHelper;
+use App\Services\AnalyticsService;
 
 class AnalyticsQuery
 {
@@ -17,6 +17,7 @@ class AnalyticsQuery
     public function analytics($_, array $args): ?array
     {
         $analytics = AnalyticsService::getAnalytics($args['period']);
+
         return GraphQLHelper::toGraphQLObject($analytics);
     }
 }
