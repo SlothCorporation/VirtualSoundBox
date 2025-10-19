@@ -11,7 +11,6 @@ class AnalyticsService
     public static function getAnalytics(string $periodType = 'DAILY'): array
     {
         [$currentStart, $currentEnd, $previousStart, $previousEnd] = self::resolveDataRanges($periodType);
-
         $ga4Current = Ga4Service::fetch($currentStart, $currentEnd);
         $ga4Previous = Ga4Service::fetch($previousStart, $previousEnd);
 
@@ -32,22 +31,22 @@ class AnalyticsService
 
         return match ($type) {
             'DAILY' => [
-                $today->copy()->subDays(6)->toDateString(),
                 $today->toDateString(),
-                $today->copy()->subDays(13)->toDateString(),
-                $today->copy()->subDays(7)->toDateString(),
+                $today->toDateString(),
+                $today->copy()->subDay()->toDateString(),
+                $today->copy()->subDay()->toDateString(),
             ],
             'WEEKLY' => [
-                $today->copy()->subWeeks(7)->startOfWeek()->toDateString(),
-                $today->endOfWeek()->toDateString(),
-                $today->copy()->subWeeks(15)->startOfWeek()->toDateString(),
-                $today->copy()->subWeeks(8)->endOfWeek()->toDateString(),
+                $today->copy()->startOfWeek()->toDateString(),
+                $today->copy()->endOfWeek()->toDateString(),
+                $today->copy()->subWeek()->startOfWeek()->toDateString(),
+                $today->copy()->subWeek()->endOfWeek()->toDateString(),
             ],
             'MONTHLY' => [
-                $today->copy()->subMonths(5)->startOfMonth()->toDateString(),
-                $today->endOfMonth()->toDateString(),
-                $today->copy()->subMonths(11)->startOfMonth()->toDateString(),
-                $today->copy()->subMonths(6)->endOfMonth()->toDateString(),
+                $today->copy()->startOfMonth()->toDateString(),
+                $today->copy()->endOfMonth()->toDateString(),
+                $today->copy()->subMonth()->startOfMonth()->toDateString(),
+                $today->copy()->subMonth()->endOfMonth()->toDateString(),
             ],
             default => throw new \InvalidArgumentException("Invalid range type: $type"),
         };

@@ -104,7 +104,11 @@ class Ga4Service
             'pageViews' => (int) $row->getMetricValues()[0]->getValue(),
             'users' => (int) $row->getMetricValues()[1]->getValue(),
             'sessions' => (int) $row->getMetricValues()[2]->getValue(),
-        ] : [];
+        ] : [
+            'pageViews' => 0,
+            'users' => 0,
+            'sessions' => 0,
+        ];
     }
 
     public static function fetchArticleViews(string $startDate, string $endDate): array
