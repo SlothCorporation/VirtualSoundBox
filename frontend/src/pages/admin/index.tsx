@@ -89,7 +89,7 @@ function Dashboard() {
       </div>
       <div className="flex gap-2">
         <SummaryCard
-          title="総ユーザー数"
+          title="総PV数"
           current={analytics?.current?.summary.pageViews ?? 0}
           previous={analytics?.previous?.summary.pageViews ?? 0}
         />
