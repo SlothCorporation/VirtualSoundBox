@@ -1,0 +1,44 @@
+query fetchAnalytics($period: AnalyticsPeriod!) {
+  Analytics(period: $period) {
+    startDate
+    endDate
+    current {
+      summary {
+        pageViews
+        users
+        sessions
+      }
+      articleViews {
+        title
+        pageViews
+      }
+      trafficSources {
+        source
+        sessions
+      }
+      deviceUsage {
+        device
+        users
+      }
+    }
+    previous {
+      summary {
+        pageViews
+        users
+        sessions
+      }
+      articleViews {
+        title
+        pageViews
+      }
+      trafficSources {
+        source
+        sessions
+      }
+      deviceUsage {
+        device
+        users
+      }
+    }
+  }
+}

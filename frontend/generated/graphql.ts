@@ -226,6 +226,67 @@ export type Topic = {
   position: Scalars["Int"]["output"];
 };
 
+export type FetchAnalyticsQueryVariables = Exact<{
+  period: AnalyticsPeriod;
+}>;
+
+export type FetchAnalyticsQuery = {
+  __typename?: "Query";
+  Analytics: {
+    __typename?: "AnalyticsData";
+    startDate: string;
+    endDate: string;
+    current: {
+      __typename?: "Analytics";
+      summary: {
+        __typename?: "AnalyticsSummary";
+        pageViews: number;
+        users: number;
+        sessions: number;
+      };
+      articleViews: Array<{
+        __typename?: "AnalyticsArticleViews";
+        title: string;
+        pageViews: number;
+      }>;
+      trafficSources: Array<{
+        __typename?: "AnalyticsTrafficSource";
+        source: string;
+        sessions: number;
+      }>;
+      deviceUsage: Array<{
+        __typename?: "AnalyticsDeviceUsage";
+        device: string;
+        users: number;
+      }>;
+    };
+    previous: {
+      __typename?: "Analytics";
+      summary: {
+        __typename?: "AnalyticsSummary";
+        pageViews: number;
+        users: number;
+        sessions: number;
+      };
+      articleViews: Array<{
+        __typename?: "AnalyticsArticleViews";
+        title: string;
+        pageViews: number;
+      }>;
+      trafficSources: Array<{
+        __typename?: "AnalyticsTrafficSource";
+        source: string;
+        sessions: number;
+      }>;
+      deviceUsage: Array<{
+        __typename?: "AnalyticsDeviceUsage";
+        device: string;
+        users: number;
+      }>;
+    };
+  };
+};
+
 export type FetchTopicsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type FetchTopicsQuery = {
@@ -404,6 +465,52 @@ export type SendContactMutation = {
   };
 };
 
+export const FetchAnalyticsDocument = gql`
+  query fetchAnalytics($period: AnalyticsPeriod!) {
+    Analytics(period: $period) {
+      startDate
+      endDate
+      current {
+        summary {
+          pageViews
+          users
+          sessions
+        }
+        articleViews {
+          title
+          pageViews
+        }
+        trafficSources {
+          source
+          sessions
+        }
+        deviceUsage {
+          device
+          users
+        }
+      }
+      previous {
+        summary {
+          pageViews
+          users
+          sessions
+        }
+        articleViews {
+          title
+          pageViews
+        }
+        trafficSources {
+          source
+          sessions
+        }
+        deviceUsage {
+          device
+          users
+        }
+      }
+    }
+  }
+`;
 export const FetchTopicsDocument = gql`
   query fetchTopics {
     Topics {
@@ -571,6 +678,24 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
+    fetchAnalytics(
+      variables: FetchAnalyticsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit["signal"],
+    ): Promise<FetchAnalyticsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FetchAnalyticsQuery>({
+            document: FetchAnalyticsDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        "fetchAnalytics",
+        "query",
+        variables,
+      );
+    },
     fetchTopics(
       variables?: FetchTopicsQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
