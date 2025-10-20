@@ -2,41 +2,50 @@ query fetchAnalytics($period: AnalyticsPeriod!) {
   Analytics(period: $period) {
     startDate
     endDate
-    current {
-      summary {
+    summary {
+      current {
         pageViews
         users
         sessions
       }
-      articleViews {
-        title
+      previous {
         pageViews
-      }
-      trafficSources {
-        source
-        sessions
-      }
-      deviceUsage {
-        device
         users
+        sessions
       }
     }
-    previous {
-      summary {
+    articleViews {
+      title
+      current {
         pageViews
+        activeUsers
+        events
+        avgDuration
+        bounceRate
+      }
+      previous {
+        pageViews
+        activeUsers
+        events
+        avgDuration
+        bounceRate
+      }
+    }
+    trafficSources {
+      source
+      current {
+        sessions
+      }
+      previous {
+        sessions
+      }
+    }
+    deviceUsage {
+      device
+      current {
         users
-        sessions
       }
-      articleViews {
-        title
-        pageViews
-      }
-      trafficSources {
-        source
-        sessions
-      }
-      deviceUsage {
-        device
+      previous {
         users
       }
     }

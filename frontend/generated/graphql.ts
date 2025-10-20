@@ -32,30 +32,12 @@ export type Scalars = {
 
 export type Analytics = {
   __typename?: "Analytics";
-  articleViews: Array<AnalyticsArticleViews>;
-  deviceUsage: Array<AnalyticsDeviceUsage>;
-  summary: AnalyticsSummary;
-  trafficSources: Array<AnalyticsTrafficSource>;
-};
-
-export type AnalyticsArticleViews = {
-  __typename?: "AnalyticsArticleViews";
-  pageViews: Scalars["Int"]["output"];
-  title: Scalars["String"]["output"];
-};
-
-export type AnalyticsData = {
-  __typename?: "AnalyticsData";
-  current: Analytics;
+  articleViews: Array<ArticleView>;
+  deviceUsage: Array<DeviceUsage>;
   endDate: Scalars["String"]["output"];
-  previous: Analytics;
   startDate: Scalars["String"]["output"];
-};
-
-export type AnalyticsDeviceUsage = {
-  __typename?: "AnalyticsDeviceUsage";
-  device: Scalars["String"]["output"];
-  users: Scalars["Int"]["output"];
+  summary: AnalyticsSummaryPeriod;
+  trafficSources: Array<TrafficSource>;
 };
 
 export enum AnalyticsPeriod {
@@ -71,10 +53,10 @@ export type AnalyticsSummary = {
   users: Scalars["Int"]["output"];
 };
 
-export type AnalyticsTrafficSource = {
-  __typename?: "AnalyticsTrafficSource";
-  sessions: Scalars["Int"]["output"];
-  source: Scalars["String"]["output"];
+export type AnalyticsSummaryPeriod = {
+  __typename?: "AnalyticsSummaryPeriod";
+  current: AnalyticsSummary;
+  previous?: Maybe<AnalyticsSummary>;
 };
 
 export type Article = {
@@ -100,6 +82,15 @@ export type ArticleFilterInput = {
   tag?: InputMaybe<Scalars["String"]["input"]>;
 };
 
+export type ArticleMetrics = {
+  __typename?: "ArticleMetrics";
+  activeUsers?: Maybe<Scalars["Int"]["output"]>;
+  avgDuration?: Maybe<Scalars["String"]["output"]>;
+  bounceRate?: Maybe<Scalars["Float"]["output"]>;
+  events?: Maybe<Scalars["Int"]["output"]>;
+  pageViews?: Maybe<Scalars["Int"]["output"]>;
+};
+
 export type ArticlePaginator = {
   __typename?: "ArticlePaginator";
   data: Array<Article>;
@@ -110,6 +101,13 @@ export enum ArticleType {
   Article = "article",
   External = "external",
 }
+
+export type ArticleView = {
+  __typename?: "ArticleView";
+  current: ArticleMetrics;
+  previous?: Maybe<ArticleMetrics>;
+  title: Scalars["String"]["output"];
+};
 
 export type Category = {
   __typename?: "Category";
@@ -134,6 +132,18 @@ export type CoverImage = {
   __typename?: "CoverImage";
   id: Scalars["ID"]["output"];
   url: Scalars["String"]["output"];
+};
+
+export type DeviceUsage = {
+  __typename?: "DeviceUsage";
+  current: DeviceUsageMetrics;
+  device?: Maybe<Scalars["String"]["output"]>;
+  previous?: Maybe<DeviceUsageMetrics>;
+};
+
+export type DeviceUsageMetrics = {
+  __typename?: "DeviceUsageMetrics";
+  users?: Maybe<Scalars["Int"]["output"]>;
 };
 
 export type Mutation = {
@@ -175,7 +185,7 @@ export type PaginatorInfo = {
 
 export type Query = {
   __typename?: "Query";
-  Analytics: AnalyticsData;
+  Analytics: Analytics;
   Article: Article;
   Articles: ArticlePaginator;
   PreviewArticle: Article;
@@ -226,6 +236,18 @@ export type Topic = {
   position: Scalars["Int"]["output"];
 };
 
+export type TrafficSource = {
+  __typename?: "TrafficSource";
+  current: TrafficSourceMetrics;
+  previous?: Maybe<TrafficSourceMetrics>;
+  source?: Maybe<Scalars["String"]["output"]>;
+};
+
+export type TrafficSourceMetrics = {
+  __typename?: "TrafficSourceMetrics";
+  sessions?: Maybe<Scalars["Int"]["output"]>;
+};
+
 export type FetchAnalyticsQueryVariables = Exact<{
   period: AnalyticsPeriod;
 }>;
@@ -233,57 +255,70 @@ export type FetchAnalyticsQueryVariables = Exact<{
 export type FetchAnalyticsQuery = {
   __typename?: "Query";
   Analytics: {
-    __typename?: "AnalyticsData";
+    __typename?: "Analytics";
     startDate: string;
     endDate: string;
-    current: {
-      __typename?: "Analytics";
-      summary: {
+    summary: {
+      __typename?: "AnalyticsSummaryPeriod";
+      current: {
         __typename?: "AnalyticsSummary";
         pageViews: number;
         users: number;
         sessions: number;
       };
-      articleViews: Array<{
-        __typename?: "AnalyticsArticleViews";
-        title: string;
-        pageViews: number;
-      }>;
-      trafficSources: Array<{
-        __typename?: "AnalyticsTrafficSource";
-        source: string;
-        sessions: number;
-      }>;
-      deviceUsage: Array<{
-        __typename?: "AnalyticsDeviceUsage";
-        device: string;
-        users: number;
-      }>;
+      previous?:
+        | {
+            __typename?: "AnalyticsSummary";
+            pageViews: number;
+            users: number;
+            sessions: number;
+          }
+        | undefined;
     };
-    previous: {
-      __typename?: "Analytics";
-      summary: {
-        __typename?: "AnalyticsSummary";
-        pageViews: number;
-        users: number;
-        sessions: number;
+    articleViews: Array<{
+      __typename?: "ArticleView";
+      title: string;
+      current: {
+        __typename?: "ArticleMetrics";
+        pageViews?: number | undefined;
+        activeUsers?: number | undefined;
+        events?: number | undefined;
+        avgDuration?: string | undefined;
+        bounceRate?: number | undefined;
       };
-      articleViews: Array<{
-        __typename?: "AnalyticsArticleViews";
-        title: string;
-        pageViews: number;
-      }>;
-      trafficSources: Array<{
-        __typename?: "AnalyticsTrafficSource";
-        source: string;
-        sessions: number;
-      }>;
-      deviceUsage: Array<{
-        __typename?: "AnalyticsDeviceUsage";
-        device: string;
-        users: number;
-      }>;
-    };
+      previous?:
+        | {
+            __typename?: "ArticleMetrics";
+            pageViews?: number | undefined;
+            activeUsers?: number | undefined;
+            events?: number | undefined;
+            avgDuration?: string | undefined;
+            bounceRate?: number | undefined;
+          }
+        | undefined;
+    }>;
+    trafficSources: Array<{
+      __typename?: "TrafficSource";
+      source?: string | undefined;
+      current: {
+        __typename?: "TrafficSourceMetrics";
+        sessions?: number | undefined;
+      };
+      previous?:
+        | { __typename?: "TrafficSourceMetrics"; sessions?: number | undefined }
+        | undefined;
+    }>;
+    deviceUsage: Array<{
+      __typename?: "DeviceUsage";
+      device?: string | undefined;
+      current: {
+        __typename?: "DeviceUsageMetrics";
+        users?: number | undefined;
+      };
+      previous?:
+        | { __typename?: "DeviceUsageMetrics"; users?: number | undefined }
+        | undefined;
+    }>;
   };
 };
 
@@ -470,41 +505,50 @@ export const FetchAnalyticsDocument = gql`
     Analytics(period: $period) {
       startDate
       endDate
-      current {
-        summary {
+      summary {
+        current {
           pageViews
           users
           sessions
         }
-        articleViews {
-          title
+        previous {
           pageViews
-        }
-        trafficSources {
-          source
-          sessions
-        }
-        deviceUsage {
-          device
           users
+          sessions
         }
       }
-      previous {
-        summary {
+      articleViews {
+        title
+        current {
           pageViews
+          activeUsers
+          events
+          avgDuration
+          bounceRate
+        }
+        previous {
+          pageViews
+          activeUsers
+          events
+          avgDuration
+          bounceRate
+        }
+      }
+      trafficSources {
+        source
+        current {
+          sessions
+        }
+        previous {
+          sessions
+        }
+      }
+      deviceUsage {
+        device
+        current {
           users
-          sessions
         }
-        articleViews {
-          title
-          pageViews
-        }
-        trafficSources {
-          source
-          sessions
-        }
-        deviceUsage {
-          device
+        previous {
           users
         }
       }

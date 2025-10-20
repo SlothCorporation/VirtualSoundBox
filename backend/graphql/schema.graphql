@@ -77,18 +77,18 @@ type ContactResponse {
     message: String
 }
 
-type AnalyticsData {
+type Analytics {
   startDate: String!
   endDate: String!
-  current: Analytics!
-  previous: Analytics!
+  summary: AnalyticsSummaryPeriod!
+  articleViews: [ArticleView!]!
+  trafficSources: [TrafficSource!]!
+  deviceUsage: [DeviceUsage!]!
 }
 
-type Analytics {
-  summary: AnalyticsSummary!
-  articleViews: [AnalyticsArticleViews!]!
-  trafficSources: [AnalyticsTrafficSource!]!
-  deviceUsage: [AnalyticsDeviceUsage!]!
+type AnalyticsSummaryPeriod {
+  current: AnalyticsSummary!
+  previous: AnalyticsSummary
 }
 
 type AnalyticsSummary {
@@ -97,19 +97,38 @@ type AnalyticsSummary {
   sessions: Int!
 }
 
-type AnalyticsArticleViews {
+type ArticleView {
   title: String!
-  pageViews: Int!
+  current: ArticleMetrics!
+  previous: ArticleMetrics
 }
 
-type AnalyticsTrafficSource {
-  source: String!
-  sessions: Int!
+type ArticleMetrics {
+  pageViews: Int
+  activeUsers: Int
+  events: Int
+  avgDuration: String
+  bounceRate: Float
 }
 
-type AnalyticsDeviceUsage {
-  device: String!
-  users: Int!
+type TrafficSource {
+  source: String
+  current: TrafficSourceMetrics!
+  previous: TrafficSourceMetrics
+}
+
+type TrafficSourceMetrics {
+  sessions: Int
+}
+
+type DeviceUsage {
+  device: String
+  current: DeviceUsageMetrics!
+  previous: DeviceUsageMetrics
+}
+
+type DeviceUsageMetrics {
+  users: Int
 }
 
 #====================================================
@@ -136,7 +155,7 @@ type Query {
     Article(id: ID!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@article")
     PreviewArticle(token: String!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@previewArticle")
     Topics: [Topic!]! @field(resolver: "App\\GraphQL\\Queries\\TopicQuery@topics")
-    Analytics(period: AnalyticsPeriod!): AnalyticsData! @field(resolver: "App\\GraphQL\\Queries\\AnalyticsQuery@analytics")
+    Analytics(period: AnalyticsPeriod!): Analytics! @field(resolver: "App\\GraphQL\\Queries\\AnalyticsQuery@analytics")
 }
 
 #====================================================
