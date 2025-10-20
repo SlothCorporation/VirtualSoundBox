@@ -3,14 +3,15 @@ import PeriodToggle from "@/components/Analytics/PeriodToggle";
 import SummaryCard from "@/components/Analytics/SummaryCard";
 import { AnalyticsPeriod } from "@/generated/graphql";
 import ArticlePerformanceTable from "@/src/components/Analytics/ArticlePerformanceTable";
+import DeviceBreakdownChart from "@/src/components/Analytics/DeviceBreakdownChart";
+import TrafficSourcesChart from "@/src/components/Analytics/TrafficSourcesChart";
 import { useAnalytics } from "@/src/hooks/admin/analytics/api";
 import { useState } from "react";
 
 function Dashboard() {
   const [period, setPeriod] = useState<AnalyticsPeriod>(AnalyticsPeriod.Weekly);
-  const { analytics, isLoading } = useAnalytics(period);
+  const { analytics } = useAnalytics(period);
 
-  console.log(analytics, isLoading);
   return (
     <div className="flex max-w-[1200px] flex-col gap-4">
       <div className="flex w-full justify-end">
@@ -33,8 +34,12 @@ function Dashboard() {
           previous={analytics?.summary.previous?.sessions ?? 0}
         />
       </div>
-      <div>
+      <div className="flex w-full flex-col gap-4 lg:flex-row">
         <ArticlePerformanceTable data={analytics?.articleViews ?? []} />
+        <div className="flex flex-1 flex-col gap-4">
+          <TrafficSourcesChart data={analytics?.trafficSources ?? []} />
+          <DeviceBreakdownChart data={analytics?.deviceUsage ?? []} />
+        </div>
       </div>
     </div>
   );
