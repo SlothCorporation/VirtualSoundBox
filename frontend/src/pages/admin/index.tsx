@@ -18,18 +18,18 @@ function Dashboard() {
       <div className="flex gap-2">
         <SummaryCard
           title="総PV数"
-          current={analytics?.current?.summary.pageViews ?? 0}
-          previous={analytics?.previous?.summary.pageViews ?? 0}
+          current={analytics?.summary.current.pageViews ?? 0}
+          previous={analytics?.summary.previous?.pageViews ?? 0}
         />
         <SummaryCard
           title="ユーザー数"
-          current={analytics?.current?.summary.users ?? 0}
-          previous={analytics?.previous?.summary.users ?? 0}
+          current={analytics?.summary.current.users ?? 0}
+          previous={analytics?.summary.previous?.users ?? 0}
         />
         <SummaryCard
           title="総セッション数"
-          current={analytics?.current?.summary.sessions ?? 0}
-          previous={analytics?.previous?.summary.sessions ?? 0}
+          current={analytics?.summary.current.sessions ?? 0}
+          previous={analytics?.summary.previous?.sessions ?? 0}
         />
       </div>
       <div></div>
