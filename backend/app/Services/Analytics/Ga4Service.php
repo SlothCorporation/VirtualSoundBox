@@ -80,6 +80,17 @@ class Ga4Service
         ]);
     }
 
+    protected static function formatSeconds(float $seconds): string
+    {
+        if ($seconds <= 0) {
+            return '0:00';
+        }
+        $minutes = floor($seconds / 60);
+        $remaining = $seconds % 60;
+
+        return sprintf('%d:%02d', $minutes, $remaining);
+    }
+
     public static function fetchSummary(string $startDate, string $endDate): array
     {
         $propertyId = self::getPropertyId();
@@ -145,7 +156,13 @@ class Ga4Service
                 'end_date' => $endDate,
             ])])
             ->setDimensions([new Dimension(['name' => 'pageTitle'])])
-            ->setMetrics([new Metric(['name' => 'screenPageViews'])])
+            ->setMetrics([
+                new Metric(['name' => 'screenPageViews']),
+                new Metric(['name' => 'activeUsers']),
+                new Metric(['name' => 'eventCount']),
+                new Metric(['name' => 'averageSessionDuration']),
+                new Metric(['name' => 'bounceRate']),
+            ])
             ->setDimensionFilter(new FilterExpression([
                 'and_group' => new FilterExpressionList([
                     'expressions' => [
@@ -163,6 +180,10 @@ class Ga4Service
             $result[] = [
                 'title' => $row->getDimensionValues()[0]->getValue(),
                 'pageViews' => (int) $row->getMetricValues()[0]->getValue(),
+                'activeUsers' => (int) $row->getMetricValues()[1]->getValue(),
+                'events' => (int) $row->getMetricValues()[2]->getValue(),
+                'avgDuration' => self::formatSeconds((float) $row->getMetricValues()[3]->getValue()),
+                'bounceRate' => (float) $row->getMetricValues()[4]->getValue(),
             ];
         }
 
