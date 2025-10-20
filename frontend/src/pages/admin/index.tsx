@@ -2,6 +2,7 @@ import AdminLayout from "@/components/AdminLayout";
 import PeriodToggle from "@/components/Analytics/PeriodToggle";
 import SummaryCard from "@/components/Analytics/SummaryCard";
 import { AnalyticsPeriod } from "@/generated/graphql";
+import ArticlePerformanceTable from "@/src/components/Analytics/ArticlePerformanceTable";
 import { useAnalytics } from "@/src/hooks/admin/analytics/api";
 import { useState } from "react";
 
@@ -32,7 +33,9 @@ function Dashboard() {
           previous={analytics?.summary.previous?.sessions ?? 0}
         />
       </div>
-      <div></div>
+      <div>
+        <ArticlePerformanceTable data={analytics?.articleViews ?? []} />
+      </div>
     </div>
   );
 }
