@@ -52,11 +52,11 @@ export default function ArticlePerformanceTable({
         <tbody className="text-gray-800">
           {data.map((a) => {
             const diff = a.previous
-              ? a.current.pageViews - a.previous.pageViews
+              ? a.current.pageViews! - a.previous.pageViews!
               : 0;
             const rate =
-              a.previous && a.previous.pageViews > 0
-                ? (diff / a.previous.pageViews) * 100
+              a.previous && a.previous.pageViews! > 0
+                ? (diff / a.previous.pageViews!) * 100
                 : 0;
             const color =
               diff > 0
@@ -79,30 +79,30 @@ export default function ArticlePerformanceTable({
                 </td>
 
                 <td className="min-w-[100px] max-w-[150px] p-2 text-right">
-                  {a.current.pageViews.toLocaleString()}
+                  {a.current.pageViews!.toLocaleString()}
                   {a.previous && (
                     <>
                       <span className={`ml-2 text-xs ${color}`}>
                         {icon} {Math.abs(rate).toFixed(1)}%
                       </span>
                       <div className="text-xs text-gray-500">
-                        前回: {a.previous.pageViews.toLocaleString()}
+                        前回: {a.previous.pageViews!.toLocaleString()}
                       </div>
                     </>
                   )}
                 </td>
 
                 <td className="max-w-[80px] p-2 text-right">
-                  {a.current.activeUsers.toLocaleString()}
+                  {a.current.activeUsers!.toLocaleString()}
                 </td>
                 <td className="max-w-[70px] p-2 text-right">
-                  {a.current.events.toLocaleString()}
+                  {a.current.events!.toLocaleString()}
                 </td>
                 <td className="max-w-[70px] p-2 text-right">
                   {a.current.avgDuration}
                 </td>
                 <td className="max-w-[70px] p-2 text-right">
-                  {Math.floor(a.current.bounceRate)}%
+                  {Math.floor(a.current.bounceRate!)}%
                 </td>
               </tr>
             );
