@@ -146,10 +146,18 @@ export type DeviceUsageMetrics = {
   users?: Maybe<Scalars["Int"]["output"]>;
 };
 
+export type Music = {
+  __typename?: "Music";
+  artist: Scalars["String"]["output"];
+  id: Scalars["ID"]["output"];
+  name: Scalars["String"]["output"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   addTopic: Scalars["Boolean"]["output"];
   contact: ContactResponse;
+  ensureMusicExists?: Maybe<Scalars["Boolean"]["output"]>;
   likeArticle: Scalars["Boolean"]["output"];
   removeTopic: Scalars["Boolean"]["output"];
   reorderTopics: Scalars["Boolean"]["output"];
@@ -161,6 +169,11 @@ export type MutationAddTopicArgs = {
 
 export type MutationContactArgs = {
   input: ContactInput;
+};
+
+export type MutationEnsureMusicExistsArgs = {
+  artist: Scalars["String"]["input"];
+  music: Scalars["String"]["input"];
 };
 
 export type MutationLikeArticleArgs = {
@@ -188,6 +201,7 @@ export type Query = {
   Analytics: Analytics;
   Article: Article;
   Articles: ArticlePaginator;
+  Musics: Array<Music>;
   PreviewArticle: Article;
   RecommendedArticles: Array<Article>;
   Topics: Array<Topic>;
@@ -205,6 +219,11 @@ export type QueryArticlesArgs = {
   filter?: InputMaybe<ArticleFilterInput>;
   page?: InputMaybe<Scalars["Int"]["input"]>;
   perPage?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type QueryMusicsArgs = {
+  artist?: InputMaybe<Scalars["String"]["input"]>;
+  music?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type QueryPreviewArticleArgs = {
