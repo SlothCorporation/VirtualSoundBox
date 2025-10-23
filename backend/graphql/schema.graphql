@@ -131,6 +131,12 @@ type DeviceUsageMetrics {
   users: Int
 }
 
+type Music {
+  id: ID!
+  name: String!
+  artist: String!
+}
+
 #====================================================
 # input types
 #====================================================
@@ -156,6 +162,7 @@ type Query {
     PreviewArticle(token: String!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@previewArticle")
     Topics: [Topic!]! @field(resolver: "App\\GraphQL\\Queries\\TopicQuery@topics")
     Analytics(period: AnalyticsPeriod!): Analytics! @field(resolver: "App\\GraphQL\\Queries\\AnalyticsQuery@analytics")
+    Musics(music: String, artist: String): [Music!]! @field(resolver: "App\\GraphQL\\Queries\\MusicQuery@musics")
 }
 
 #====================================================
@@ -167,4 +174,5 @@ type Mutation {
     addTopic(articleId: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@addTopic")
     removeTopic(id: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@removeTopic")
     reorderTopics(ids: [ID!]!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@reorderTopics")
+    ensureMusicExists(music: String!, artist: String!): Boolean @field(resolver: "App\\GraphQL\\Mutations\\MusicMutation@ensureMusicExists")
 }
