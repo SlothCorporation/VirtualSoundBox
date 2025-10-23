@@ -37,7 +37,9 @@ class SpotifyService
         }
         $isMatch =
             mb_strtolower($track['name']) === mb_strtolower($name) &&
-            collect($track['artists'])->pluck('name')->contains(fn ($a) => mb_strtolower($a) === mb_strtolower($artist));
+            collect($track['artists'])->pluck('name')->contains(
+                fn ($a) => mb_strtolower($a) === mb_strtolower($artist)
+            );
 
         return $isMatch ? $track : null;
     }
