@@ -2,14 +2,21 @@
 # enums
 #====================================================
 enum ArticleType {
-    article
-    external
+  article
+  external
 }
 
 enum AnalyticsPeriod {
-    DAILY
-    WEEKLY
-    MONTHLY
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum MusicVerifyStatus {
+  unverified
+  auto_verified
+  auto_failed
+  manual_verified
 }
 
 #====================================================
@@ -17,64 +24,64 @@ enum AnalyticsPeriod {
 #====================================================
 
 type Category {
-    id: ID!
-    name: String!
-    slug: String!
+  id: ID!
+  name: String!
+  slug: String!
 }
 
 type Tag {
-    id: ID!
-    name: String!
-    slug: String!
+  id: ID!
+  name: String!
+  slug: String!
 }
 
 type CoverImage{
-    id: ID!
-    url: String!
+  id: ID!
+  url: String!
 }
 
 type ThumbnailImage {
-    id: ID!
-    url: String!
+  id: ID!
+  url: String!
 }
 
 type Article {
-    id: ID!
-    title: String!
-    type: ArticleType!
-    body: String
-    likeCount: Int
-    excerpt: String
-    externalUrl: String
-    externalDescription: String
-    category: Category!
-    tags: [Tag]
-    coverImage: CoverImage
-    thumbnailImage: ThumbnailImage
-    publishedAt: String!
+  id: ID!
+  title: String!
+  type: ArticleType!
+  body: String
+  likeCount: Int
+  excerpt: String
+  externalUrl: String
+  externalDescription: String
+  category: Category!
+  tags: [Tag]
+  coverImage: CoverImage
+  thumbnailImage: ThumbnailImage
+  publishedAt: String!
 }
 
 type Topic {
-    id: ID!
-    article: Article!
-    position: Int!
+  id: ID!
+  article: Article!
+  position: Int!
 }
 
 type ArticlePaginator {
-    data: [Article!]!
-    paginatorInfo: PaginatorInfo!
+  data: [Article!]!
+  paginatorInfo: PaginatorInfo!
 }
 
 type PaginatorInfo {
-    currentPage: Int!
-    lastPage: Int!
-    perPage: Int!
-    total: Int!
+  currentPage: Int!
+  lastPage: Int!
+  perPage: Int!
+  total: Int!
 }
 
 type ContactResponse {
-    success: Boolean!
-    message: String
+  success: Boolean!
+  message: String
 }
 
 type Analytics {
@@ -135,44 +142,55 @@ type Music {
   id: ID!
   name: String!
   artist: String!
+  verifyStatus: MusicVerifyStatus!
+  spotifyTrackId: String
+  createdAt: String!
+  updatedAt: String!
+  verifiedAt: String
+}
+
+type MusicPaginator {
+  data: [Music!]!
+  paginatorInfo: PaginatorInfo!
 }
 
 #====================================================
 # input types
 #====================================================
 input ArticleFilterInput {
-    tag: String
-    category: String
-    keyword: String
+  tag: String
+  category: String
+  keyword: String
 }
 
 input ContactInput {
-    name: String!
-    email: String!
-    message: String!
+  name: String!
+  email: String!
+  message: String!
 }
 
 #====================================================
 # queries
 #====================================================
 type Query {
-    Articles(filter: ArticleFilterInput, page: Int, perPage: Int): ArticlePaginator! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@paginatedArticles")
-    RecommendedArticles(articleId: ID!, limit: Int = 5): [Article!]! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@recommendedArticles")
-    Article(id: ID!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@article")
-    PreviewArticle(token: String!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@previewArticle")
-    Topics: [Topic!]! @field(resolver: "App\\GraphQL\\Queries\\TopicQuery@topics")
-    Analytics(period: AnalyticsPeriod!): Analytics! @field(resolver: "App\\GraphQL\\Queries\\AnalyticsQuery@analytics")
-    Musics(music: String, artist: String): [Music!]! @field(resolver: "App\\GraphQL\\Queries\\MusicQuery@musics")
+  Articles(filter: ArticleFilterInput, page: Int, perPage: Int): ArticlePaginator! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@paginatedArticles")
+  RecommendedArticles(articleId: ID!, limit: Int = 5): [Article!]! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@recommendedArticles")
+  Article(id: ID!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@article")
+  PreviewArticle(token: String!): Article! @field(resolver: "App\\GraphQL\\Queries\\ArticleQuery@previewArticle")
+  Topics: [Topic!]! @field(resolver: "App\\GraphQL\\Queries\\TopicQuery@topics")
+  Analytics(period: AnalyticsPeriod!): Analytics! @field(resolver: "App\\GraphQL\\Queries\\AnalyticsQuery@analytics")
+  SearchMusics(music: String, artist: String): [Music!]! @field(resolver: "App\\GraphQL\\Queries\\MusicQuery@musics")
+  Musics(keyword: String, verifyStatus: [MusicVerifyStatus], page: Int, perPage: Int): MusicPaginator! @field(resolver: "App\\GraphQL\\Queries\\MusicQuery@paginatedMusics")
 }
 
 #====================================================
 # mutations
 #====================================================
 type Mutation {
-    likeArticle(articleId: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\ArticleMutation@likeArticle")
-    contact(input: ContactInput!): ContactResponse! @field(resolver: "App\\GraphQL\\Mutations\\ContactResolver")
-    addTopic(articleId: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@addTopic")
-    removeTopic(id: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@removeTopic")
-    reorderTopics(ids: [ID!]!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@reorderTopics")
-    ensureMusicExists(music: String!, artist: String!): Boolean @field(resolver: "App\\GraphQL\\Mutations\\MusicMutation@ensureMusicExists")
+  likeArticle(articleId: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\ArticleMutation@likeArticle")
+  contact(input: ContactInput!): ContactResponse! @field(resolver: "App\\GraphQL\\Mutations\\ContactResolver")
+  addTopic(articleId: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@addTopic")
+  removeTopic(id: ID!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@removeTopic")
+  reorderTopics(ids: [ID!]!): Boolean! @field(resolver: "App\\GraphQL\\Mutations\\TopicMutation@reorderTopics")
+  ensureMusicExists(music: String!, artist: String!): Boolean @field(resolver: "App\\GraphQL\\Mutations\\MusicMutation@ensureMusicExists")
 }
