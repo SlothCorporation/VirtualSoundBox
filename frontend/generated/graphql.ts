@@ -149,9 +149,27 @@ export type DeviceUsageMetrics = {
 export type Music = {
   __typename?: "Music";
   artist: Scalars["String"]["output"];
+  createdAt: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
   name: Scalars["String"]["output"];
+  spotifyTrackId?: Maybe<Scalars["String"]["output"]>;
+  updatedAt: Scalars["String"]["output"];
+  verifiedAt?: Maybe<Scalars["String"]["output"]>;
+  verifyStatus: MusicVerifyStatus;
 };
+
+export type MusicPaginator = {
+  __typename?: "MusicPaginator";
+  data: Array<Music>;
+  paginatorInfo: PaginatorInfo;
+};
+
+export enum MusicVerifyStatus {
+  AutoFailed = "auto_failed",
+  AutoVerified = "auto_verified",
+  ManualVerified = "manual_verified",
+  Unverified = "unverified",
+}
 
 export type Mutation = {
   __typename?: "Mutation";
@@ -201,9 +219,10 @@ export type Query = {
   Analytics: Analytics;
   Article: Article;
   Articles: ArticlePaginator;
-  Musics: Array<Music>;
+  Musics: MusicPaginator;
   PreviewArticle: Article;
   RecommendedArticles: Array<Article>;
+  SearchMusics: Array<Music>;
   Topics: Array<Topic>;
 };
 
@@ -222,8 +241,10 @@ export type QueryArticlesArgs = {
 };
 
 export type QueryMusicsArgs = {
-  artist?: InputMaybe<Scalars["String"]["input"]>;
-  music?: InputMaybe<Scalars["String"]["input"]>;
+  keyword?: InputMaybe<Scalars["String"]["input"]>;
+  page?: InputMaybe<Scalars["Int"]["input"]>;
+  perPage?: InputMaybe<Scalars["Int"]["input"]>;
+  verifyStatus?: InputMaybe<Array<InputMaybe<MusicVerifyStatus>>>;
 };
 
 export type QueryPreviewArticleArgs = {
@@ -233,6 +254,11 @@ export type QueryPreviewArticleArgs = {
 export type QueryRecommendedArticlesArgs = {
   articleId: Scalars["ID"]["input"];
   limit?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type QuerySearchMusicsArgs = {
+  artist?: InputMaybe<Scalars["String"]["input"]>;
+  music?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type Tag = {

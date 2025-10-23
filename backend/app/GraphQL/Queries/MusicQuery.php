@@ -16,4 +16,26 @@ class MusicQuery
 
         return GraphQLHelper::toGraphQLObject($musics);
     }
+
+    public function paginatedMusics($_, array $args): ?array
+    {
+        $musics = Musics::query()
+            ->when($args['keyword'], function ($query) use ($args) {
+                $keyword = $args['keyword'];
+                $query->where(
+                    fn ($q) =>
+                    $q->where('name', 'like', "%{$keyword}%")
+                      ->orWhere('artist', 'like', "%{$keyword}%")
+                );
+            })
+            ->when(!empty($args['verifyStatus']), function ($query) use ($args) {
+                $query->whereIn('verify_status', $args['verifyStatus']);
+            })
+            ->orderBy('artist', 'ASC')
+            ->orderBy('name', 'ASC')
+            ->latest()
+            ->paginate($args['perPage']);
+
+        return GraphQLHelper::toGraphQLPaginated($musics);
+    }
 }
