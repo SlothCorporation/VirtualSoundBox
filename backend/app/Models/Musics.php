@@ -14,5 +14,8 @@ class Musics extends Model
     protected $fillable = [
         'name',
         'artist',
+        'verify_status',
+        'spotify_track_id',
+        'verified_at',
     ];
 }
